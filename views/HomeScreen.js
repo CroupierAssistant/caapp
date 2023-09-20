@@ -1,46 +1,70 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import HomeStackNavigator from '../navigation/HomeStackNavigator';
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const Tab = createBottomTabNavigator();
+function HomeScreen() {
+  const navigation = useNavigation();
 
-function MainTabNavigator() {
+  const handleNavigateToBlackjack = () => {
+    navigation.navigate("Blackjack");
+  };
+
+  const handleNavigateToRoulette = () => {
+    navigation.navigate("Roulette");
+  };
+
+  const handleNavigateToPoker = () => {
+    navigation.navigate("Poker");
+  };
+
   return (
-    // <Tab.Navigator>
-    //   <Tab.Screen name="Главная" component={HomeStackNavigator} />
-    // </Tab.Navigator>
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Главная страница</Text>
+    <View style={styles.container}>
+      <Text style={styles.greetingsText}>Hi user!</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleNavigateToBlackjack}
+      >
+        <Text style={styles.buttonText}>Blackjack</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleNavigateToRoulette}
+      >
+        <Text style={styles.buttonText}>Roulette</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleNavigateToPoker}>
+        <Text style={styles.buttonText}>Poker</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'start',
-        alignItems: 'center',
-        padding: 20
-    },
-    button: {
-        backgroundColor: 'grey',
-        padding: 15,
-        marginBottom: 10,
-        borderRadius: 3,
-        width: '100%'
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 20,
-    },
-    headerText: {
-        fontSize: 20,
-        textAlign: 'left',
-        fontWeight: 'bold',
-        marginBottom: 20,
-        width: '100%'
-    }
+  container: {
+    flex: 1,
+    justifyContent: "start",
+    alignItems: "center",
+    padding: 20,
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#4783b8",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 3,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 20,
+  },
+  greetingsText: {
+    color: "black",
+    fontSize: 26,
+    marginBottom: 30,
+    textAlign: "left",
+    width: "100%",
+    fontWeight: "bold"
+  },
 });
 
 export default HomeScreen;
