@@ -19,6 +19,10 @@ function BlackjackTest({ route, navigation }) {
   const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
 
+  const [showActiveCard, setShowActiveCard] = useState(true); // Добавляем новое состояние
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -46,32 +50,66 @@ function BlackjackTest({ route, navigation }) {
   const closePaytableModal = () => {
     setShowPaytableModal(false);
   };
-  
+
   function generateUniqueRandomNumbers(amount, min, max) {
     const uniqueNumbers = new Set();
-  
+
     while (uniqueNumbers.size < amount) {
       const randomNum = Math.ceil(Math.random() * (max - min) + min);
       if (randomNum % 5 === 0) {
         uniqueNumbers.add(randomNum);
       }
     }
-  
+
     return Array.from(uniqueNumbers);
   }
-  
+
   const cardNumbers = generateUniqueRandomNumbers(amountOfCards, 5, 500);
-  
+
   const cardData = cardNumbers.map((number, index) => ({
     title: `Blackjack`,
     number,
     index: `${index + 1} / ${amountOfCards}`,
   }));
 
+  const handleInputChange = (text) => {
+    setInputValue(text);
+  };
+
+  const handleSubmit = () => {
+    // Здесь можно обработать введенное значение, если нужно
+    // Например, сохранить его или выполнить какую-то логику
+
+    // Переходим к следующей карте
+    if (activeCardIndex < cardData.length - 1) {
+      setActiveCardIndex(activeCardIndex + 1);
+    } else {
+      setShowActiveCard(false); // Если достигнут конец, скрываем активную карту
+    }
+
+    // Очищаем поле ввода
+    setInputValue("");
+  };
+
+  const handleKeyboardPress = (key) => {
+    if (key === "submit") {
+      handleSubmit();
+    }
+    // Добавьте обработку других кнопок клавиатуры по необходимости
+  };
+
   const renderCardItem = ({ item }) => {
     return (
       <View style={{ flex: 1, width: Dimensions.get("window").width }}>
-        <Card title={item.title} number={item.number} index={item.index} />
+        {showActiveCard && ( // Добавляем проверку, показывать или нет активную карту
+          <Card
+            title={cardData[activeCardIndex].title}
+            number={cardData[activeCardIndex].number}
+            index={cardData[activeCardIndex].index}
+            onInputChange={handleInputChange}
+            onSubmit={handleSubmit}
+          />
+        )}
       </View>
     );
   };
@@ -115,6 +153,7 @@ function BlackjackTest({ route, navigation }) {
         renderItem={renderCardItem}
         keyExtractor={(item) => item.index.toString()}
         showsHorizontalScrollIndicator={false}
+        scrollEnabled={false}
         pagingEnabled={true}
       />
 
@@ -136,7 +175,7 @@ function BlackjackTest({ route, navigation }) {
         </View>
       </Modal>
 
-      <Keyboard />
+      <Keyboard onKeyboardPress={handleKeyboardPress} />
     </View>
   );
 }

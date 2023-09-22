@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const CustomKeyboard = () => {
+const Keyboard = ({ onKeyboardPress }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyPress = (value) => {
@@ -15,8 +15,10 @@ const CustomKeyboard = () => {
       setInputValue((prev) => prev.slice(0, -1));
     } else if (value === ".") {
       setInputValue((prev) => (prev.includes(".") ? prev : prev + value));
-    } else if (value === "Ok") {
+    } else if (value === "OK") {
       // Ваша логика для обработки нажатия "Ok"
+      setInputValue("")
+      onKeyboardPress("submit")
     } else {
       setInputValue((prev) => prev + value);
     }
@@ -110,7 +112,7 @@ const CustomKeyboard = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.okButton}
-          onPress={() => handleKeyPress("Ok")}
+          onPress={() => handleKeyPress("OK")}
         >
           <Text style={styles.buttonText}>OK</Text>
         </TouchableOpacity>
@@ -181,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomKeyboard;
+export default Keyboard;
