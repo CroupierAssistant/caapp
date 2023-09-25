@@ -11,23 +11,30 @@ function Blackjack() {
   const handleNavigateToTest = () => {
     navigation.navigate("BlackjackTest", {
       mode: isEnabled ? 'sandbox' : 'timelimit',
-      amountOfCards: !isEnabled && selectedButton,
-      minBet: isEnabled && selectedMinBet,
-      maxBet: isEnabled && selectedMaxBet,
-      step: isEnabled && selectedStep,
+      amountOfCards: Number(!isEnabled ? selectedButton : 0),
+      minBet: Number(selectedMinBet),
+      maxBet: Number(selectedMaxBet),
+      step: Number(selectedStep),
     });
   };
 
   const { isAuthenticated, login, logout } = useContext(AuthContext);
 
   useEffect(() => {
+    setSelectedButton('10');
     setIsEnabled(false);
   }, [isAuthenticated]);
 
   const [isPremium, setIsPremium] = useState(true);
 
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const toggleSwitch = () => {
+    setSelectedStep('5');
+    setSelectedMinBet('5');
+    setSelectedMaxBet('500');
+    setIsEnabled((previousState) => !previousState);
+  }
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {

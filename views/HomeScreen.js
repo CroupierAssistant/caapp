@@ -2,37 +2,28 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function HomeScreen() {
+function HomeScreen({ route }) {
   const navigation = useNavigation();
-
-  const handleNavigateToBlackjack = () => {
-    navigation.navigate("Blackjack");
-  };
-
-  const handleNavigateToRoulette = () => {
-    navigation.navigate("Roulette");
-  };
-
-  const handleNavigateToPoker = () => {
-    navigation.navigate("Poker");
-  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.greetingsText}>Hi user!</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={handleNavigateToBlackjack}
+        onPress={() => navigation.navigate("Blackjack")}
       >
         <Text style={styles.buttonText}>Blackjack</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={handleNavigateToRoulette}
+        onPress={() => navigation.navigate("Roulette")}
       >
         <Text style={styles.buttonText}>Roulette</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleNavigateToPoker}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Poker")}
+      >
         <Text style={styles.buttonText}>Poker</Text>
       </TouchableOpacity>
     </View>
@@ -63,7 +54,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: "left",
     width: "100%",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 });
 

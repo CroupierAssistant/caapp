@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const Timer = (props) => {
-    const { time } = props;
+const Timer = ({time, setTimePassedParent, setIsDone}) => {
     const [timeLeft, setTimeLeft] = useState(time);
   
     let TIME_LIMIT = time;
@@ -28,10 +27,13 @@ const Timer = (props) => {
       const interval = setInterval(() => {
         setTimeLeft((prevProgress) => {
           timePassed = new Date() - startTime;
+          setTimePassedParent(formatTime(timePassed))
           if (prevProgress > 0) {
             return Math.max(0, TIME_LIMIT - timePassed); // Уменьшаем прогресс каждую секунду
           } else {
             clearInterval(interval); // Останавливаем таймер при достижении 0
+            setTimePassedParent(formatTime(time))
+            setIsDone(true)
             return prevProgress;
           }
         });

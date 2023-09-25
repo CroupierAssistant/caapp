@@ -1,11 +1,8 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from "../views/HomeScreen";
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../views/Profile";
-import HomeStackNavigator from './HomeStackNavigator';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
+import HomeStackNavigator from "./HomeStackNavigator";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // Создаем нижнюю навигацию
 const Tab = createBottomTabNavigator();
@@ -17,12 +14,16 @@ function MainTabNavigator() {
         name="Home"
         component={HomeStackNavigator}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: "Home",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: '#4783b8',
-          tabBarInactiveBackgroundColor: '#eee',
+          tabBarActiveBackgroundColor: "#4783b8",
+          tabBarInactiveBackgroundColor: "#eee",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons name="home" color={focused ? '#eee' : '#4783b8'}  size={30} />
+            <MaterialCommunityIcons
+              name="home"
+              color={focused ? "#eee" : "#4783b8"}
+              size={30}
+            />
           ),
           headerShown: false,
         }}
@@ -31,14 +32,19 @@ function MainTabNavigator() {
         name="Profile"
         component={Profile}
         options={{
-          tabBarLabel: 'Profile',
+          tabBarLabel: "Profile",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: '#4783b8',
-          tabBarInactiveBackgroundColor: '#eee',
+          tabBarActiveBackgroundColor: "#4783b8",
+          tabBarInactiveBackgroundColor: "#eee",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons name="account" color={focused ? '#eee' : '#4783b8'}  size={30} />
+            <MaterialCommunityIcons
+              name="account"
+              color={focused ? "#eee" : "#4783b8"}
+              size={30}
+            />
           ),
           headerShown: false,
+          detachPreviousScreen: true
         }}
       />
     </Tab.Navigator>

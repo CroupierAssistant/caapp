@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const Keyboard = ({ onKeyboardPress }) => {
+const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyPress = (value) => {
@@ -17,8 +17,9 @@ const Keyboard = ({ onKeyboardPress }) => {
       setInputValue((prev) => (prev.includes(".") ? prev : prev + value));
     } else if (value === "OK") {
       // Ваша логика для обработки нажатия "Ok"
-      setInputValue("")
+      handleInputChange(inputValue)
       onKeyboardPress("submit")
+      setInputValue("")
     } else {
       setInputValue((prev) => prev + value);
     }
