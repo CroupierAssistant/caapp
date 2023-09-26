@@ -44,8 +44,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
               style={{
                 fontSize: 22,
                 fontWeight: "bold",
-                borderBottomWidth: 2,
-                borderBottomColor: "#607d8b",
+                marginBottom: 5
               }}
             >
               Bet: {item.cardNumber}

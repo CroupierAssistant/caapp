@@ -21,10 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.g0rdonshumway.caapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c9357b8d-3388-4c47-85da-4fdbeb341049"
+      }
+    },
+    "owner": "g0rdonshumway"
   }
 }

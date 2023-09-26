@@ -14,7 +14,7 @@ import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 
-function BlackjackTest({ route, navigation }) {
+function BlackjackTest({ route }) {
   const { mode, amountOfCards, minBet, maxBet, step } = route.params;
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
