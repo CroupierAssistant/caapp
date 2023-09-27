@@ -14,7 +14,7 @@ function HomeScreen({ route }) {
       >
         <Text style={styles.buttonText}>Blackjack</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Roulette")}
       >
@@ -25,7 +25,7 @@ function HomeScreen({ route }) {
         onPress={() => navigation.navigate("Poker")}
       >
         <Text style={styles.buttonText}>Poker</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
