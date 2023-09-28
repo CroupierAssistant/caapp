@@ -15,7 +15,7 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 
-function BlackjackTest({ route }) {
+function PokerTest({ route }) {
   const {
     timeLimit,
     mode,
@@ -72,6 +72,7 @@ function BlackjackTest({ route }) {
       return [...prev, newResult];
     });
   };
+
   const handleSubmit = () => {
     // Переходим к следующей карте
     if (activeCardIndex < cardList.length - 1) {
@@ -191,7 +192,7 @@ function BlackjackTest({ route }) {
 
                 <Button
                   style={styles.modalButton}
-                  title="Start Timer"
+                  title="Start"
                   onPress={startTimer}
                 />
               </View>
@@ -216,7 +217,7 @@ function BlackjackTest({ route }) {
           >
             <TouchableOpacity
               onPress={openPaytableModal}
-              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100, marginTop: 15 }}
+              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
             >
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
             </TouchableOpacity>
@@ -255,6 +256,7 @@ function BlackjackTest({ route }) {
                 }}
               >
                 <Paytable combinations={combinations} splitCoeff={splitCoeff} />
+
                 <Button
                   style={styles.modalButton}
                   title="Close"
@@ -287,13 +289,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    width: "100%",
   },
   modalInfo: {
     marginBottom: 50,
   },
   modalButton: {
     width: "100%",
+    marginTop: 50,
   },
 });
 
-export default BlackjackTest;
+export default PokerTest;

@@ -27,19 +27,19 @@ const Timer = ({time, setTimePassedParent, setIsDone}) => {
       const interval = setInterval(() => {
         setTimeLeft((prevProgress) => {
           timePassed = new Date() - startTime;
-          setTimePassedParent(formatTime(timePassed))
+          setTimePassedParent(formatTime(timePassed));
           if (prevProgress > 0) {
-            return Math.max(0, TIME_LIMIT - timePassed); // Уменьшаем прогресс каждую секунду
+            return Math.max(0, TIME_LIMIT - timePassed);
           } else {
-            clearInterval(interval); // Останавливаем таймер при достижении 0
-            setTimePassedParent(formatTime(time))
-            setIsDone(true)
+            clearInterval(interval);
+            setTimePassedParent(formatTime(time));
+            setIsDone(true);
             return prevProgress;
           }
         });
       }, 10);
-  
-      return () => clearInterval(interval); // Очищаем интервал при размонтировании компонента
+    
+      return () => clearInterval(interval);
     }, []);
   
     return (
@@ -52,10 +52,10 @@ const Timer = ({time, setTimePassedParent, setIsDone}) => {
 
 const styles = StyleSheet.create({
   container: {
-    // position: "absolute",
-    // top: 0,
-    // left: 0,
-    // right: 0,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     width: "100%",
     padding: 5,
     backgroundColor: "white",

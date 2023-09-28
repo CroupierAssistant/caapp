@@ -22,7 +22,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-        Test Results: {Number(percentage).toFixed(2)}%
+        Test Results: {percentage ? Number(percentage).toFixed(2) : '0'}%
         {mode === "timelimit" && ` in ${timePassedParent}`}
       </Text>
       <FlatList
@@ -36,7 +36,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
               styles.resultItem,
               {
                 backgroundColor:
-                  item.userInput == item.rightAnswer ? "#4caf50" : "#f44336",
+                  item.userInput == item.rightAnswer ? "#66cc6a" : "#f55c51",
               },
             ]}
           >
@@ -44,15 +44,16 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
               style={{
                 fontSize: 22,
                 fontWeight: "bold",
-                marginBottom: 5
+                marginBottom: 5,
+                color: '#444',
               }}
             >
-              Bet: {item.cardNumber}
+              {item.cardName} - {item.cardNumber}
             </Text>
-            <Text style={{ fontSize: 18 }}>
+            <Text style={{ fontSize: 18, color: '#444' }}>
               Right answer: {item.rightAnswer}
             </Text>
-            <Text style={{ fontSize: 18 }}>Your answer: {item.userInput}</Text>
+            <Text style={{ fontSize: 18, color: '#444' }}>Your answer: {item.userInput ? item.userInput : '—'}</Text>
           </View>
         )}
       />
@@ -64,16 +65,22 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 20,
     padding: 10,
+    elevation: 4,
   },
   header: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    textAlign: "center",
+    color: '#444',
+    textTransform: 'uppercase',
   },
   resultItem: {
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#fff",
   },
 });
 

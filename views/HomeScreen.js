@@ -14,18 +14,43 @@ function HomeScreen({ route }) {
       >
         <Text style={styles.buttonText}>Blackjack</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RussianPokerAnte")}
+      >
+        <Text style={styles.buttonText}>Russian poker</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RussianPokerBonus")}
+      >
+        <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("UTHBlindBets")}
+      >
+        <Text style={styles.buttonText}>UTH Blind Bets</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("UTHTripsBets")}
+      >
+        <Text style={styles.buttonText}>UTH Trips Bets</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("TexasHoldEm")}
+      >
+        <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
+      </TouchableOpacity> 
+
       {/* <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Roulette")}
       >
         <Text style={styles.buttonText}>Roulette</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Poker")}
-      >
-        <Text style={styles.buttonText}>Poker</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>*/}
     </View>
   );
 }

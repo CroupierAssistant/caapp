@@ -5,22 +5,54 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
 
-function Blackjack() {
+function RussianPokerAnte() {
   const navigation = useNavigation();
-  
+
   const handleNavigateToTest = () => {
-    navigation.navigate("BlackjackTest", {
-      mode: isEnabled ? 'sandbox' : 'timelimit',
+    navigation.navigate("PokerTest", {
+      mode: isEnabled ? "sandbox" : "timelimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
       step: Number(selectedStep),
-      timeLimit: 60000,
-      splitCoeff: false,
+      timeLimit: 90000,
+      splitCoeff: true,
       combinations: [
         {
-          name: "Blackjack",
-          coeff: 1.5,
+          name: "Pair",
+          coeff: 2,
+        },
+        {
+          name: "Two Pair",
+          coeff: 4,
+        },
+        {
+          name: "Three of a kind",
+          coeff: 6,
+        },
+        {
+          name: "Straight",
+          coeff: 8,
+        },
+        {
+          name: "Flush",
+          coeff: 10,
+        },
+        {
+          name: "Full house",
+          coeff: 14,
+        },
+        {
+          name: "Four of a kind",
+          coeff: 40,
+        },
+        {
+          name: "Straight flush",
+          coeff: 100,
+        },
+        {
+          name: "Royal flush",
+          coeff: 200,
         },
       ],
     });
@@ -29,7 +61,7 @@ function Blackjack() {
   const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
-    setSelectedButton('10');
+    setSelectedButton("10");
     setIsEnabled(false);
   }, [isAuthenticated]);
 
@@ -38,11 +70,11 @@ function Blackjack() {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => {
-    setSelectedStep('5');
-    setSelectedMinBet('5');
-    setSelectedMaxBet('500');
+    setSelectedStep("5");
+    setSelectedMinBet("5");
+    setSelectedMaxBet("500");
     setIsEnabled((previousState) => !previousState);
-  }
+  };
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
@@ -66,7 +98,11 @@ function Blackjack() {
 
   return (
     <View style={styles.container}>
-    <Switcher isEnabled={isEnabled} toggleSwitch={toggleSwitch} isAuthenticated={isAuthenticated}/>
+      <Switcher
+        isEnabled={isEnabled}
+        toggleSwitch={toggleSwitch}
+        isAuthenticated={isAuthenticated}
+      />
       {!isAuthenticated && (
         <Text style={{ ...styles.timeLimitDescription, marginTop: -20 }}>
           Only Time Limit Mode available when you are not logged in.
@@ -157,7 +193,7 @@ function Blackjack() {
             </View>
 
             <Text style={styles.timeLimitDescription}>
-              The goal is calculate payouts for selected amount of cards in 60
+              The goal is calculate payouts for selected amount of cards in 90
               seconds
             </Text>
           </>
@@ -514,4 +550,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Blackjack;
+export default RussianPokerAnte;
