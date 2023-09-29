@@ -496,7 +496,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    backgroundColor: "#479761",
+    backgroundColor: "#008486",
     borderRadius: 5,
   },
   startButtonText: {

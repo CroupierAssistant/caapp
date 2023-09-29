@@ -426,6 +426,7 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     alignItems: "center",
     padding: 20,
+    backgroundColor: '#fff'
   },
   switcherHeader: {
     width: "100%",
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    backgroundColor: "#479761",
+    backgroundColor: "#008486",
     borderRadius: 5,
   },
   startButtonText: {

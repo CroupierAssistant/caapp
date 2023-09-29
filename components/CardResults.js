@@ -39,7 +39,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
               styles.resultItem,
               {
                 backgroundColor:
-                  item.userInput == item.rightAnswer ? "#479761" : "#a16e83",
+                  item.userInput == item.rightAnswer ? "#479761" : "#a6334d",
               },
             ]}
           >
