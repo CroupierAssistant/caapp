@@ -13,32 +13,20 @@ import Timer from "../../../components/Timer";
 import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
-import Paytable from "../../../components/Paytable";
 
-function PokerTest({ route }) {
-  const {
-    timeLimit,
-    mode,
-    amountOfCards,
-    minBet,
-    maxBet,
-    step,
-    combinations,
-    splitCoeff,
-  } = route.params;
+function RouletteSeriesTest({ route }) {
+  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } = route.params;
+
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
-
-  const [showActiveCard, setShowActiveCard] = useState(true); // Добавляем новое состояние
+  const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
   const [cardList, setCardList] = useState([]);
   const [isDone, setIsDone] = useState(false);
-
   const [timePassedParent, setTimePassedParent] = useState("");
-
   const flatListRef = useRef(null);
 
   const startTimer = () => {
@@ -49,6 +37,7 @@ function PokerTest({ route }) {
   const openPaytableModal = () => {
     setShowPaytableModal(true);
   };
+
   const handleStopTest = () => {
     setIsDone(true);
   };
@@ -58,15 +47,27 @@ function PokerTest({ route }) {
   };
 
   const handleInputChange = (text) => {
-    // setInputValue(text);
-    setInputValue(text);
-
     setCardResults((prev) => {
+      const sector = cardList[activeCardIndex];
+      const bet = cardList[activeCardIndex].number;
+
+      let playsBy;
+      let playsByBefore;
+      let playsByAfter;
+
+      if (bet <= sector.critical) {
+        playsBy = round5(bet / sector.coefficientBeforeCritical);
+      } else {
+        playsByBefore = sector.critical / sector.coefficientBeforeCritical;
+        playsByAfter =
+          (bet - sector.critical) / sector.coefficientAfterCritical;
+        playsBy = round5(playsByAfter + playsByBefore);
+      }
+
       const newResult = {
         cardName: cardList[activeCardIndex].title,
         cardNumber: cardList[activeCardIndex].number,
-        rightAnswer:
-          cardList[activeCardIndex].number * cardList[activeCardIndex].coeff,
+        rightAnswer: playsBy < maxBet * 2 ? playsBy : maxBet * 2,
         userInput: text,
       };
       return [...prev, newResult];
@@ -74,7 +75,6 @@ function PokerTest({ route }) {
   };
 
   const handleSubmit = () => {
-    // Переходим к следующей карте
     if (activeCardIndex < cardList.length - 1) {
       setActiveCardIndex(activeCardIndex + 1);
     } else {
@@ -90,15 +90,31 @@ function PokerTest({ route }) {
     }
   };
 
+  const round5 = (x) => {
+    return x % 5 >= 4.5 ? parseInt(x / 5) * 5 + 5 : parseInt(x / 5) * 5;
+  };
+
+  function getRandomMultipleOfFive(minNumber, maxBet) {
+    const minMultipleOfFive = Math.ceil(minNumber / 5) * 5;
+    const maxMultipleOfFive = Math.floor(maxBet / 5) * 5;
+    return getRandomIntInclusive(minMultipleOfFive, maxMultipleOfFive);
+  }
+
+  function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   useEffect(() => {
     function generateUniqueRandomNumbers(amount, min, max, st) {
       if (amount === 0) {
-        amount = max / st + 1; // Используем максимальное возможное количество чисел
+        amount = max / st + 1;
       }
 
       const uniqueNumbers = new Set();
       let attempts = 0;
-      const maxAttempts = 10000; // Максимальное количество попыток
+      const maxAttempts = 10000;
 
       while (uniqueNumbers.size < amount && attempts < maxAttempts) {
         const randomNum = Math.round(Math.random() * (max - min) + min);
@@ -115,35 +131,36 @@ function PokerTest({ route }) {
       amountOfCards,
       minBet,
       maxBet,
-      step
+      5
     );
 
     const cardData = cardNumbers.map((number, index) => {
       const randomGameIndex = Math.floor(Math.random() * combinations.length);
       const randomGame = combinations[randomGameIndex];
 
+      const minNumber =
+        Number(minBet) * Number(randomGame.coefficientBeforeCritical);
+      const bet = round5(getRandomMultipleOfFive(minNumber, randomGame.maxBet));
+
       return {
         title: randomGame.name,
-        coeff: randomGame.coeff,
+        maxBet: randomGame.maxBet,
+        critical: randomGame.critical,
+        coefficientBeforeCritical: randomGame.coefficientBeforeCritical,
+        coefficientAfterCritical: randomGame.coefficientAfterCritical,
         index:
           amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
-        number,
+        number: bet,
       };
     });
 
     setCardList(cardData);
-
-    // Здесь вы можете сохранить cardData в состояние, если это нужно
-
-    return () => {
-      // Здесь можно выполнить дополнительные действия при размонтировании компонента
-    };
-  }, []); // Пустой массив зависимостей, что означает, что этот блок кода выполнится только при загрузке компонента
+  }, []);
 
   const renderCardItem = ({ item }) => {
     return (
       <View style={{ flex: 1, width: Dimensions.get("window").width }}>
-        {showActiveCard && ( // Добавляем проверку, показывать или нет активную карту
+        {showActiveCard && (
           <Card
             title={cardList[activeCardIndex].title}
             number={cardList[activeCardIndex].number}
@@ -169,26 +186,23 @@ function PokerTest({ route }) {
             onDismiss={startTimer}
           >
             <View style={styles.modal}>
-              <View
-                style={{
-                  width: "100%",
-                }}
-              >
+              <View style={{ width: "100%" }}>
                 {mode === "timelimit" && (
                   <Text style={styles.modalInfo}>
                     You need to calculate the payout for {amountOfCards} bets.
-                    The time limit is {timeLimit / 1000} seconds. You need to do
-                    100% to get to the leaderboard.
+                    The time limit is {timeLimit / 1000} seconds. You need to
+                    write the maximum denomination of how much the sector plays.
+                    Step is 5, maximum is {maxBet} progressive (DON'T WRITE THE
+                    REST). You need to do 100% to get to the leaderboard.
                   </Text>
                 )}
                 {mode === "sandbox" && (
                   <Text style={styles.modalInfo}>
-                    You need to calculate the payout for as many bets as you can.
-                    There is no time limit. Have fun, no one is rushing you.
+                    You need to calculate the payout for as many bets as you
+                    can. There is no time limit. Have fun, no one is rushing
+                    you.
                   </Text>
                 )}
-
-                <Paytable combinations={combinations} splitCoeff={splitCoeff} />
 
                 <Button
                   style={styles.modalButton}
@@ -213,6 +227,7 @@ function PokerTest({ route }) {
               justifyContent: "space-between",
               flexDirection: "row",
               padding: 5,
+              paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
             <TouchableOpacity
@@ -222,14 +237,12 @@ function PokerTest({ route }) {
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
             </TouchableOpacity>
 
-            {mode === "sandbox" && (
-              <TouchableOpacity
-                onPress={handleStopTest}
-                style={{ padding: 5, backgroundColor: "#f99", minWidth: 100 }}
-              >
-                <Text style={{ textAlign: "center" }}>Stop</Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity
+              onPress={handleStopTest}
+              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+            >
+              <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
+            </TouchableOpacity>
           </View>
 
           <FlatList
@@ -250,13 +263,23 @@ function PokerTest({ route }) {
             onRequestClose={closePaytableModal}
           >
             <View style={styles.modal}>
-              <View
-                style={{
-                  width: "100%",
-                }}
-              >
-                <Paytable combinations={combinations} splitCoeff={splitCoeff} />
-
+              <View style={{ width: "100%" }}>
+                {mode === "timelimit" && (
+                  <Text style={styles.modalInfo}>
+                    You need to calculate the payout for {amountOfCards} bets.
+                    The time limit is {timeLimit / 1000} seconds. You need to
+                    write the maximum denomination of how much the sector plays.
+                    Step is 5, maximum is {maxBet} progressive (DON'T WRITE THE
+                    REST). You need to do 100% to get to the leaderboard.
+                  </Text>
+                )}
+                {mode === "sandbox" && (
+                  <Text style={styles.modalInfo}>
+                    You need to calculate the payout for as many bets as you
+                    can. There is no time limit. Have fun, no one is rushing
+                    you.
+                  </Text>
+                )}
                 <Button
                   style={styles.modalButton}
                   title="Close"
@@ -300,4 +323,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PokerTest;
+export default RouletteSeriesTest;

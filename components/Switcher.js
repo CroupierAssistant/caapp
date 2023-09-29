@@ -9,9 +9,9 @@ const Switcher = ({ isEnabled, toggleSwitch, isAuthenticated }) => {
       <Text style={{ fontSize: 26 }}>Switch mode</Text>
       <View style={{ flex: 1, alignItems: 'flex-end' }}>
         <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isEnabled ? "#0d8215" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
+          trackColor={{ false: "#fff", true: "#fff" }}
+          thumbColor={isEnabled ? "#29648a" : "#29648a"}
+          ios_backgroundColor="#fff"
           onValueChange={toggleSwitch}
           value={isEnabled}
           disabled={!isAuthenticated}

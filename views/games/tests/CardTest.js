@@ -15,7 +15,7 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 
-function BlackjackTest({ route }) {
+function CardTest({ route }) {
   const {
     timeLimit,
     mode,
@@ -72,6 +72,7 @@ function BlackjackTest({ route }) {
       return [...prev, newResult];
     });
   };
+
   const handleSubmit = () => {
     // Переходим к следующей карте
     if (activeCardIndex < cardList.length - 1) {
@@ -182,8 +183,9 @@ function BlackjackTest({ route }) {
                 )}
                 {mode === "sandbox" && (
                   <Text style={styles.modalInfo}>
-                    You need to calculate the payout for as many bets as you can.
-                    There is no time limit. Have fun, no one is rushing you.
+                    You need to calculate the payout for as many bets as you
+                    can. There is no time limit. Have fun, no one is rushing
+                    you.
                   </Text>
                 )}
 
@@ -191,7 +193,7 @@ function BlackjackTest({ route }) {
 
                 <Button
                   style={styles.modalButton}
-                  title="Start Timer"
+                  title="Start"
                   onPress={startTimer}
                 />
               </View>
@@ -212,23 +214,22 @@ function BlackjackTest({ route }) {
               justifyContent: "space-between",
               flexDirection: "row",
               padding: 5,
+              paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
             <TouchableOpacity
               onPress={openPaytableModal}
-              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100, marginTop: 15 }}
+              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
             >
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
             </TouchableOpacity>
 
-            {mode === "sandbox" && (
-              <TouchableOpacity
-                onPress={handleStopTest}
-                style={{ padding: 5, backgroundColor: "#f99", minWidth: 100 }}
-              >
-                <Text style={{ textAlign: "center" }}>Stop</Text>
-              </TouchableOpacity>
-            )}
+            <TouchableOpacity
+              onPress={handleStopTest}
+              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+            >
+              <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
+            </TouchableOpacity>
           </View>
 
           <FlatList
@@ -255,6 +256,7 @@ function BlackjackTest({ route }) {
                 }}
               >
                 <Paytable combinations={combinations} splitCoeff={splitCoeff} />
+
                 <Button
                   style={styles.modalButton}
                   title="Close"
@@ -287,13 +289,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    width: "100%",
   },
   modalInfo: {
     marginBottom: 50,
   },
   modalButton: {
     width: "100%",
+    marginTop: 50,
   },
 });
 
-export default BlackjackTest;
+export default CardTest;

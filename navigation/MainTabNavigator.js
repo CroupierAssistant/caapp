@@ -14,14 +14,14 @@ function MainTabNavigator() {
         name="Home"
         component={HomeStackNavigator}
         options={{
-          tabBarLabel: "Home",
+          tabBarLabel: "Main",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#4783b8",
-          tabBarInactiveBackgroundColor: "#eee",
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialCommunityIcons
               name="home"
-              color={focused ? "#eee" : "#4783b8"}
+              color={focused ? "#ccc" : "#29648a"}
               size={30}
             />
           ),
@@ -34,12 +34,12 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: "Profile",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#4783b8",
-          tabBarInactiveBackgroundColor: "#eee",
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
             <MaterialCommunityIcons
               name="account"
-              color={focused ? "#eee" : "#4783b8"}
+              color={focused ? "#ccc" : "#29648a"}
               size={30}
             />
           ),

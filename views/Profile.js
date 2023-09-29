@@ -1,13 +1,20 @@
-import React, { useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Switch } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
+import Registration from '../components/Registration';
+import Switcher from '../components/Switcher';
 
 const Profile = () => {
-  const { isAuthenticated, login, logout } = useContext(AuthContext);
+  const { isAuthenticated, login, logout, setIsAuthenticated } = useContext(AuthContext);
+  const [isEnabled, setIsEnabled] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsAuthenticated((previousState) => !previousState);
+  }
 
   return (
     <View style={styles.container}>
-      {isAuthenticated ? (
+      {/* {isAuthenticated ? (
         <View>
           <TouchableOpacity style={styles.menuItem}>
             <Text>User information</Text>
@@ -31,7 +38,16 @@ const Profile = () => {
             <Text>Register</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
+      {/* <Registration /> */}
+      <Switch
+          trackColor={{ false: "#fff", true: "#fff" }}
+          thumbColor={isEnabled ? "#29648a" : "#29648a"}
+          ios_backgroundColor="#fff"
+          onValueChange={toggleSwitch}
+          value={isAuthenticated}
+          // disabled={!isAuthenticated}
+        />
     </View>
   );
 };

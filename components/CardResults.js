@@ -21,9 +21,12 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>
+      <Text style={[styles.header, {lineHeight: 22}]}>
         Test Results: {percentage ? Number(percentage).toFixed(2) : '0'}%
         {mode === "timelimit" && ` in ${timePassedParent}`}
+      </Text>
+      <Text style={[styles.header, {fontSize: 20, lineHeight: 20}]}>
+        Correct answers: {rightAnswersAmount} / {cardResults.length}
       </Text>
       <FlatList
         data={cardResults}
@@ -36,24 +39,24 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
               styles.resultItem,
               {
                 backgroundColor:
-                  item.userInput == item.rightAnswer ? "#66cc6a" : "#f55c51",
+                  item.userInput == item.rightAnswer ? "#479761" : "#a16e83",
               },
             ]}
           >
             <Text
               style={{
-                fontSize: 22,
+                fontSize: 20, lineHeight: 20,
                 fontWeight: "bold",
                 marginBottom: 5,
-                color: '#444',
+                color: '#19181a',
               }}
             >
               {item.cardName} - {item.cardNumber}
             </Text>
-            <Text style={{ fontSize: 18, color: '#444' }}>
+            <Text style={{ fontSize: 16, color: '#19181a', lineHeight: 16 }}>
               Right answer: {item.rightAnswer}
             </Text>
-            <Text style={{ fontSize: 18, color: '#444' }}>Your answer: {item.userInput ? item.userInput : '—'}</Text>
+            <Text style={{ fontSize: 16, color: '#19181a', lineHeight: 16 }}>Your answer: {item.userInput ? item.userInput : '—'}</Text>
           </View>
         )}
       />
@@ -63,24 +66,21 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginBottom: 50,
     padding: 10,
     elevation: 4,
   },
   header: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
-    color: '#444',
-    textTransform: 'uppercase',
+    color: '#19181a'
   },
   resultItem: {
-    marginBottom: 10,
+    marginBottom: 5,
     padding: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#fff",
+    borderRadius: 3,
   },
 });
 

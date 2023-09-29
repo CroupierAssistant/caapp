@@ -5,22 +5,46 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
 
-function Blackjack() {
+function RouletteSeries() {
   const navigation = useNavigation();
-  
+
   const handleNavigateToTest = () => {
-    navigation.navigate("CardTest", {
-      mode: isEnabled ? 'sandbox' : 'timelimit',
+    navigation.navigate("RouletteSeriesTest", {
+      mode: isEnabled ? "sandbox" : "timelimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
-      step: Number(selectedStep),
-      timeLimit: 60000,
+      timeLimit: 150000,
       splitCoeff: false,
+      step: selectedStep,
       combinations: [
         {
-          name: "Blackjack",
-          coeff: 1.5,
+          name: "Voisins de zero",
+          maxBet: selectedMaxBet * 17,
+          critical: selectedMaxBet * 13.5,
+          coefficientBeforeCritical: 9,
+          coefficientAfterCritical: 7,
+        },
+        {
+          name: "Zero spiel",
+          maxBet: selectedMaxBet * 7,
+          critical: selectedMaxBet * 4,
+          coefficientBeforeCritical: 4,
+          coefficientAfterCritical: 3,
+        },
+        {
+          name: "Orphelins",
+          maxBet: selectedMaxBet * 9,
+          critical: selectedMaxBet * 5,
+          coefficientBeforeCritical: 5,
+          coefficientAfterCritical: 4,
+        },
+        {
+          name: "Tier",
+          maxBet: selectedMaxBet * 12,
+          critical: selectedMaxBet * 12,
+          coefficientBeforeCritical: 6,
+          coefficientAfterCritical: 6,
         },
       ],
     });
@@ -29,7 +53,7 @@ function Blackjack() {
   const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
-    setSelectedButton('10');
+    setSelectedButton("10");
     setIsEnabled(false);
   }, [isAuthenticated]);
 
@@ -38,11 +62,10 @@ function Blackjack() {
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => {
-    setSelectedStep('5');
-    setSelectedMinBet('5');
-    setSelectedMaxBet('500');
+    setSelectedMinBet("5");
+    setSelectedMaxBet("50");
     setIsEnabled((previousState) => !previousState);
-  }
+  };
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
@@ -50,23 +73,23 @@ function Blackjack() {
   };
 
   const [selectedStep, setSelectedStep] = useState("5");
-  const handleStepSelect = (value) => {
-    setSelectedStep(value);
-  };
-
   const [selectedMinBet, setSelectedMinBet] = useState("5");
   const handleMinBetSelect = (value) => {
     setSelectedMinBet(value);
   };
 
-  const [selectedMaxBet, setSelectedMaxBet] = useState("500");
+  const [selectedMaxBet, setSelectedMaxBet] = useState("50");
   const handleMaxBetSelect = (value) => {
     setSelectedMaxBet(value);
   };
 
   return (
     <View style={styles.container}>
-    <Switcher isEnabled={isEnabled} toggleSwitch={toggleSwitch} isAuthenticated={isAuthenticated}/>
+      <Switcher
+        isEnabled={isEnabled}
+        toggleSwitch={toggleSwitch}
+        isAuthenticated={isAuthenticated}
+      />
       {!isAuthenticated && (
         <Text style={{ ...styles.timeLimitDescription, marginTop: -20 }}>
           Only Time Limit Mode available when you are not logged in.
@@ -157,7 +180,7 @@ function Blackjack() {
             </View>
 
             <Text style={styles.timeLimitDescription}>
-              The goal is calculate payouts for selected amount of cards in 60
+              The goal is calculate payouts for selected amount of cards in 90
               seconds
             </Text>
           </>
@@ -199,6 +222,34 @@ function Blackjack() {
                 style={[
                   !isPremium && styles.radioButtonDisabled,
                   styles.radioButton,
+                  selectedMinBet === "10" && styles.selectedButton,
+                ]}
+                onPress={() => handleMinBetSelect("10")}
+              >
+                {isPremium ? (
+                  <Text
+                    style={[
+                      styles.radioButtonText,
+                      selectedMinBet === "10" && styles.selectedRadioButtonText,
+                    ]}
+                  >
+                    10
+                  </Text>
+                ) : (
+                  <FontAwesome
+                    style={styles.lockIcon}
+                    name="lock"
+                    size={24}
+                    color="black"
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={!isPremium}
+                style={[
+                  !isPremium && styles.radioButtonDisabled,
+                  styles.radioButton,
+                  styles.radioButtonLast,
                   selectedMinBet === "25" && styles.selectedButton,
                 ]}
                 onPress={() => handleMinBetSelect("25")}
@@ -221,21 +272,42 @@ function Blackjack() {
                   />
                 )}
               </TouchableOpacity>
+            </View>
+          </>
+          <>
+            <Text style={styles.radioLegend}>Select max-bet:</Text>
+            <View style={styles.radioContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.radioButton,
+                  styles.radioButtonFirst,
+                  selectedMaxBet === "50" && styles.selectedButton,
+                ]}
+                onPress={() => handleMaxBetSelect("50")}
+              >
+                <Text
+                  style={[
+                    styles.radioButtonText,
+                    selectedMaxBet === "50" && styles.selectedRadioButtonText,
+                  ]}
+                >
+                  50
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 disabled={!isPremium}
                 style={[
                   !isPremium && styles.radioButtonDisabled,
                   styles.radioButton,
-                  styles.radioButtonLast,
-                  selectedMinBet === "100" && styles.selectedButton,
+                  selectedMaxBet === "100" && styles.selectedButton,
                 ]}
-                onPress={() => handleMinBetSelect("100")}
+                onPress={() => handleMaxBetSelect("100")}
               >
                 {isPremium ? (
                   <Text
                     style={[
                       styles.radioButtonText,
-                      selectedMinBet === "100" &&
+                      selectedMaxBet === "100" &&
                         styles.selectedRadioButtonText,
                     ]}
                   >
@@ -250,152 +322,53 @@ function Blackjack() {
                   />
                 )}
               </TouchableOpacity>
-            </View>
-          </>
-          <>
-            <Text style={styles.radioLegend}>Select max-bet:</Text>
-            <View style={styles.radioContainer}>
               <TouchableOpacity
+                disabled={!isPremium}
                 style={[
+                  !isPremium && styles.radioButtonDisabled,
                   styles.radioButton,
-                  styles.radioButtonFirst,
+                  selectedMaxBet === "200" && styles.selectedButton,
+                ]}
+                onPress={() => handleMaxBetSelect("200")}
+              >
+                {isPremium ? (
+                  <Text
+                    style={[
+                      styles.radioButtonText,
+                      selectedMaxBet === "200" &&
+                        styles.selectedRadioButtonText,
+                    ]}
+                  >
+                    200
+                  </Text>
+                ) : (
+                  <FontAwesome
+                    style={styles.lockIcon}
+                    name="lock"
+                    size={24}
+                    color="black"
+                  />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={!isPremium}
+                style={[
+                  !isPremium && styles.radioButtonDisabled,
+                  styles.radioButton,
+                  styles.radioButtonLast,
                   selectedMaxBet === "500" && styles.selectedButton,
                 ]}
                 onPress={() => handleMaxBetSelect("500")}
               >
-                <Text
-                  style={[
-                    styles.radioButtonText,
-                    selectedMaxBet === "500" && styles.selectedRadioButtonText,
-                  ]}
-                >
-                  500
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={!isPremium}
-                style={[
-                  !isPremium && styles.radioButtonDisabled,
-                  styles.radioButton,
-                  selectedMaxBet === "1000" && styles.selectedButton,
-                ]}
-                onPress={() => handleMaxBetSelect("1000")}
-              >
                 {isPremium ? (
                   <Text
                     style={[
                       styles.radioButtonText,
-                      selectedMaxBet === "1000" &&
+                      selectedMaxBet === "500" &&
                         styles.selectedRadioButtonText,
                     ]}
                   >
-                    1000
-                  </Text>
-                ) : (
-                  <FontAwesome
-                    style={styles.lockIcon}
-                    name="lock"
-                    size={24}
-                    color="black"
-                  />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={!isPremium}
-                style={[
-                  !isPremium && styles.radioButtonDisabled,
-                  styles.radioButton,
-                  styles.radioButtonLast,
-                  selectedMaxBet === "5000" && styles.selectedButton,
-                ]}
-                onPress={() => handleMaxBetSelect("5000")}
-              >
-                {isPremium ? (
-                  <Text
-                    style={[
-                      styles.radioButtonText,
-                      selectedMaxBet === "5000" &&
-                        styles.selectedRadioButtonText,
-                    ]}
-                  >
-                    5000
-                  </Text>
-                ) : (
-                  <FontAwesome
-                    style={styles.lockIcon}
-                    name="lock"
-                    size={24}
-                    color="black"
-                  />
-                )}
-              </TouchableOpacity>
-            </View>
-          </>
-          <>
-            <Text style={styles.radioLegend}>Select step:</Text>
-            <View style={styles.radioContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.radioButton,
-                  styles.radioButtonFirst,
-                  selectedStep === "5" && styles.selectedButton,
-                ]}
-                onPress={() => handleStepSelect("5")}
-              >
-                <Text
-                  style={[
-                    styles.radioButtonText,
-                    selectedStep === "5" && styles.selectedRadioButtonText,
-                  ]}
-                >
-                  5
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={!isPremium}
-                style={[
-                  !isPremium && styles.radioButtonDisabled,
-                  styles.radioButton,
-                  selectedStep === "10" && styles.selectedButton,
-                ]}
-                onPress={() => handleStepSelect("10")}
-              >
-                {isPremium ? (
-                  <Text
-                    style={[
-                      styles.radioButtonText,
-                      selectedStep === "10" && styles.selectedRadioButtonText,
-                    ]}
-                  >
-                    10
-                  </Text>
-                ) : (
-                  <FontAwesome
-                    style={styles.lockIcon}
-                    name="lock"
-                    size={24}
-                    color="black"
-                  />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity
-                disabled={!isPremium}
-                style={[
-                  !isPremium && styles.radioButtonDisabled,
-                  styles.radioButton,
-                  styles.radioButtonLast,
-                  selectedStep === "25" && styles.selectedButton,
-                ]}
-                onPress={() => handleStepSelect("25")}
-              >
-                {isPremium ? (
-                  <Text
-                    style={[
-                      styles.radioButtonText,
-                      selectedStep === "25" && styles.selectedRadioButtonText,
-                    ]}
-                  >
-                    25
+                    500
                   </Text>
                 ) : (
                   <FontAwesome
@@ -447,7 +420,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   radioButton: {
-    width: "33%",
+    // width: "25%",
+    flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderWidth: 1,
@@ -514,4 +488,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Blackjack;
+export default RouletteSeries;

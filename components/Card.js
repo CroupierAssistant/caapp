@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     borderWidth: 1,
-    borderColor: "#4783b8",
+    borderColor: "#29648a",
     borderRadius: 5,
     padding: 10,
     width: "80%",
-    backgroundColor: "#4783b8",
+    backgroundColor: "#29648a",
     shadowColor: "#003665",
     shadowOffset: {
       width: 5,
@@ -45,12 +45,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 20.0,
     elevation: 24,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "gray",
-    padding: 5,
-    marginVertical: 5,
   },
 });
 

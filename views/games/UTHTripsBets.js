@@ -5,11 +5,11 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
 
-function UTHTripsBets () {
+function UTHTripsBets() {
   const navigation = useNavigation();
 
   const handleNavigateToTest = () => {
-    navigation.navigate("PokerTest", {
+    navigation.navigate("CardTest", {
       mode: isEnabled ? "sandbox" : "timelimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
@@ -480,7 +480,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderWidth: 1,
     borderRightWidth: 0,
-    borderColor: "#4783b8",
+    borderColor: "#29648a",
   },
   startButton: {
     width: "50%",
@@ -488,7 +488,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingVertical: 15,
     paddingHorizontal: 20,
-    backgroundColor: "#0d8215",
+    backgroundColor: "#479761",
     borderRadius: 5,
   },
   startButtonText: {
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   radioButtonDisabled: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#b19f9e",
   },
   radioButtonFirst: {
     borderBottomStartRadius: 5,
@@ -510,7 +510,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
   },
   selectedButton: {
-    backgroundColor: "#4783b8",
+    backgroundColor: "#29648a",
   },
   radioButtonText: {
     textAlign: "center",
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 16,
     marginTop: 20,
-    marginBottom: -10,
+    marginBottom: -5,
   },
 });
 
