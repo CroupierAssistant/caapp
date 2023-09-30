@@ -26,25 +26,19 @@ function CardTest({ route }) {
     combinations,
     splitCoeff,
   } = route.params;
+
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
-
-  const [showActiveCard, setShowActiveCard] = useState(true); // Добавляем новое состояние
+  const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
   const [cardList, setCardList] = useState([]);
   const [isDone, setIsDone] = useState(false);
-
   const [timePassedParent, setTimePassedParent] = useState("");
 
   const flatListRef = useRef(null);
-
-  const startTimer = () => {
-    setModalVisible(false);
-    setTimerRunning(true);
-  };
 
   const openPaytableModal = () => {
     setShowPaytableModal(true);
@@ -93,12 +87,12 @@ function CardTest({ route }) {
   useEffect(() => {
     function generateUniqueRandomNumbers(amount, min, max, st) {
       if (amount === 0) {
-        amount = max / st + 1; // Используем максимальное возможное количество чисел
+        amount = max / st + 1;
       }
 
       const uniqueNumbers = new Set();
       let attempts = 0;
-      const maxAttempts = 10000; // Максимальное количество попыток
+      const maxAttempts = 10000;
 
       while (uniqueNumbers.size < amount && attempts < maxAttempts) {
         const randomNum = Math.round(Math.random() * (max - min) + min);
@@ -132,14 +126,12 @@ function CardTest({ route }) {
     });
 
     setCardList(cardData);
-
     setTimerRunning(true);
-    // Здесь вы можете сохранить cardData в состояние, если это нужно
 
     return () => {
       // Здесь можно выполнить дополнительные действия при размонтировании компонента
     };
-  }, []); // Пустой массив зависимостей, что означает, что этот блок кода выполнится только при загрузке компонента
+  }, []);
 
   const renderCardItem = ({ item }) => {
     return (
@@ -155,6 +147,10 @@ function CardTest({ route }) {
       </View>
     );
   };
+  
+  const updateTimer = (formattedTime) => {
+    setTimePassedParent(formattedTime);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -163,7 +159,7 @@ function CardTest({ route }) {
           {timerRunning && mode === "timelimit" && (
             <Timer
               time={timeLimit}
-              setTimePassedParent={setTimePassedParent}
+              updateTimer={updateTimer}
               setIsDone={setIsDone}
             />
           )}

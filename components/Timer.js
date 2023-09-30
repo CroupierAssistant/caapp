@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const Timer = ({ time, setTimePassedParent, setIsDone }) => {
+const Timer = ({ time, updateTimer, setIsDone }) => {
   const [timeLeft, setTimeLeft] = useState(time);
-
   let intervalRef = useRef(null);
   let TIME_LIMIT = time;
-  let timePassed = 0;
   let startTime = useRef(new Date());
 
   const formatTime = (time) => {
@@ -27,21 +25,22 @@ const Timer = ({ time, setTimePassedParent, setIsDone }) => {
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setTimeLeft((prevProgress) => {
-        timePassed = new Date() - startTime.current;
-        setTimePassedParent(formatTime(timePassed));
-        if (prevProgress > 0) {
-          return Math.max(0, TIME_LIMIT - timePassed);
-        } else {
+        const timePassed = new Date() - startTime.current;
+        const formattedTime = formatTime(timePassed);
+
+        if (prevProgress <= 0) {
           clearInterval(intervalRef.current);
-          setTimePassedParent(formatTime(time));
           setIsDone(true);
-          return prevProgress;
+        } else {
+          updateTimer(formattedTime);
         }
+
+        return prevProgress > 0 ? Math.max(0, TIME_LIMIT - timePassed) : prevProgress;
       });
     }, 10);
 
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [updateTimer, setIsDone]);
 
   return (
     <View style={styles.container}>
@@ -82,5 +81,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 });
-
 export default Timer;
+

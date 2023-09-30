@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Switch } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import Registration from '../components/Registration';
 import Switcher from '../components/Switcher';
 
 const Profile = () => {
