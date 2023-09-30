@@ -35,6 +35,10 @@ function HomeScreen({ route }) {
         <Text style={styles.buttonText}>Roulette Complete Bet</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity style={{...styles.button, backgroundColor: '#aaa'}} onPress={() => navigation.navigate("RoulettePictures")} >
+        <Text style={styles.buttonText}>Roulette Pictures</Text>
+      </TouchableOpacity>
+
       <View style={styles.break} />
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPokerAnte")} >

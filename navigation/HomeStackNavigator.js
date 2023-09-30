@@ -9,6 +9,7 @@ import UTHBlindBets from "../views/games/UTHBlindBets";
 import UTHTripsBets from "../views/games/UTHTripsBets";
 import TexasHoldEm from "../views/games/TexasHoldEm";
 import RouletteSeries from "../views/games/RouletteSeries";
+import RoulettePictures from "../views/games/RoulettePictures";
 import MultiplicationTable from "../views/games/MultiplicationTable";
 
 import CardTest from "../views/games/tests/CardTest";
@@ -32,6 +33,7 @@ function HomeStackNavigator({ navigation, route }) {
       <Stack.Screen name="TexasHoldEm" component={TexasHoldEm} options={{ title: "Texas Hold'em bonus" }}/>
       <Stack.Screen name="RouletteSeries" component={RouletteSeries} options={{ title: "Roulette Series" }}/>
       <Stack.Screen name="MultiplicationTable" component={MultiplicationTable} options={{ title: "Multiplication Table" }}/>
+      <Stack.Screen name="RoulettePictures" component={RoulettePictures} options={{ title: "Roulette Pictures" }}/>
 
       <Stack.Screen name="CardTest" component={CardTest} options={{ title: "" }}/>
       <Stack.Screen name="RouletteSeriesTest" component={RouletteSeriesTest} options={{ title: "" }}/>
