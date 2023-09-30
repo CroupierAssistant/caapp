@@ -1,9 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity, Switch, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView } from "react-native";
 import { AuthContext } from "../../context/AuthContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
+import Paytable from "../../components/Paytable";
 
 function UTHBlindBets() {
   const navigation = useNavigation();
@@ -17,34 +18,36 @@ function UTHBlindBets() {
       step: Number(selectedStep),
       timeLimit: 90000,
       splitCoeff: false,
-      combinations: [
-        {
-          name: "Straight",
-          coeff: 1,
-        },
-        {
-          name: "Flush",
-          coeff: 1.5,
-        },
-        {
-          name: "Full house",
-          coeff: 3,
-        },
-        {
-          name: "Four of a kind",
-          coeff: 10,
-        },
-        {
-          name: "Straight flush",
-          coeff: 50,
-        },
-        {
-          name: "Royal flush",
-          coeff: 500,
-        },
-      ],
+      combinations: combinations,
     });
   };
+
+  const [combinations, setCombinations] = useState([
+    {
+      name: "Straight",
+      coeff: 1,
+    },
+    {
+      name: "Flush",
+      coeff: 1.5,
+    },
+    {
+      name: "Full house",
+      coeff: 3,
+    },
+    {
+      name: "Four of a kind",
+      coeff: 10,
+    },
+    {
+      name: "Straight flush",
+      coeff: 50,
+    },
+    {
+      name: "Royal flush",
+      coeff: 500,
+    },
+  ]);
 
   const { isAuthenticated } = useContext(AuthContext);
 
@@ -85,6 +88,7 @@ function UTHBlindBets() {
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Switcher
         isEnabled={isEnabled}
@@ -434,13 +438,16 @@ function UTHBlindBets() {
           </>
         </>
       )}
+      
+      <Paytable combinations={combinations} splitCoeff={false} />
+
       <TouchableOpacity
         style={[styles.startButton]}
         onPress={handleNavigateToTest}
       >
         <Text style={[styles.startButtonText]}>Start</Text>
       </TouchableOpacity>
-    </View>
+    </View></ScrollView>
   );
 }
 

@@ -21,7 +21,7 @@ function HomeScreen({ route }) {
         <Text style={styles.buttonText}>Blackjack</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{...styles.button, backgroundColor: '#aaa'}} onPress={() => navigation.navigate("#")} disabled={true} >
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MultiplicationTable")} >
         <Text style={styles.buttonText}>Multiplication Table</Text>
       </TouchableOpacity>
 
@@ -41,12 +41,12 @@ function HomeScreen({ route }) {
         <Text style={styles.buttonText}>Russian poker Ante</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPokerBonus")} >
-        <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPoker5Bonus")} >
+        <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{...styles.button, backgroundColor: '#aaa'}} onPress={() => navigation.navigate("#")} disabled={true} >
-        <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPokerBonus")} >
+        <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
       </TouchableOpacity>
 
       <View style={styles.break} />

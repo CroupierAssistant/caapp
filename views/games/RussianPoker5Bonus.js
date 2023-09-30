@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
 import Paytable from "../../components/Paytable";
 
-function UTHTripsBets() {
+function RussianPoker5Bonus() {
   const navigation = useNavigation();
 
   const handleNavigateToTest = () => {
@@ -31,32 +31,28 @@ function UTHTripsBets() {
 
   const [combinations, setCombinations] = useState([
     {
-      name: "Three of a kind",
-      coeff: 3,
-    },
-    {
       name: "Straight",
-      coeff: 4,
+      coeff: 25,
     },
     {
       name: "Flush",
-      coeff: 7,
+      coeff: 50,
     },
     {
       name: "Full house",
-      coeff: 8,
+      coeff: 100,
     },
     {
       name: "Four of a kind",
-      coeff: 30,
+      coeff: 300,
     },
     {
       name: "Straight flush",
-      coeff: 40,
+      coeff: 500,
     },
     {
       name: "Royal flush",
-      coeff: 50,
+      coeff: 1000,
     },
   ]);
 
@@ -99,7 +95,7 @@ function UTHTripsBets() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView> 
       <View style={styles.container}>
         <Switcher
           isEnabled={isEnabled}
@@ -453,7 +449,7 @@ function UTHTripsBets() {
             </>
           </>
         )}
-
+        
         <Paytable combinations={combinations} splitCoeff={false} />
 
         <TouchableOpacity
@@ -561,4 +557,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UTHTripsBets;
+export default RussianPoker5Bonus;

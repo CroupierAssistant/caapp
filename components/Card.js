@@ -5,18 +5,21 @@ function Card({ title, number, index }) {
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        <Text style={{ textAlign: "center", fontSize: 20 }}>{title}</Text>
+        <Text style={{ textAlign: "center", fontSize: 20, color: "#fff" }}>{title}</Text>
         <Text
           style={{
             textAlign: "center",
-            fontSize: 72,
+            fontSize: 68,
             fontWeight: "bold",
             marginVertical: 25,
+            color: "#fff",
           }}
         >
           {number}
         </Text>
-        <Text style={{ textAlign: "right", fontSize: 14 }}>{index}</Text>
+        <Text style={{ textAlign: "right", fontSize: 14, color: "#fff" }}>
+          {index}
+        </Text>
       </View>
     </View>
   );
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
     borderColor: "#29648a",
     borderRadius: 5,
     padding: 10,
-    width: "80%",
+    width: "90%",
     backgroundColor: "#29648a",
     shadowColor: "#003665",
     shadowOffset: {

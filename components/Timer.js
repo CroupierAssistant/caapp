@@ -1,37 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const Timer = React.memo(({time, setTimePassedParent, setIsDone}) => {
+const Timer = ({ time, setTimePassedParent, setIsDone }) => {
   const [timeLeft, setTimeLeft] = useState(time);
 
+  let intervalRef = useRef(null);
   let TIME_LIMIT = time;
   let timePassed = 0;
-  let startTime = new Date();
+  let startTime = useRef(new Date());
 
-  function formatTime(time) {
-    var minutes = Math.floor(time / 60000)
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60000)
       .toString()
       .padStart(2, "0");
-    var seconds = Math.floor((time % 60000) / 1000)
+    const seconds = Math.floor((time % 60000) / 1000)
       .toString()
       .padStart(2, "0");
-    var milliseconds = ((time % 1000) / 10)
+    const milliseconds = ((time % 1000) / 10)
       .toFixed()
       .toString()
       .padStart(2, "0");
 
     return `${minutes}:${seconds}.${milliseconds}`;
-  }
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       setTimeLeft((prevProgress) => {
-        timePassed = new Date() - startTime;
+        timePassed = new Date() - startTime.current;
         setTimePassedParent(formatTime(timePassed));
         if (prevProgress > 0) {
           return Math.max(0, TIME_LIMIT - timePassed);
         } else {
-          clearInterval(interval);
+          clearInterval(intervalRef.current);
           setTimePassedParent(formatTime(time));
           setIsDone(true);
           return prevProgress;
@@ -39,7 +40,7 @@ const Timer = React.memo(({time, setTimePassedParent, setIsDone}) => {
       });
     }, 10);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(intervalRef.current);
   }, []);
 
   return (
@@ -50,7 +51,7 @@ const Timer = React.memo(({time, setTimePassedParent, setIsDone}) => {
       <Text style={styles.timerText}>{formatTime(timeLeft)}</Text>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {

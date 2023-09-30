@@ -17,14 +17,16 @@ function Blackjack() {
       step: Number(selectedStep),
       timeLimit: 60000,
       splitCoeff: false,
-      combinations: [
-        {
-          name: "Blackjack",
-          coeff: 1.5,
-        },
-      ],
+      combinations: combinations,
     });
   };
+  
+  const [combinations, setCombinations] = useState([
+    {
+      name: "Blackjack",
+      coeff: 1.5,
+    },
+  ]);
 
   const { isAuthenticated } = useContext(AuthContext);
 
