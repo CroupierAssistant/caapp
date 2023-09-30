@@ -1,5 +1,11 @@
 import React, { useContext, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 
@@ -8,65 +14,110 @@ function HomeScreen({ route }) {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={[
-          styles.greetingsText,
-          { color: isAuthenticated ? `#479761` : `#a16e83` },
-        ]}
-      >
-        Hi {isAuthenticated ? `USER` : `GUEST`}!
-      </Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Blackjack")}>
-        <Text style={styles.buttonText}>Blackjack</Text>
-      </TouchableOpacity>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* <Text style={[styles.greetingsText, { color: isAuthenticated ? `#479761` : `#a16e83` }]}>
+          Hi {isAuthenticated ? `USER` : `GUEST`}!
+        </Text> */}
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("MultiplicationTable")} >
-        <Text style={styles.buttonText}>Multiplication Table</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Blackjack")}
+        >
+          <Text style={styles.buttonText}>Blackjack</Text>
+        </TouchableOpacity>
 
-      <View style={styles.break} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("MultiplicationTable")}
+        >
+          <Text style={styles.buttonText}>Multiplication Table</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RouletteSeries")} >
-        <Text style={styles.buttonText}>Roulette Series</Text>
-      </TouchableOpacity>
+        <View style={styles.break} />
 
-      <TouchableOpacity style={{...styles.button, backgroundColor: '#aaa'}} onPress={() => navigation.navigate("#")} disabled={true} >
-        <Text style={styles.buttonText}>Roulette Complete Bet</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RouletteSeries")}
+        >
+          <Text style={styles.buttonText}>Roulette Series</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={{...styles.button, backgroundColor: '#aaa'}} onPress={() => navigation.navigate("RoulettePictures")} >
-        <Text style={styles.buttonText}>Roulette Pictures</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          disabled={true}
+          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          onPress={() => navigation.navigate("RoulettePictures")}
+        >
+          <Text style={styles.buttonText}>Roulette Pictures</Text>
+        </TouchableOpacity>
 
-      <View style={styles.break} />
+        <TouchableOpacity
+          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          onPress={() => navigation.navigate("#")}
+          disabled={true}
+        >
+          <Text style={styles.buttonText}>
+            Roulette Straight Up Complete Bet
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPokerAnte")} >
-        <Text style={styles.buttonText}>Russian poker Ante</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          onPress={() => navigation.navigate("#")}
+          disabled={true}
+        >
+          <Text style={styles.buttonText}>
+            Roulette Complete Bet Intersections
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPoker5Bonus")} >
-        <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
-      </TouchableOpacity>
+        <View style={styles.break} />
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("RussianPokerBonus")} >
-        <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RussianPokerAnte")}
+        >
+          <Text style={styles.buttonText}>Russian poker Ante</Text>
+        </TouchableOpacity>
 
-      <View style={styles.break} />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RussianPoker5Bonus")}
+        >
+          <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("UTHBlindBets")} >
-        <Text style={styles.buttonText}>UTH Blind Bets</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RussianPokerBonus")}
+        >
+          <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("UTHTripsBets")} >
-        <Text style={styles.buttonText}>UTH Trips Bets</Text>
-      </TouchableOpacity>
+        <View style={styles.break} />
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("TexasHoldEm")} >
-        <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("UTHBlindBets")}
+        >
+          <Text style={styles.buttonText}>UTH Blind Bets</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("UTHTripsBets")}
+        >
+          <Text style={styles.buttonText}>UTH Trips Bets</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("TexasHoldEm")}
+        >
+          <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 

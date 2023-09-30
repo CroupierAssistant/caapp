@@ -15,7 +15,8 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 
 function RouletteSeriesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } = route.params;
+  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } =
+    route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
@@ -172,6 +173,10 @@ function RouletteSeriesTest({ route }) {
     );
   };
 
+  const updateTimer = (formattedTime) => {
+    setTimePassedParent(formattedTime);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {!isDone && (
@@ -200,7 +205,8 @@ function RouletteSeriesTest({ route }) {
                   <Text style={styles.modalInfo}>
                     You need to calculate the payout for as many bets as you
                     can. There is no time limit. Have fun, no one is rushing
-                    you.
+                    you. Step is 5, maximum is {maxBet} progressive (DON'T WRITE
+                    THE REST)
                   </Text>
                 )}
 
@@ -216,7 +222,7 @@ function RouletteSeriesTest({ route }) {
           {timerRunning && mode === "timelimit" && (
             <Timer
               time={timeLimit}
-              setTimePassedParent={setTimePassedParent}
+              updateTimer={updateTimer}
               setIsDone={setIsDone}
             />
           )}
@@ -234,7 +240,7 @@ function RouletteSeriesTest({ route }) {
               onPress={openPaytableModal}
               style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
             >
-              <Text style={{ textAlign: "center" }}>Show paytable</Text>
+              <Text style={{ textAlign: "center" }}>Show info</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -277,7 +283,8 @@ function RouletteSeriesTest({ route }) {
                   <Text style={styles.modalInfo}>
                     You need to calculate the payout for as many bets as you
                     can. There is no time limit. Have fun, no one is rushing
-                    you.
+                    you. Step is 5, maximum is {maxBet} progressive (DON'T WRITE
+                    THE REST)
                   </Text>
                 )}
                 <Button

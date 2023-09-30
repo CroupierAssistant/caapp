@@ -86,7 +86,7 @@ function MultiplicationTable() {
             </View>
           </>
           <>
-            <Text style={styles.radioLegend}>Select min:</Text>
+            <Text style={styles.radioLegend}>Select min/step:</Text>
             <View style={styles.radioContainer}>
               <TouchableOpacity style={[styles.radioButton, styles.radioButtonFirst, selectedMinBet === "1" && styles.selectedButton]} onPress={() => handleMinBetSelect("1")}>
                 <Text style={[styles.radioButtonText, selectedMinBet === "1" && styles.selectedRadioButtonText]}>1</Text>
