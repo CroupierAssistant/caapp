@@ -13,9 +13,12 @@ import Timer from "../../../components/Timer";
 import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
+import { useNavigation } from "@react-navigation/native";
 
 function RouletteSeriesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } = route.params;
+
+  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } =
+    route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -42,7 +45,8 @@ function RouletteSeriesTest({ route }) {
       const newResult = {
         cardName: cardList[activeCardIndex].title,
         cardNumber: cardList[activeCardIndex].number,
-        rightAnswer: cardList[activeCardIndex].bet * cardList[activeCardIndex].coeff,
+        rightAnswer:
+          cardList[activeCardIndex].bet * cardList[activeCardIndex].coeff,
         userInput: text,
       };
       return [...prev, newResult];
@@ -64,11 +68,12 @@ function RouletteSeriesTest({ route }) {
       handleSubmit();
     }
   };
+  const navigation = useNavigation();
 
   useEffect(() => {
     function generateUniqueRandomNumbers(amount, min, max, st) {
       if (amount === 0) {
-        amount = 500
+        amount = 500;
       }
 
       const uniqueNumbers = new Array();
@@ -95,29 +100,34 @@ function RouletteSeriesTest({ route }) {
 
     const cardData = cardNumbers.map((number, index) => {
       // Фильтруем combinations, оставляем только выбранные
-      const selectedCombinations = combinations.filter(combination => combination.selected);
-    
-      // Если нет выбранных комбинаций, возвращаем пустной объект
+      const selectedCombinations = combinations.filter(
+        (combination) => combination.selected
+      );
+
       if (selectedCombinations.length === 0) {
-        return {};
+        // Если нет выбранных комбинаций, перейти назад в стеке навигации
+        navigation.popToTop();
+        return
       }
-    
+
       // Генерируем случайный индекс из отфильтрованных комбинаций
-      const randomGameIndex = Math.floor(Math.random() * selectedCombinations.length);
+      const randomGameIndex = Math.floor(
+        Math.random() * selectedCombinations.length
+      );
       const randomGame = selectedCombinations[randomGameIndex];
-    
+
       return {
         coeff: randomGame.coeff,
         bet: number,
-        index: amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+        index:
+          amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
         number: (
           <Text>
             {randomGame.coeff} <Text>&times;</Text> {number}
           </Text>
-        )
+        ),
       };
     });
-    
 
     setCardList(cardData);
   }, []);
@@ -149,7 +159,10 @@ function RouletteSeriesTest({ route }) {
               padding: 5,
             }}
           >
-            <TouchableOpacity onPress={handleStopTest} style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}>
+            <TouchableOpacity
+              onPress={handleStopTest}
+              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+            >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
           </View>

@@ -6,31 +6,37 @@ function MultiplicationTable() {
   const navigation = useNavigation();
 
   const handleNavigateToTest = () => {
-    navigation.navigate("MultiplicationTableTest", {
-      mode: "sandbox",
-      amountOfCards: 0,
-      minBet: Number(selectedMinBet),
-      maxBet: Number(selectedMaxBet),
-      splitCoeff: false,
-      combinations: [
-        {
-          name: "5", coeff: 5, selected: selected5
-        },
-        {
-          name: "8", coeff: 8, selected: selected8
-        },
-        {
-          name: "11", coeff: 11, selected: selected11
-        },
-        {
-          name: "17", coeff: 17, selected: selected17
-        },
-        {
-          name: "35", coeff: 35, selected: selected35
-        },
-      ],
-    });
+    const isAnyCombinationSelected =
+      selected5 || selected8 || selected11 || selected17 || selected35;
+  
+    if (isAnyCombinationSelected) {
+      navigation.navigate("MultiplicationTableTest", {
+        mode: "sandbox",
+        amountOfCards: 0,
+        minBet: Number(selectedMinBet),
+        maxBet: Number(selectedMaxBet),
+        splitCoeff: false,
+        combinations: [
+          {
+            name: "5", coeff: 5, selected: selected5
+          },
+          {
+            name: "8", coeff: 8, selected: selected8
+          },
+          {
+            name: "11", coeff: 11, selected: selected11
+          },
+          {
+            name: "17", coeff: 17, selected: selected17
+          },
+          {
+            name: "35", coeff: 35, selected: selected35
+          },
+        ],
+      });
+    }
   };
+  
 
   const [selected5, setSelected5] = useState(true);
   const handleSelect5 = () => {
