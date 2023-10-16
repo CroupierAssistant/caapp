@@ -130,13 +130,13 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "column",
     justifyContent: 'space-between',
-    rowGap: 5
+    rowGap: 2,
   },
     inputContainer: {
       flex: 1,
     },
   input: {
-    width: "97%",
+    width: "99%",
     height: 50,
     backgroundColor: "#ccc",
     borderRadius: 2,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     color: '#000'
   },
   inputButton: {
-    width: "32%",
+    width: "33%",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   delButton: {
-    width: "32%",
+    width: "33%",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   okButton: {
-    width: "32%",
+    width: "33%",
     height: 50,
     justifyContent: "center",
     alignItems: "center",

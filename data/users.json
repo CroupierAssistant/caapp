@@ -1,0 +1,23 @@
+[
+  {
+    "firstName": "test",
+    "lastName": "test",
+    "username": "test",
+    "email": "test",
+    "password": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+  },
+  {
+    "firstName": "test1",
+    "lastName": "test1",
+    "username": "test1",
+    "email": "test1",
+    "password": "1b4f0e9851971998e732078544c96b36c3d01cedf7caa332359d6f1d83567014"
+  },
+  {
+    "firstName": "12",
+    "lastName": "12",
+    "username": "12",
+    "email": "12@12.12",
+    "password": "6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918"
+  }
+]

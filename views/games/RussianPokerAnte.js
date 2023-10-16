@@ -68,12 +68,12 @@ function RussianPokerAnte() {
     },
   ]);
 
-  const { isAuthenticated } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     setSelectedButton("10");
     setIsEnabled(false);
-  }, [isAuthenticated]);
+  }, [user]);
 
   const [isPremium, setIsPremium] = useState(true);
 
@@ -112,9 +112,9 @@ function RussianPokerAnte() {
         <Switcher
           isEnabled={isEnabled}
           toggleSwitch={toggleSwitch}
-          isAuthenticated={isAuthenticated}
+          user={user}
         />
-        {!isAuthenticated && (
+        {!user && (
           <Text style={{ ...styles.timeLimitDescription, marginTop: -20 }}>
             Only Time Limit Mode available when you are not logged in.
           </Text>
@@ -123,7 +123,7 @@ function RussianPokerAnte() {
           <>
             <Text style={styles.modeSelectText}>Time limit mode</Text>
             <>
-              {!isAuthenticated && (
+              {!user && (
                 <Text style={styles.timeLimitDescription}>
                   Only one option available when you are not logged in.
                 </Text>
@@ -147,15 +147,15 @@ function RussianPokerAnte() {
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  disabled={!isAuthenticated}
+                  disabled={!user}
                   style={[
                     styles.radioButton,
-                    !isAuthenticated && styles.radioButtonDisabled,
+                    !user && styles.radioButtonDisabled,
                     selectedButton === "20" && styles.selectedButton,
                   ]}
                   onPress={() => handleButtonPress("20")}
                 >
-                  {isAuthenticated ? (
+                  {user ? (
                     <Text
                       style={[
                         styles.radioButtonText,
@@ -175,16 +175,16 @@ function RussianPokerAnte() {
                   )}
                 </TouchableOpacity>
                 <TouchableOpacity
-                  disabled={!isAuthenticated}
+                  disabled={!user}
                   style={[
                     styles.radioButton,
                     styles.radioButtonLast,
-                    !isAuthenticated && styles.radioButtonDisabled,
+                    !user && styles.radioButtonDisabled,
                     selectedButton === "30" && styles.selectedButton,
                   ]}
                   onPress={() => handleButtonPress("30")}
                 >
-                  {isAuthenticated ? (
+                  {user ? (
                     <Text
                       style={[
                         styles.radioButtonText,

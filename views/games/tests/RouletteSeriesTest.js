@@ -15,8 +15,7 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 
 function RouletteSeriesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } =
-    route.params;
+  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } = route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);

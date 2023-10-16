@@ -10,15 +10,15 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 
 function HomeScreen({ route }) {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { login, logout, user } = useContext(AuthContext);
   const navigation = useNavigation();
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        {/* <Text style={[styles.greetingsText, { color: isAuthenticated ? `#479761` : `#a16e83` }]}>
-          Hi {isAuthenticated ? `USER` : `GUEST`}!
-        </Text> */}
+        <Text style={[styles.greetingsText, { color: user ? `#479761` : `#a16e83` }]}>
+          Hi {user ? user.username : `Guest`}!
+        </Text>
 
         <TouchableOpacity
           style={styles.button}
@@ -44,14 +44,13 @@ function HomeScreen({ route }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          disabled={true}
-          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          style={styles.button}
           onPress={() => navigation.navigate("RoulettePictures")}
         >
           <Text style={styles.buttonText}>Roulette Pictures</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ ...styles.button, backgroundColor: "#aaa" }}
           onPress={() => navigation.navigate("#")}
           disabled={true}
@@ -69,7 +68,7 @@ function HomeScreen({ route }) {
           <Text style={styles.buttonText}>
             Roulette Complete Bet Intersections
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <View style={styles.break} />
 

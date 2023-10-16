@@ -3,7 +3,7 @@
 import React from 'react';
 import { View, Text, Switch } from 'react-native';
 
-const Switcher = ({ isEnabled, toggleSwitch, isAuthenticated }) => {
+const Switcher = ({ isEnabled, toggleSwitch, user }) => {
   return (
     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}>
       <Text style={{ fontSize: 26 }}>Switch mode</Text>
@@ -14,7 +14,7 @@ const Switcher = ({ isEnabled, toggleSwitch, isAuthenticated }) => {
           ios_backgroundColor="#ccc"
           onValueChange={toggleSwitch}
           value={isEnabled}
-          disabled={!isAuthenticated}
+          disabled={!user}
         />
       </View>
     </View>

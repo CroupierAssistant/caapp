@@ -15,6 +15,8 @@ import MultiplicationTable from "../views/games/MultiplicationTable";
 import CardTest from "../views/games/tests/CardTest";
 import RouletteSeriesTest from "../views/games/tests/RouletteSeriesTest";
 import MultiplicationTableTest from "../views/games/tests/MultiplicationTableTest";
+import RoulettePicturesTest from "../views/games/tests/RoulettePicturesTest";
+// import RoulettePicturesTest from "../views/games/tests/RoulettePicturesTestCopy";
 
 
 const Stack = createStackNavigator();
@@ -34,6 +36,7 @@ function HomeStackNavigator({ navigation, route }) {
       <Stack.Screen name="RouletteSeries" component={RouletteSeries} options={{ title: "Roulette Series" }}/>
       <Stack.Screen name="MultiplicationTable" component={MultiplicationTable} options={{ title: "Multiplication Table" }}/>
       <Stack.Screen name="RoulettePictures" component={RoulettePictures} options={{ title: "Roulette Pictures" }}/>
+      <Stack.Screen name="RoulettePicturesTest" component={RoulettePicturesTest} options={{ title: "Roulette Pictures" }}/>
 
       <Stack.Screen name="CardTest" component={CardTest} options={{ title: "" }}/>
       <Stack.Screen name="RouletteSeriesTest" component={RouletteSeriesTest} options={{ title: "" }}/>

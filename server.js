@@ -1,0 +1,125 @@
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const db = require("./db");
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
+
+
+const User = require("./models/User");
+
+const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
+
+
+// Задайте путь к папке с изображениями
+const picturesPath = 'assets/images/pictures';
+
+fs.readdir(picturesPath, (err, files) => {
+  if (err) {
+    console.error('Ошибка чтения директории:', err);
+    return;
+  }
+
+  const fileList = files.map(file => {
+    return `${picturesPath}/${file}`;
+  });
+
+  console.log('Массив файлов:', fileList);
+});
+
+// Обработка GET запроса на получение списка файлов
+app.get('/getImages', (req, res) => {
+  fs.readdir(picturesPath, (err, files) => {
+    if (err) {
+      return res.status(500).json({ error: 'Ошибка при чтении папки с изображениями' });
+    }
+    res.json({ files });
+  });
+});
+
+async function hashPassword(password) {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword;
+}
+
+async function comparePassword(inputPassword, hashedPassword) {
+  const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
+  return isMatch;
+}
+
+app.post("/register", async (req, res) => {
+  try {
+    const { firstName, lastName, username, email, password, agree } = req.body;
+
+    // Проверка на обязательные поля
+    if (!firstName || !lastName || !username || !email || !password || !agree) {
+      return res.status(400).json({ error: "Заполните все обязательные поля" });
+    }
+
+    // Проверка уникальности имени пользователя и почты
+    const isUsernameTaken = await User.exists({ username });
+    const isEmailTaken = await User.exists({ email });
+
+    if (isUsernameTaken || isEmailTaken) {
+      return res
+        .status(400)
+        .json({ error: "Имя пользователя или почта уже заняты" });
+    }
+
+    // Хеширование пароля
+    const hashedPassword = await hashPassword(password);
+
+    // Создание нового пользователя
+    const newUser = await User.create({
+      firstName,
+      lastName,
+      username,
+      email,
+      password: hashedPassword,
+    });
+
+    const token = jwt.sign({ userId: newUser._id }, 'ваш_секретный_ключ');
+
+    return res.json({ success: "Регистрация успешна", user: newUser, token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Проверка на обязательные поля
+    if (!username || !password) {
+      return res.status(400).json({ error: "Заполните все обязательные поля" });
+    }
+
+    // Поиск пользователя по имени пользователя
+    const user = await User.findOne({ username });
+
+    if (!user || !(await comparePassword(password, user.password))) {
+      return res
+        .status(401)
+        .json({ error: "Неверные имя пользователя или пароль" });
+    }
+
+    const token = jwt.sign({ userId: user._id }, 'ваш_секретный_ключ');
+    return res.json({ success: "Авторизация успешна", user, token });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://192.168.31.124:${PORT}`);
+});
