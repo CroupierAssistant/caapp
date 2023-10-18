@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { PicturesContext } from "../../../context/PicturesContext";
 
 function RoulettePicturesCenter() {
+  const {payouts, handleAddPayout} = useContext(PicturesContext)
+
   const [leftSL, setLeftSL] = useState(false);
   const [rightSL, setRightSL] = useState(false);
   const [street, setStreet] = useState(false);

@@ -28,7 +28,7 @@ function MainTabNavigator() {
           headerShown: false,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={Profile}
         options={{
@@ -46,7 +46,7 @@ function MainTabNavigator() {
           headerShown: false,
           detachPreviousScreen: true
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

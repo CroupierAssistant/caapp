@@ -4,7 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-const CardResults = ({ cardResults, timePassedParent, mode }) => {
+const CardResults = ({ cardResults, timePassedParent, mode, amountOfCards }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
 
@@ -17,7 +17,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
       }
     });
 
-    const calculatedPercentage = (correctAnswers * 100) / cardResults.length;
+    const calculatedPercentage = (correctAnswers * 100) / (mode == 'timelimit' ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
   }, [cardResults]);
@@ -29,7 +29,7 @@ const CardResults = ({ cardResults, timePassedParent, mode }) => {
         {mode === "timelimit" && ` in ${timePassedParent}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
-        Correct answers: {rightAnswersAmount} / {cardResults.length}
+        Correct answers: {rightAnswersAmount} / {(mode == 'timelimit' ? amountOfCards : cardResults.length)}
       </Text>
       <FlatList
         data={cardResults}

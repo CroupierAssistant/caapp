@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, FlatList, StyleSheet, Image } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import CardResultsPicturesItem from "./CardResultPicturesItem";
+import { PicturesContext } from "../context/PicturesContext";
 
-const CardResultsPictures = ({ cardResults, timePassedParent, mode }) => {
+const CardResultsPictures = ({ cardResults, timePassedParent, mode, amountOfCards }) => {
+  // const {payouts, handleAddPayout} = useContext(PicturesContext)
+
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
 
@@ -18,14 +21,14 @@ const CardResultsPictures = ({ cardResults, timePassedParent, mode }) => {
       }
     });
 
-    const calculatedPercentage = (correctAnswers * 100) / cardResults.length;
+    const calculatedPercentage = (correctAnswers * 100) / amountOfCards;
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
+
   }, [cardResults]);
 
   const renderCardItem = ({ item }) => {
     // const image = require(`../../../assets/images/pictures/${item.number}`);
-    console.log(item);
     return (
       <View style={[styles.resultItem, {backgroundColor: item.userInput == item.rightAnswer ? "#3c7c49" : "#a6334d"}]}>
         <CardResultsPicturesItem item={item}/>
@@ -40,7 +43,7 @@ const CardResultsPictures = ({ cardResults, timePassedParent, mode }) => {
         {mode === "timelimit" && ` in ${timePassedParent}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
-        Correct answers: {rightAnswersAmount} / {cardResults.length}
+        Correct answers: {rightAnswersAmount} / {amountOfCards}
       </Text>
       <FlatList
         data={cardResults}

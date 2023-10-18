@@ -27,7 +27,7 @@ function RoulettePicturesTest({ route }) {
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
@@ -162,12 +162,12 @@ function RoulettePicturesTest({ route }) {
               paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={openPaytableModal}
               style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
             >
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={handleStopTest}
@@ -220,6 +220,7 @@ function RoulettePicturesTest({ route }) {
           cardResults={cardResults}
           timePassedParent={timePassedParent}
           mode={mode}
+          amountOfCards={amountOfCards}
         />
       )}
     </View>

@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 20,
+    // marginVertical: 20,
+    transform: [{scale: 0.9}]
   },
   cardContainer: {
     borderWidth: 1,

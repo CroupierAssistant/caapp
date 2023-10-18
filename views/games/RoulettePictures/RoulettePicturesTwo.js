@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { PicturesContext } from "../../../context/PicturesContext";
 
 function RoulettePicturesTwo() {
+  const {payouts, handleAddPayout} = useContext(PicturesContext)
+
   const [firstFour, setFirstFour] = useState(false);
   const [rightSL, setRightSL] = useState(false);
   const [street, setStreet] = useState(false);
@@ -133,7 +136,8 @@ function RoulettePicturesTwo() {
     });
 
     setPayout(totalPayout); // Устанавливаем сумму выплаты
-  }, [activeChips, betsArray]); // Обновляем сумму при изменении активных фишек или суммы ставок
+    handleAddPayout(totalPayout)
+  }, [betsArray]); // Обновляем сумму при изменении активных фишек или суммы ставок
 
 
   return (

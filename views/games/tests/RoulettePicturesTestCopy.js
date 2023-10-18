@@ -7,15 +7,31 @@ import RoulettePicturesTwo from "../RoulettePictures/RoulettePicturesTwo";
 import RoulettePicturesZero from "../RoulettePictures/RoulettePicturesZero";
 import RoulettePicturesZeroSide from "../RoulettePictures/RoulettePicturesZeroSide";
 import Keyboard from "../../../components/Keyboard";
+import CardResultsPictures from "../../../components/CardResultsPictures";
 
 // Определяем компонент RoulettePictures
 function RoulettePicturesTest() {
+  const [payouts, setPayouts] = useState([]);
+
+  const handleAddPayout = (payout) => {
+    setPayouts([...payouts, 'payout']);
+    // setPayouts([...payouts, payout]);
+    
+    console.log(payouts);
+  };
+
   // Здесь вы можете подготовить данные, которые будут переданы в FlatList
   const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [isDone, setIsDone] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cardList, setCardList] = useState([]);
+  const [cardResults, setCardResults] = useState([]);
+  const [timePassedParent, setTimePassedParent] = useState("");
+  const [timerRunning, setTimerRunning] = useState(false);
+
+  const mode = "sandbox";
+  const amountOfCards = 5;
 
   const flatListRef = useRef(null);
 
@@ -32,43 +48,34 @@ function RoulettePicturesTest() {
       const randomIndex = Math.floor(Math.random() * rouletteComponents.length);
       const RandomComponent = rouletteComponents[randomIndex];
 
-      return <RandomComponent />;
+      return <RandomComponent handleAddPayout={handleAddPayout} />;
     }
 
     const cardData = [];
 
-    for (let i = 0; i < 50; i++) {
-      cardData.push({ index: i + 1, component: RandomComponent() });
+    for (let i = 0; i <= amountOfCards; i++) {
+      cardData.push({
+        index: i + 1,
+        component: RandomComponent(),
+      });
     }
 
     setCardList(cardData);
   }, []);
 
-  const renderCardItem = ({ item }) => {
+  const renderCardItem = ({ item, index }) => {
     return (
-      <View style={{flex: 1, width: Dimensions.get("window").width / 5}}>
+      <View style={{ flex: 1, width: Dimensions.get("window").width }}>
         {showActiveCard && (
-          <CardPicture index={item.index}>{item.component}</CardPicture>
+          <CardPicture
+            key={cardList[index].index}
+            index={cardList[activeCardIndex].index}
+          >
+            {cardList[activeCardIndex].component}
+          </CardPicture>
         )}
       </View>
     );
-  };
-
-  const handleSubmit = () => {
-    const newIndex = activeCardIndex + 1;
-    setActiveCardIndex(newIndex);
-
-    if (newIndex < cardList.length - 1) {
-      flatListRef.current.scrollToIndex({
-        animated: false,
-        index: newIndex,
-      });
-    } else {
-      setShowActiveCard(false);
-      setIsDone(true);
-    }
-
-    setInputValue("");
   };
 
   const handleKeyboardPress = (key) => {
@@ -77,27 +84,71 @@ function RoulettePicturesTest() {
     }
   };
 
+  const updateTimer = (formattedTime) => {
+    setTimePassedParent(formattedTime);
+  };
+
   const handleInputChange = (text) => {
-    console.log("ok");
+    // setInputValue(text);
+    setInputValue(text);
+
+    setCardResults((prev) => {
+      const newResult = {
+        cardNumber: cardList[activeCardIndex].number,
+        rightAnswer: cardList[activeCardIndex].rightAnswer,
+        userInput: text,
+      };
+      return [...prev, newResult];
+    });
+  };
+
+  const handleSubmit = () => {
+    // Переходим к следующей карте
+    if (activeCardIndex < cardList.length - 1) {
+      setActiveCardIndex(activeCardIndex + 1);
+    } else {
+      setShowActiveCard(false);
+      setIsDone(true);
+    }
+    setInputValue("");
   };
 
   return (
-    <View style={{ 
-      backgroundColor: "#29648a57",flex: 1 }}>
-      <FlatList
-        ref={flatListRef}
-        data={cardList}
-        renderItem={renderCardItem}
-        keyExtractor={(item) => item.index.toString()}
-        horizontal // Включаем горизонтальное отображение
-        // showsHorizontalScrollIndicator={false} // Если вам не нужны индикаторы прокрутки
-        // scrollEnabled={false} // Опционально: можете отключить прокрутку
-        pagingEnabled={true} // Опционально: можете включить пейджинг
-      />
-      {/* <Keyboard
-        onKeyboardPress={handleKeyboardPress}
-        handleInputChange={handleInputChange}
-      /> */}
+    <View style={{ flex: 1 }}>
+      {!isDone && (
+        <>
+          {timerRunning && mode === "timelimit" && (
+            <Timer
+              time={timeLimit}
+              updateTimer={updateTimer}
+              setIsDone={setIsDone}
+            />
+          )}
+          <FlatList
+            ref={flatListRef}
+            data={cardList}
+            renderItem={renderCardItem}
+            keyExtractor={(item) => item.index.toString()}
+            horizontal // Включаем горизонтальное отображение
+            showsHorizontalScrollIndicator={false} // Если вам не нужны индикаторы прокрутки
+            // scrollEnabled={false} // Опционально: можете отключить прокрутку
+            pagingEnabled={true} // Опционально: можете включить пейджинг
+          />
+          <Keyboard
+            onKeyboardPress={handleKeyboardPress}
+            handleInputChange={handleInputChange}
+          />
+        </>
+      )}
+      {isDone && (
+        <CardResultsPictures
+          cardResults={cardResults}
+          timePassedParent={timePassedParent}
+          mode={mode}
+          amountOfCards={amountOfCards}
+          payouts={payouts}
+        />
+      )}
     </View>
   );
 }

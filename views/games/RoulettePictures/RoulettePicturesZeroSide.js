@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-function RoulettePicturesZeroSide() {
+function RoulettePicturesZeroSide({handleAddPayout}) {
+
   const [firstFour, setFirstFour] = useState(false);
   const [rightSL, setRightSL] = useState(false);
   const [street, setStreet] = useState(false);
@@ -15,7 +16,7 @@ function RoulettePicturesZeroSide() {
   const [leftSplit, setLeftSplit] = useState(false);
   const [rightSplit, setRightSplit] = useState(false);
 
-  const [chipCount, setChipCount] = useState(10);
+  const [chipCount, setChipCount] = useState(20);
   const [betsArray, setBetsArray] = useState([]);
   const [payout, setPayout] = useState(0)
 
@@ -120,9 +121,10 @@ function RoulettePicturesZeroSide() {
       totalPayout += betsArray[index] * coefficients[ch]; // Считаем выплату
     });
 
-    setPayout(totalPayout); // Устанавливаем сумму выплаты
+    setPayout(totalPayout, () => {
+      handleAddPayout('ok');
+    });
   }, [activeChips, betsArray]); // Обновляем сумму при изменении активных фишек или суммы ставок
-
 
   return (
     <View style={styles.container}>
@@ -155,18 +157,16 @@ function RoulettePicturesZeroSide() {
           );
         })}
       </View>
-    <Text style={{marginBottom: 30}}>{payout}</Text>
+    <Text style={{marginTop: 30}}>{payout}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    transform: [{scale: 1.2}],
   },
   tableContainer: {
     width: 239,
@@ -217,7 +217,6 @@ const styles = StyleSheet.create({
       height: 0,
     },
     position: "absolute",
-    borderRadius: "50%",
     borderWidth: 3,
     borderColor: "rgb(131, 30, 30)",
     width: 40,
@@ -225,6 +224,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgb(173, 50, 50)",
+    borderRadius: '50%'
   },
   chipBet: {
     color: "#fff",

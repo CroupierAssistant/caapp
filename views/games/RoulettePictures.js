@@ -12,7 +12,7 @@ function RoulettePictures() {
     if (isAnyCombinationSelected && isAnyNumberSelected) {
       navigation.navigate("RoulettePicturesTest", {
         mode: "sandbox",
-        amountOfCards: 20,
+        amountOfCards: 50,
         splitCoeff: false,
         timeLimit: 600000,
         combinations: { 

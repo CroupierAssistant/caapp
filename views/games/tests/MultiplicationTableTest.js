@@ -189,6 +189,7 @@ function RouletteSeriesTest({ route }) {
           cardResults={cardResults}
           timePassedParent={timePassedParent}
           mode={mode}
+          amountOfCards={amountOfCards}
         />
       )}
     </View>

@@ -1,12 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-function CardPicture({ index, children }) {
+function CardPicture({ index, children, handleAddPayout }) {
+  
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        {children}
-        {/* Размещаем children (в данном случае RoulettePictureCenter) */}
+        <Text style={{ width: '100%', textAlign: "right", fontSize: 14, color: "#000" }}>
+          {" "}
+        </Text>
+        {React.cloneElement(children, { handleAddPayout })}
+        {/* Размещаем children (в данном случае RoulettePictureZeroSide) */}
         <Text style={{ width: '100%', textAlign: "right", fontSize: 14, color: "#000" }}>
           {index}
         </Text>
@@ -22,16 +26,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // marginVertical: 20,
+    transform: [{scale: 0.9}]
   },
   cardContainer: {
     borderRadius: 5,
     padding: 10,
     width: "90%",
+    backgroundColor: "#29648a57",
     justifyContent: "center",
     alignItems: "center",
-    height: 600
-    // marginLeft: 100,
-    // marginTop: 60
+    height: 300
   },
 });
 
