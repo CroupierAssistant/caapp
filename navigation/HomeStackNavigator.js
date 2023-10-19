@@ -11,12 +11,16 @@ import TexasHoldEm from "../views/games/TexasHoldEm";
 import RouletteSeries from "../views/games/RouletteSeries";
 import RoulettePictures from "../views/games/RoulettePictures";
 import MultiplicationTable from "../views/games/MultiplicationTable";
+import NiuNiuCombinations from "../views/games/NiuNiuCombinations"
+import Neighbours from "../views/games/Neighbours"
 
 import CardTest from "../views/games/tests/CardTest";
 import RouletteSeriesTest from "../views/games/tests/RouletteSeriesTest";
 import MultiplicationTableTest from "../views/games/tests/MultiplicationTableTest";
 import RoulettePicturesTest from "../views/games/tests/RoulettePicturesTest";
 import RoulettePicturesTestCopy from "../views/games/tests/RoulettePicturesTestCopy";
+import NiuNiuCombinationsTest from "../views/games/tests/NiuNiuCombinationsTest";
+import NeighboursTest from "../views/games/tests/NeighboursTest";
 
 
 const Stack = createStackNavigator();
@@ -38,10 +42,14 @@ function HomeStackNavigator({ navigation, route }) {
       <Stack.Screen name="RoulettePictures" component={RoulettePictures} options={{ title: "Roulette Pictures" }}/>
       <Stack.Screen name="RoulettePicturesTest" component={RoulettePicturesTest} options={{ title: "Roulette Pictures" }}/>
       <Stack.Screen name="RoulettePicturesTestCopy" component={RoulettePicturesTestCopy} options={{ title: "Roulette Pictures Copy" }}/>
+      <Stack.Screen name="NiuNiuCombinations" component={NiuNiuCombinations} options={{ title: "Niu-Niu Combinations" }}/>
+      <Stack.Screen name="Neighbours" component={Neighbours} options={{ title: "Neighbours" }}/>
 
       <Stack.Screen name="CardTest" component={CardTest} options={{ title: "" }}/>
       <Stack.Screen name="RouletteSeriesTest" component={RouletteSeriesTest} options={{ title: "" }}/>
       <Stack.Screen name="MultiplicationTableTest" component={MultiplicationTableTest} options={{ title: "" }}/>
+      <Stack.Screen name="NiuNiuCombinationsTest" component={NiuNiuCombinationsTest} options={{ title: "" }}/>
+      <Stack.Screen name="NeighboursTest" component={NeighboursTest} options={{ title: "" }}/>
     </Stack.Navigator>
   );
 }

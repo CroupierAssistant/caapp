@@ -14,12 +14,14 @@ function HomeScreen({ route }) {
   const navigation = useNavigation();
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <Text style={[styles.greetingsText, { color: user ? `#479761` : `#a16e83` }]}>
-          Hi {user ? user.username : `Guest`}!
-        </Text>
+    <View style={styles.container}>
+      <Text
+        style={[styles.greetingsText, { color: user ? `#479761` : `#a16e83` }]}
+      >
+        Hi {user ? user.username : `Guest`}!
+      </Text>
 
+      <ScrollView style={{flex: 1, width: "100%"}}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Blackjack")}
@@ -48,6 +50,13 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RoulettePictures")}
         >
           <Text style={styles.buttonText}>Roulette Pictures</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          onPress={() => navigation.navigate("Neighbours")}
+        >
+          <Text style={styles.buttonText}>Neighbours</Text>
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -115,8 +124,17 @@ function HomeScreen({ route }) {
         >
           <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
         </TouchableOpacity>
-      </View>
-    </ScrollView>
+
+        <View style={styles.break} />
+
+        <TouchableOpacity
+          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          onPress={() => navigation.navigate("NiuNiuCombinations")}
+        >
+          <Text style={styles.buttonText}>Niu-Niu Combinations</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -125,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "start",
     alignItems: "center",
-    padding: 20,
+    padding: 10,
   },
   break: {
     height: 2,
@@ -147,7 +165,7 @@ const styles = StyleSheet.create({
   greetingsText: {
     color: "black",
     fontSize: 26,
-    marginBottom: 30,
+    marginBottom: 10,
     textAlign: "left",
     width: "100%",
     fontWeight: "bold",
