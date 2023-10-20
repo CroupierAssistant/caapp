@@ -31,7 +31,7 @@ const CardResults = ({
 
   function areAllElementsPresent(arrA, arrB) {
     const setB = new Set(arrB);
-    return arrA.every((element) => setB.has(element));
+    return arrA.length && arrA.every((element) => setB.has(element));
   }
 
   return (
@@ -62,14 +62,17 @@ const CardResults = ({
           >
             <Text
               style={{
-                fontSize: 20,
-                lineHeight: 20,
+                fontSize: 18,
+                lineHeight: 24,
                 fontWeight: "bold",
                 marginBottom: 5,
                 color: "#fff",
+                verticalAlign: 'middle'
               }}
             >
-              {`${item.rightAnswer[0]} ${item.rightAnswer[1]} ${item.cardNumber} ${item.rightAnswer[3]} ${item.rightAnswer[4]}`}
+              {`${item.rightAnswer[0]} ${item.rightAnswer[1]}`} 
+              <Text style={{ fontSize: 24, color: "#fff"}}> {item.cardNumber} </Text>
+              {`${item.rightAnswer[3]} ${item.rightAnswer[4]}`}
             </Text>
             <Text style={{ fontSize: 16, color: "#fff", lineHeight: 16 }}>
               Your answer:{" "}

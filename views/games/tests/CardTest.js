@@ -159,7 +159,6 @@ function CardTest({ route }) {
           {timerRunning && mode === "timelimit" && (
             <Timer
               time={timeLimit}
-              updateTimer={updateTimer}
               setIsDone={setIsDone}
             />
           )}
@@ -170,7 +169,6 @@ function CardTest({ route }) {
               justifyContent: "space-between",
               flexDirection: "row",
               padding: 5,
-              paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
             <TouchableOpacity

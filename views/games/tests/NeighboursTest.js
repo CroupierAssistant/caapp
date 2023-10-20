@@ -9,25 +9,20 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
-import Timer from "../../../components/Timer";
-import Card from "../../../components/Card";
 import CardNeighbour from "../../../components/CardNeighbour";
-import Keyboard from "../../../components/Keyboard";
 import CardResultsNeigbours from "../../../components/CardResultsNeigbours";
-import { useNavigation } from "@react-navigation/native";
+import Timer from "../../../components/Timer";
 
 function NeighboursTest({ route }) {
-  const { timeLimit, mode, amountOfCards } = route.params;
+  const { mode, amountOfCards, timeLimit } = route.params;
   const [isDone, setIsDone] = useState(false);
   const [cardList, setCardList] = useState([]);
-  const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(false);
   const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
-  const [timePassedParent, setTimePassedParent] = useState("");
+  const [timerRunning, setTimerRunning] = useState(false);
 
   const flatListRef = useRef(null);
 
@@ -48,7 +43,7 @@ function NeighboursTest({ route }) {
       ];
 
       const card = {
-        index: `${i + 1}`,
+        index: amountOfCards != 37 ? `${i + 1} / ${amountOfCards}` : i + 1,
         numbers: cardNumbers,
         otherNumbers: otherNumbers,
       };
@@ -64,13 +59,12 @@ function NeighboursTest({ route }) {
     const finalCardDataWithNewIndices = finalCardData.map((item, index) => {
       return {
         ...item,
-        index: `${index + 1} / ${finalCardData.length}`,
+        index: amountOfCards != 37 ? `${index + 1} / ${finalCardData.length}` : `${index + 1}`,
       };
     }); // Прописываем новые индексы
 
-    console.log(finalCardDataWithNewIndices);
-
     setCardList(finalCardDataWithNewIndices);
+    setTimerRunning(true);
   }, []);
 
   const handleSubmit = (userInput) => {
@@ -80,7 +74,6 @@ function NeighboursTest({ route }) {
         rightAnswer: cardList[activeCardIndex].numbers,
         userInput: userInput,
       };
-      console.log(newResult);
       return [...prev, newResult];
     });
 
@@ -104,7 +97,7 @@ function NeighboursTest({ route }) {
         style={{
           flex: 1,
           width: Dimensions.get("window").width,
-          height: Dimensions.get("window").height - 220,
+          // height: Dimensions.get("window").height - 220,
         }}
       >
         {showActiveCard && ( // Добавляем проверку, показывать или нет активную карту
@@ -123,6 +116,9 @@ function NeighboursTest({ route }) {
     <View style={{ flex: 1 }}>
       {!isDone && (
         <>
+          {timerRunning && mode === "timelimit" && (
+            <Timer time={timeLimit} setIsDone={setIsDone} />
+          )}
           <View
             style={{
               display: "flex",
@@ -155,7 +151,6 @@ function NeighboursTest({ route }) {
       {isDone && (
         <CardResultsNeigbours
           cardResults={cardResults}
-        //   timePassedParent={timePassedParent}
           mode={mode}
           amountOfCards={amountOfCards}
         />

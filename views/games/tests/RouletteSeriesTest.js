@@ -155,6 +155,7 @@ function RouletteSeriesTest({ route }) {
     });
 
     setCardList(cardData);
+    setTimerRunning(true);
   }, []);
 
   const renderCardItem = ({ item }) => {
@@ -180,44 +181,6 @@ function RouletteSeriesTest({ route }) {
     <View style={{ flex: 1 }}>
       {!isDone && (
         <>
-          <Modal
-            animationType="fade"
-            presentationStyle="pageSheet"
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-            }}
-            onDismiss={startTimer}
-          >
-            <View style={styles.modal}>
-              <View style={{ width: "100%" }}>
-                {mode === "timelimit" && (
-                  <Text style={styles.modalInfo}>
-                    You need to calculate the payout for {amountOfCards} bets.
-                    The time limit is {timeLimit / 1000} seconds. You need to
-                    write the maximum denomination of how much the sector plays.
-                    Step is 5, maximum is {maxBet} progressive (DON'T WRITE THE
-                    REST). You need to do 100% to get to the leaderboard.
-                  </Text>
-                )}
-                {mode === "sandbox" && (
-                  <Text style={styles.modalInfo}>
-                    You need to calculate the payout for as many bets as you
-                    can. There is no time limit. Have fun, no one is rushing
-                    you. Step is 5, maximum is {maxBet} progressive (DON'T WRITE
-                    THE REST)
-                  </Text>
-                )}
-
-                <Button
-                  style={styles.modalButton}
-                  title="Start"
-                  onPress={startTimer}
-                />
-              </View>
-            </View>
-          </Modal>
-
           {timerRunning && mode === "timelimit" && (
             <Timer
               time={timeLimit}
@@ -232,7 +195,6 @@ function RouletteSeriesTest({ route }) {
               justifyContent: "space-between",
               flexDirection: "row",
               padding: 5,
-              paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
             <TouchableOpacity

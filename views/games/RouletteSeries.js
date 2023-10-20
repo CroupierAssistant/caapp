@@ -180,8 +180,11 @@ function RouletteSeries() {
             </View>
 
             <Text style={styles.timeLimitDescription}>
-              The goal is calculate payouts for selected amount of cards in 90
-              seconds
+              You need to calculate the payout for {selectedButton} bets.
+                    The time limit is 90 seconds. You need to
+                    write the maximum denomination of how much the sector plays (DON'T WRITE THE
+                    REST).
+                    Step is 5, maximum is 50 progressive. You need to do 100% to get to the leaderboard.
             </Text>
           </>
         </>
@@ -380,6 +383,12 @@ function RouletteSeries() {
                 )}
               </TouchableOpacity>
             </View>
+            <Text style={styles.timeLimitDescription}>
+                    There is no time limit in this mode. You need to
+                    write the maximum denomination of how much the sector plays (DON'T WRITE THE
+                    REST).
+                    Step is 5, maximum is {selectedMaxBet} progressive. You need to do 100% to get to the leaderboard.
+            </Text>
           </>
         </>
       )}

@@ -32,14 +32,14 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
       number[4],
       ...shuffledOtherNumbers,
     ];
-    const finalOptions = allOptions.slice(0, 14);
+    const finalOptions = allOptions.slice(0, 15);
     setShuffledFinalOptions([...finalOptions].sort(() => Math.random() - 0.5));
   }, [onSubmit]);
 
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        {/* <Text style={{ textAlign: "center", fontSize: 20, color: "#fff" }}>Neighbours</Text> */}
+        <Text style={{ textAlign: "center", fontSize: 14, color: "#fff" }}> </Text>
         <Text
           style={{
             textAlign: "center",
@@ -61,7 +61,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[0])
                 ? "#29648a"
                 : "#ccc",
@@ -82,7 +81,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[1])
                 ? "#29648a"
                 : "#ccc",
@@ -103,7 +101,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[2])
                 ? "#29648a"
                 : "#ccc",
@@ -124,7 +121,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[3])
                 ? "#29648a"
                 : "#ccc",
@@ -145,7 +141,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[4])
                 ? "#29648a"
                 : "#ccc",
@@ -168,7 +163,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[5])
                 ? "#29648a"
                 : "#ccc",
@@ -189,7 +183,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[6])
                 ? "#29648a"
                 : "#ccc",
@@ -210,7 +203,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[7])
                 ? "#29648a"
                 : "#ccc",
@@ -231,7 +223,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[8])
                 ? "#29648a"
                 : "#ccc",
@@ -252,7 +243,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(shuffledFinalOptions[9])
                 ? "#29648a"
                 : "#ccc",
@@ -275,7 +265,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(
                 shuffledFinalOptions[10]
               )
@@ -298,7 +287,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(
                 shuffledFinalOptions[11]
               )
@@ -321,7 +309,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(
                 shuffledFinalOptions[12]
               )
@@ -344,7 +331,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
           <TouchableOpacity
             style={{
               ...styles.optionKey,
-              transform: [{ rotateZ: `${getRandomRotation()}deg` }],
               backgroundColor: selectedOptions.includes(
                 shuffledFinalOptions[13]
               )
@@ -365,12 +351,34 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            style={{
+              ...styles.optionKey,
+              backgroundColor: selectedOptions.includes(
+                shuffledFinalOptions[14]
+              )
+                ? "#29648a"
+                : "#ccc",
+            }}
+            onPress={() => handleOptionPress(shuffledFinalOptions[14])}
+          >
+            <Text
+              style={{
+                ...styles.optionKeyText,
+                color: selectedOptions.includes(shuffledFinalOptions[14])
+                  ? "#fff"
+                  : "#000",
+              }}
+            >
+              {shuffledFinalOptions[14]}
+            </Text>
+          </TouchableOpacity>
+        </View>
+          <TouchableOpacity
             onPress={() => onSubmit(selectedOptions)}
             style={{ ...styles.optionKey, ...styles.optionKeySubmit }}
           >
-            <Text style={styles.optionKeyText}>OK</Text>
+            <Text style={{...styles.optionKeyText, color: "#fff"}}>CONFIRM</Text>
           </TouchableOpacity>
-        </View>
       </View>
     </View>
   );
@@ -391,6 +399,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 13,
     paddingHorizontal: 15,
+    position: 'absolute',
+    bottom: 0,
   },
   keyboardContainerRow: {
     display: "flex",
@@ -408,14 +418,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ccc",
+    borderRadius: 3
   },
   optionKeySubmit: {
     flex: 1,
-    height: "100%",
+    height: 50,
+    width: '60%',
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#479761",
+    marginBottom: 13,
   },
   optionKeyText: {
     fontSize: 20,
@@ -428,14 +441,6 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "90%",
     backgroundColor: "#29648a",
-    shadowColor: "#003665",
-    shadowOffset: {
-      width: 5,
-      height: 18,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 20.0,
-    elevation: 24,
     transform: [{ scale: 0.9 }],
   },
 });
