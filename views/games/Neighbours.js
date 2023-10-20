@@ -116,8 +116,7 @@ function Neighbours() {
 
             <Text style={styles.timeLimitDescription}>
               The goal is to pick the right neighbours for given amount of
-              numbers in 60 seconds. The order in which you select does not
-              matter: you can change your selection before clicking "Confirm".
+              numbers in 60 seconds. The order of selection does not matter. You can also change your selection before clicking "Confirm".
             </Text>
           </>
         </>
@@ -127,9 +126,7 @@ function Neighbours() {
           <Text style={styles.modeSelectText}>Sandbox mode</Text>
           <Text style={{ ...styles.timeLimitDescription }}>
             There is no time limit in this mode. Take your time and be careful.
-            The goal is to pick the right neighbours for given number. The order
-            in which you select does not matter: you can change your selection
-            before clicking "Confirm".
+            The goal is to pick the right neighbours for given number. The order of selection does not matter. You can also change your selection before clicking "Confirm".
           </Text>
         </>
       )}

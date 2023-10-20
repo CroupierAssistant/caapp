@@ -206,7 +206,7 @@ function RussianPokerAnte() {
               </View>
 
               <Text style={styles.timeLimitDescription}>
-                The goal is calculate payouts for selected amount of cards in 90
+                The goal is calculate payouts for {selectedButton} bets in 90
                 seconds
               </Text>
             </>

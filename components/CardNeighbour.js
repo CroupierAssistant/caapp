@@ -45,7 +45,7 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
             textAlign: "center",
             fontSize: 68,
             fontWeight: "bold",
-            marginVertical: 25,
+            marginVertical: 15,
             color: "#fff",
           }}
         >
@@ -387,10 +387,11 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    width: "100%",
+    // width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "100%",
+    // height: "100%",
+    flex: 1
   },
   keyboardContainer: {
     display: "flex",
@@ -438,7 +439,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#29648a",
     borderRadius: 5,
-    padding: 10,
+    padding: 5,
     width: "90%",
     backgroundColor: "#29648a",
     transform: [{ scale: 0.9 }],

@@ -159,7 +159,7 @@ function Blackjack() {
             </View>
 
             <Text style={styles.timeLimitDescription}>
-              The goal is calculate payouts for selected amount of cards in 60
+              The goal is calculate payouts for {selectedButton} bets in 60
               seconds
             </Text>
           </>
