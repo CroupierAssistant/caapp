@@ -108,7 +108,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/uploads/'); // Укажите путь, куда сохранять файлы
+    cb(null, 'uploads/'); // Укажите путь, куда сохранять файлы
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname); // Уникальное имя файла

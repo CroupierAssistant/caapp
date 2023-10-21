@@ -42,7 +42,7 @@ const Profile = (props) => {
       await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          // 'Authorization': `Bearer ${AsyncStorage.getItem("token")}` // Предполагается, что вы используете JWT и у вас есть токен
+          'Authorization': `Bearer ${AsyncStorage.getItem("token")}` // Предполагается, что вы используете JWT и у вас есть токен
         }
       });
       console.log('Фотография профиля успешно загружена');
@@ -571,10 +571,8 @@ const styles = StyleSheet.create({
   },
   editIconContainer: {
     position: "absolute",
-    right: 5,
+    right: 0,
     bottom: 15,
-    width: 20,
-    height: 20,
   },
 });
 
