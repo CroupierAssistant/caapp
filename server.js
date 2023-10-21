@@ -5,9 +5,6 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const multer = require('multer');
-
-
 
 const User = require("./models/User");
 
@@ -91,36 +88,28 @@ app.post("/login", async (req, res) => {
   }
 });
 
+const multer = require('multer');
+
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/') // Укажите папку для сохранения файлов
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Укажите путь, куда сохранять файлы
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname) // Генерация уникального имени файла
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname); // Уникальное имя файла
   }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
 app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
     const profilePhotoPath = req.file.path;
 
-    // const updatedUser = await User.findByIdAndUpdate(userId, {
-    //   profilePhoto: profilePhotoPath
-    // }, { new: true }); // Параметр { new: true } возвращает обновленную версию пользователя   
-
-    await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
-    
     // Здесь вы можете сохранить путь к фотографии в базу данных для данного пользователя
-    // Пример: await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
-    if (updatedUser) {
-      res.json({ success: 'Фотография профиля успешно загружена' });
-    } else {
-      res.status(404).json({ error: 'Пользователь не найден' });
-    }
+    await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
+    res.json({ success: 'Фотография профиля успешно загружена' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка сервера' });

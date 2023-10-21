@@ -30,14 +30,32 @@ const Profile = (props) => {
     onSubscriptionStatus,
   } = props;
 
-  const openImagePickerAsync = async () => {
+  const uploadProfilePhoto = async (photoUri) => {
+    const formData = new FormData();
+    formData.append('profilePhoto', {
+      uri: photoUri,
+      type: 'image/jpeg',
+      name: 'profile.jpg'
+    });
+  
+    try {
+      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Предполагается, что вы используете JWT и у вас есть токен
+        }
+      });
+      console.log('Фотография профиля успешно загружена');
+    } catch (error) {
+      console.error('Ошибка при загрузке фотографии профиля:', error);
+    }
+  };
+
+  const handleImagePick = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
   
     if (permissionResult.granted === false) {
-      Alert.alert(
-        "Permission Required",
-        "Permission to access camera roll is required!"
-      );
+      Alert.alert("Permission Required", "Permission to access camera roll is required!");
       return;
     }
   
@@ -47,31 +65,9 @@ const Profile = (props) => {
       return;
     }
   
-    setUserPhoto(pickerResult.uri);
-  
-    // Создаем объект FormData для передачи файла на сервер
-    const formData = new FormData();
-    formData.append('profilePhoto', {
-      uri: pickerResult.uri,
-      type: 'image/jpeg', // Укажите правильный MIME-тип для вашего изображения
-      name: 'profile.jpg', // Укажите имя файла
-    });
-  
-    try {
-      // Отправляем фото на сервер
-      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-  
-      // В этом месте вы можете обновить user.profilePhoto в контексте
-      // или в хранилище, чтобы обновить фото без перезагрузки приложения
-    } catch (error) {
-      console.error('Error uploading profile photo:', error);
-      // Здесь обработайте возможные ошибки при загрузке фото на сервер
-    }
-  };
+    const photoUri = pickerResult.uri;
+    await uploadProfilePhoto(photoUri);
+  }
 
   const { login, logout, user } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
@@ -364,7 +360,7 @@ const Profile = (props) => {
         ) : (
           <>
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={openImagePickerAsync}>
+              <TouchableOpacity onPress={handleImagePick}>
                 <View style={styles.profilePhoto}>
                   {user.profilePhoto ? (
                     <Image
