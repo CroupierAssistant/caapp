@@ -88,7 +88,7 @@ function UTHBlindBets() {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
     <View style={styles.container}>
       <Switcher
         isEnabled={isEnabled}

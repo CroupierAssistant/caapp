@@ -21,7 +21,7 @@ function HomeScreen({ route }) {
         Hi {user ? user.username : `Guest`}!
       </Text>
 
-      <ScrollView style={{flex: 1, width: "100%"}}>
+      <ScrollView style={{flex: 1, width: "100%"}} showsVerticalScrollIndicator={false}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Blackjack")}
@@ -53,7 +53,7 @@ function HomeScreen({ route }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{ ...styles.button, backgroundColor: "#aaa" }}
+          style={styles.button}
           onPress={() => navigation.navigate("Neighbours")}
         >
           <Text style={styles.buttonText}>Neighbours</Text>

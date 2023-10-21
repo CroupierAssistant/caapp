@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 
 function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
@@ -13,10 +13,6 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
         setSelectedOptions([...selectedOptions, option]);
       }
     }
-  };
-
-  const getRandomRotation = () => {
-    return Math.random() * (5 - -5) - 5; // Генерируем случайное значение от -5 до 5
   };
 
   useEffect(() => {
@@ -34,7 +30,31 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
     ];
     const finalOptions = allOptions.slice(0, 15);
     setShuffledFinalOptions([...finalOptions].sort(() => Math.random() - 0.5));
-  }, [onSubmit]);
+  }, [number]);
+
+  const renderOptions = useMemo(() => {
+    return shuffledFinalOptions.map((option, index) => (
+      <TouchableOpacity
+        key={index}
+        style={{
+          ...styles.optionKey,
+          backgroundColor: selectedOptions.includes(option)
+            ? "#29648a"
+            : "#ccc",
+        }}
+        onPress={() => handleOptionPress(option)}
+      >
+        <Text
+          style={{
+            ...styles.optionKeyText,
+            color: selectedOptions.includes(option) ? "#fff" : "#000",
+          }}
+        >
+          {option}
+        </Text>
+      </TouchableOpacity>
+    ));
+  }, [selectedOptions, shuffledFinalOptions]);
 
   return (
     <View style={styles.container}>
@@ -57,328 +77,13 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
       </View>
 
       <View style={styles.keyboardContainer}>
-        <View style={styles.keyboardContainerRow}>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[0])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[0])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[0])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[0]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[1])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[1])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[1])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[1]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[2])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[2])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[2])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[2]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[3])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[3])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[3])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[3]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[4])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[4])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[4])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[4]}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.keyboardContainerRow}>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[5])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[5])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[5])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[5]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[6])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[6])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[6])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[6]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[7])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[7])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[7])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[7]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[8])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[8])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[8])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[8]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(shuffledFinalOptions[9])
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[9])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[9])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[9]}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.keyboardContainerRow}>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(
-                shuffledFinalOptions[10]
-              )
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[10])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[10])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[10]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(
-                shuffledFinalOptions[11]
-              )
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[11])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[11])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[11]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(
-                shuffledFinalOptions[12]
-              )
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[12])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[12])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[12]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(
-                shuffledFinalOptions[13]
-              )
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[13])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[13])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[13]}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.optionKey,
-              backgroundColor: selectedOptions.includes(
-                shuffledFinalOptions[14]
-              )
-                ? "#29648a"
-                : "#ccc",
-            }}
-            onPress={() => handleOptionPress(shuffledFinalOptions[14])}
-          >
-            <Text
-              style={{
-                ...styles.optionKeyText,
-                color: selectedOptions.includes(shuffledFinalOptions[14])
-                  ? "#fff"
-                  : "#000",
-              }}
-            >
-              {shuffledFinalOptions[14]}
-            </Text>
-          </TouchableOpacity>
-        </View>
-          <TouchableOpacity
-            onPress={() => onSubmit(selectedOptions)}
-            style={{ ...styles.optionKey, ...styles.optionKeySubmit }}
-          >
-            <Text style={{...styles.optionKeyText, color: "#fff"}}>CONFIRM</Text>
-          </TouchableOpacity>
+        <View style={styles.keyboardContainerRow}>{renderOptions}</View>
+        <TouchableOpacity
+          onPress={() => onSubmit(selectedOptions)}
+          style={{ ...styles.optionKeySubmit }}
+        >
+          <Text style={{ ...styles.optionKeyText, color: "#fff" }}>CONFIRM</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -398,23 +103,25 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 13,
+    gap: 10,
     paddingHorizontal: 15,
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
   },
   keyboardContainerRow: {
     display: "flex",
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
-    gap: 13,
+    gap: 10,
     height: 50,
+    flexWrap: "wrap",
+    height: 170
   },
   optionKey: {
-    flex: 1,
-    height: "100%",
+    height: 50,
+    width: 50,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -422,14 +129,14 @@ const styles = StyleSheet.create({
     borderRadius: 3
   },
   optionKeySubmit: {
-    flex: 1,
     height: 50,
     width: '60%',
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#479761",
-    marginBottom: 13,
+    marginBottom: 10,
+    borderRadius: 3
   },
   optionKeyText: {
     fontSize: 20,

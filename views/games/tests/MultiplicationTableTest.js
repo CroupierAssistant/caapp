@@ -14,9 +14,9 @@ import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import { useNavigation } from "@react-navigation/native";
+import Stopwatch from "../../../components/Stopwatch";
 
 function RouletteSeriesTest({ route }) {
-
   const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } =
     route.params;
 
@@ -24,13 +24,27 @@ function RouletteSeriesTest({ route }) {
   const [timerRunning, setTimerRunning] = useState(false);
   const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
   const [cardList, setCardList] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [timePassedParent, setTimePassedParent] = useState("");
+  const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
   const flatListRef = useRef(null);
 
+  const openPaytableModal = () => {
+    setShowPaytableModal(true);
+  };
+
+  const closePaytableModal = () => {
+    setShowPaytableModal(false);
+  };
+
+  const onTimeUpdate = (time) => {
+    setTimeSpent(time);
+  };
+  
   const startTimer = () => {
     setModalVisible(false);
     setTimerRunning(true);
@@ -107,7 +121,7 @@ function RouletteSeriesTest({ route }) {
       if (selectedCombinations.length === 0) {
         // Если нет выбранных комбинаций, перейти назад в стеке навигации
         navigation.popToTop();
-        return
+        return;
       }
 
       // Генерируем случайный индекс из отфильтрованных комбинаций
@@ -151,6 +165,27 @@ function RouletteSeriesTest({ route }) {
     <View style={{ flex: 1 }}>
       {!isDone && (
         <>
+          <Modal
+            animationType="slide"
+            presentationStyle="pageSheet"
+            visible={showPaytableModal}
+            onRequestClose={closePaytableModal}
+          >
+            <View style={styles.modal}>
+              <View
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  style={styles.modalButton}
+                  title="Close"
+                  onPress={closePaytableModal}
+                />
+              </View>
+            </View>
+          </Modal>
+
           <View
             style={{
               display: "flex",
@@ -160,8 +195,29 @@ function RouletteSeriesTest({ route }) {
             }}
           >
             <TouchableOpacity
+              onPress={openPaytableModal}
+              style={{
+                padding: 5,
+                backgroundColor: "#ccc",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ textAlign: "center" }}>Show info</Text>
+            </TouchableOpacity>
+
+            {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}
+
+            <TouchableOpacity
               onPress={handleStopTest}
-              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+              style={{
+                padding: 5,
+                backgroundColor: "#a16e83",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
@@ -187,7 +243,7 @@ function RouletteSeriesTest({ route }) {
       {isDone && (
         <CardResults
           cardResults={cardResults}
-          timePassedParent={timePassedParent}
+          timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
         />

@@ -121,5 +121,6 @@ app.post("/login", async (req, res) => {
 const PORT = 3000;
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://192.168.31.124:${PORT}`);
+  console.log(`Server is running on ${PORT}`);
 });
+

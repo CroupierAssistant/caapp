@@ -12,19 +12,33 @@ import {
 import CardNeighbour from "../../../components/CardNeighbour";
 import CardResultsNeigbours from "../../../components/CardResultsNeigbours";
 import Timer from "../../../components/Timer";
+import Stopwatch from "../../../components/Stopwatch";
 
 function NeighboursTest({ route }) {
   const { mode, amountOfCards, timeLimit } = route.params;
   const [isDone, setIsDone] = useState(false);
   const [cardList, setCardList] = useState([]);
-  const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [showActiveCard, setShowActiveCard] = useState(true);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [cardResults, setCardResults] = useState([]);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
+  const [showPaytableModal, setShowPaytableModal] = useState(false);
 
   const flatListRef = useRef(null);
+
+  const openPaytableModal = () => {
+    setShowPaytableModal(true);
+  };
+
+  const closePaytableModal = () => {
+    setShowPaytableModal(false);
+  };
+
+  const onTimeUpdate = (time) => {
+    setTimeSpent(time);
+  };
 
   const TRACK = [
     3, 26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23,
@@ -59,11 +73,15 @@ function NeighboursTest({ route }) {
     const finalCardDataWithNewIndices = finalCardData.map((item, index) => {
       return {
         ...item,
-        index: amountOfCards != 37 ? `${index + 1} / ${finalCardData.length}` : `${index + 1}`,
+        index:
+          amountOfCards != 37
+            ? `${index + 1} / ${finalCardData.length}`
+            : `${index + 1}`,
       };
     }); // Прописываем новые индексы
 
     setCardList(finalCardDataWithNewIndices);
+
     setTimerRunning(true);
   }, []);
 
@@ -117,8 +135,34 @@ function NeighboursTest({ route }) {
       {!isDone && (
         <>
           {timerRunning && mode === "timelimit" && (
-            <Timer time={timeLimit} setIsDone={setIsDone} />
+            <Timer
+              time={timeLimit + 1000}
+              setIsDone={setIsDone}
+              setTimeSpent={setTimeSpent}
+            />
           )}
+
+          <Modal
+            animationType="slide"
+            presentationStyle="pageSheet"
+            visible={showPaytableModal}
+            onRequestClose={closePaytableModal}
+          >
+            <View style={styles.modal}>
+              <View
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  style={styles.modalButton}
+                  title="Close"
+                  onPress={closePaytableModal}
+                />
+              </View>
+            </View>
+          </Modal>
+
           <View
             style={{
               display: "flex",
@@ -128,12 +172,34 @@ function NeighboursTest({ route }) {
             }}
           >
             <TouchableOpacity
+              onPress={openPaytableModal}
+              style={{
+                padding: 5,
+                backgroundColor: "#ccc",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ textAlign: "center" }}>Show info</Text>
+            </TouchableOpacity>
+
+            {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}
+
+            <TouchableOpacity
               onPress={handleStopTest}
-              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+              style={{
+                padding: 5,
+                backgroundColor: "#a16e83",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
           </View>
+
           <View style={{ flex: 1 }}>
             <FlatList
               ref={flatListRef}
@@ -153,6 +219,7 @@ function NeighboursTest({ route }) {
           cardResults={cardResults}
           mode={mode}
           amountOfCards={amountOfCards}
+          timeSpent={timeSpent}
         />
       )}
     </View>

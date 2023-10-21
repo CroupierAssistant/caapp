@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 const Timer = (props) => {
-  const { time, setIsDone } = props;
+  const { time, setIsDone, setTimeSpent } = props;
   const [remainingTime, setRemainingTime] = useState(time);
   const [startTime, setStartTime] = useState(new Date());
 
@@ -13,10 +13,13 @@ const Timer = (props) => {
 
       if (elapsedTime < time) {
         setRemainingTime(time - elapsedTime);
+        setTimeSpent(elapsedTime)
       } else {
         setRemainingTime(0);
         setIsDone(true);
+        setTimeSpent(time - 1000)
       }
+      
     }, 10);
 
     return () => clearInterval(interval);

@@ -6,7 +6,10 @@ const AuthProvider = ({ children }) => {
 
   // const [user, setUser] = useState(null);
   const [user, setUser] = useState({
-    username: 'tester'
+    username: 'G0rdonShumway',
+    firstName: 'Pavlo',
+    lastName: 'Zorin',
+    profilePhoto: 'https://static.wikia.nocookie.net/doblaje/images/e/e1/Alf-0.jpg/revision/latest?cb=20200912124507&path-prefix=es',
   });
 
   const login = (userData) => {

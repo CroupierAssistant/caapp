@@ -6,11 +6,23 @@ import { Ionicons } from "@expo/vector-icons";
 import CardResultsPicturesItem from "./CardResultPicturesItem";
 import { PicturesContext } from "../context/PicturesContext";
 
-const CardResultsPictures = ({ cardResults, timePassedParent, mode, amountOfCards }) => {
+const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards }) => {
   // const {payouts, handleAddPayout} = useContext(PicturesContext)
 
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const ms = Math.round((milliseconds % 1000) / 10);
+
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}.${String(ms).padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     let correctAnswers = 0;
@@ -40,7 +52,7 @@ const CardResultsPictures = ({ cardResults, timePassedParent, mode, amountOfCard
     <View style={styles.container}>
       <Text style={[styles.header, { lineHeight: 22 }]}>
         Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}%
-        {mode === "timelimit" && ` in ${timePassedParent}`}
+        {mode === "timelimit" && ` in ${formatTime(timeSpent)}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
         Correct answers: {rightAnswersAmount} / {amountOfCards}

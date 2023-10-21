@@ -14,9 +14,9 @@ import CardPicture from "../../../components/CardPicture";
 import Keyboard from "../../../components/Keyboard";
 import CardResultsPictures from "../../../components/CardResultsPictures";
 import Timer from "../../../components/Timer";
-// import { IMAGE_PATHS } from "../../../components/IMAGE_PATHS";
 import { PICTURE10_PATH } from "../../../components/PICTURE10_PATH";
 import { PICTURE20_PATH } from "../../../components/PICTURE20_PATH";
+import Stopwatch from "../../../components/Stopwatch";
 
 function RoulettePicturesTest({ route }) {
   const { timeLimit, mode, amountOfCards, combinations, numbers } =
@@ -33,14 +33,20 @@ function RoulettePicturesTest({ route }) {
   const [cardResults, setCardResults] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [timePassedParent, setTimePassedParent] = useState("");
+  const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
 
   const flatListRef = useRef(null);
+
+  const handleStopTest = () => {
+    setIsDone(true);
+  };
 
   const openPaytableModal = () => {
     setShowPaytableModal(true);
   };
-  const handleStopTest = () => {
-    setIsDone(true);
+
+  const onTimeUpdate = (time) => {
+    setTimeSpent(time);
   };
 
   const closePaytableModal = () => {
@@ -83,7 +89,6 @@ function RoulettePicturesTest({ route }) {
   };
 
   useEffect(() => {
-
     const PICTURE_PATHS = [
       ...(combinations.selected10 ? PICTURE10_PATH : []),
       ...(combinations.selected20 ? PICTURE20_PATH : []),
@@ -101,13 +106,14 @@ function RoulettePicturesTest({ route }) {
       .filter(([key, value]) => numbers[key])
       .map(([key, value]) => value);
 
-    const cardData = PICTURE_PATHS
-    .filter(item => selectedLabelsArray.includes(item.label))
-    .map((item, index) => {
+    const cardData = PICTURE_PATHS.filter((item) =>
+      selectedLabelsArray.includes(item.label)
+    ).map((item, index) => {
       const image = item.image;
-  
+
       return {
-        index: amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+        index:
+          amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
         number: image,
         rightAnswer: item.name.split("_")[1],
       };
@@ -147,11 +153,32 @@ function RoulettePicturesTest({ route }) {
         <>
           {timerRunning && mode === "timelimit" && (
             <Timer
-              time={timeLimit}
-              updateTimer={updateTimer}
+              time={timeLimit + 1000}
               setIsDone={setIsDone}
+              setTimeSpent={setTimeSpent}
             />
           )}
+
+          <Modal
+            animationType="slide"
+            presentationStyle="pageSheet"
+            visible={showPaytableModal}
+            onRequestClose={closePaytableModal}
+          >
+            <View style={styles.modal}>
+              <View
+                style={{
+                  width: "100%",
+                }}
+              >
+                <Button
+                  style={styles.modalButton}
+                  title="Close"
+                  onPress={closePaytableModal}
+                />
+              </View>
+            </View>
+          </Modal>
 
           <View
             style={{
@@ -159,19 +186,32 @@ function RoulettePicturesTest({ route }) {
               justifyContent: "space-between",
               flexDirection: "row",
               padding: 5,
-              paddingTop: mode === "timelimit" ? 40 : 5,
             }}
           >
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={openPaytableModal}
-              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
+              style={{
+                padding: 5,
+                backgroundColor: "#ccc",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              <Text style={{ textAlign: "center" }}>Show paytable</Text>
-            </TouchableOpacity> */}
+              <Text style={{ textAlign: "center" }}>Show info</Text>
+            </TouchableOpacity>
+
+            {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}
 
             <TouchableOpacity
               onPress={handleStopTest}
-              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+              style={{
+                padding: 5,
+                backgroundColor: "#a16e83",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
@@ -218,7 +258,7 @@ function RoulettePicturesTest({ route }) {
       {isDone && (
         <CardResultsPictures
           cardResults={cardResults}
-          timePassedParent={timePassedParent}
+          timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
         />

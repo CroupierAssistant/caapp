@@ -14,6 +14,7 @@ import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
+import Stopwatch from "../../../components/Stopwatch";
 
 function CardTest({ route }) {
   const {
@@ -37,6 +38,7 @@ function CardTest({ route }) {
   const [cardList, setCardList] = useState([]);
   const [isDone, setIsDone] = useState(false);
   const [timePassedParent, setTimePassedParent] = useState("");
+  const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
 
   const flatListRef = useRef(null);
 
@@ -147,19 +149,24 @@ function CardTest({ route }) {
       </View>
     );
   };
-  
+
   const updateTimer = (formattedTime) => {
     setTimePassedParent(formattedTime);
+  };
+
+  const onTimeUpdate = (time) => {
+    setTimeSpent(time);
   };
 
   return (
     <View style={{ flex: 1 }}>
       {!isDone && (
         <>
-          {timerRunning && mode === "timelimit" && (
+          {mode === "timelimit" && (
             <Timer
-              time={timeLimit}
+              time={timeLimit + 1000}
               setIsDone={setIsDone}
+              setTimeSpent={setTimeSpent}
             />
           )}
 
@@ -173,14 +180,16 @@ function CardTest({ route }) {
           >
             <TouchableOpacity
               onPress={openPaytableModal}
-              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100 }}
+              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100, justifyContent: "space-between", alignItems: "center", }}
             >
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
             </TouchableOpacity>
 
+            {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}
+
             <TouchableOpacity
               onPress={handleStopTest}
-              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100 }}
+              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100,justifyContent: "space-between", alignItems: "center", }}
             >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
@@ -229,7 +238,7 @@ function CardTest({ route }) {
       {isDone && (
         <CardResults
           cardResults={cardResults}
-          timePassedParent={timePassedParent}
+          timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
         />

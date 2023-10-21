@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 
 function NiuNiuCombinationsTest({ route }) {
     const [isDone, setIsDone] = useState(false);
+    const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
     const handleStopTest = () => {
         setIsDone(true);
       };

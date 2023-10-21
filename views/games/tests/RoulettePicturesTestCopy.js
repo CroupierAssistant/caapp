@@ -29,6 +29,7 @@ function RoulettePicturesTest() {
   const [cardResults, setCardResults] = useState([]);
   const [timePassedParent, setTimePassedParent] = useState("");
   const [timerRunning, setTimerRunning] = useState(false);
+  const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
 
   const mode = "sandbox";
   const amountOfCards = 5;
@@ -118,11 +119,7 @@ function RoulettePicturesTest() {
       {!isDone && (
         <>
           {timerRunning && mode === "timelimit" && (
-            <Timer
-              time={timeLimit}
-              updateTimer={updateTimer}
-              setIsDone={setIsDone}
-            />
+            <Timer time={timeLimit + 1000} setIsDone={setIsDone} setTimeSpent={setTimeSpent}/>
           )}
           <FlatList
             ref={flatListRef}
@@ -143,7 +140,7 @@ function RoulettePicturesTest() {
       {isDone && (
         <CardResultsPictures
           cardResults={cardResults}
-          timePassedParent={timePassedParent}
+          timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
           payouts={payouts}

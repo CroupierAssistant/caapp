@@ -4,9 +4,21 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-const CardResults = ({ cardResults, timePassedParent, mode, amountOfCards }) => {
+const CardResults = ({ cardResults, timeSpent, mode, amountOfCards }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const ms = Math.round((milliseconds % 1000) / 10);
+
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}.${String(ms).padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     let correctAnswers = 0;
@@ -25,8 +37,7 @@ const CardResults = ({ cardResults, timePassedParent, mode, amountOfCards }) => 
   return (
     <View style={styles.container}>
       <Text style={[styles.header, { lineHeight: 22 }]}>
-        Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}%
-        {mode === "timelimit" && ` in ${timePassedParent}`}
+        Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}% {` in ${formatTime(timeSpent)}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
         Correct answers: {rightAnswersAmount} / {(mode == 'timelimit' ? amountOfCards : cardResults.length)}
