@@ -5,6 +5,7 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const multer = require('multer');
 
 const User = require("./models/User");
 
@@ -104,8 +105,7 @@ app.use((req, res, next) => {
   }
 });
 
-const multer = require('multer');
-
+// Конфигурация multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/'); // Укажите путь, куда сохранять файлы
@@ -117,13 +117,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Обработчик для загрузки фотографии профиля
 app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
-    console.log(req);
     const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
     const profilePhotoPath = req.file.path;
 
-    // Здесь вы можете сохранить путь к фотографии в базу данных для данного пользователя
+    // Здесь вы можете сохранить путь к фотографии в базе данных для данного пользователя
     await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
     res.json({ success: 'Фотография профиля успешно загружена' });

@@ -30,45 +30,6 @@ const Profile = (props) => {
     onSubscriptionStatus,
   } = props;
 
-  const uploadProfilePhoto = async (photoUri) => {
-    const formData = new FormData();
-    formData.append('profilePhoto', {
-      uri: photoUri,
-      type: 'image/jpeg',
-      name: 'profile.jpg'
-    });
-  
-    try {
-      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${AsyncStorage.getItem("token")}` // Предполагается, что вы используете JWT и у вас есть токен
-        }
-      });
-      console.log('Фотография профиля успешно загружена');
-    } catch (error) {
-      console.error('Ошибка при загрузке фотографии профиля:', error);
-    }
-  };
-
-  const handleImagePick = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
-    if (permissionResult.granted === false) {
-      Alert.alert("Permission Required", "Permission to access camera roll is required!");
-      return;
-    }
-  
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-  
-    if (pickerResult.cancelled === true) {
-      return;
-    }
-  
-    const photoUri = pickerResult.uri;
-    await uploadProfilePhoto(photoUri);
-  }
-
   const { login, logout, user } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
@@ -104,28 +65,28 @@ const Profile = (props) => {
 
   const handleInputChange = (name, value) => {
     // Проверка на латиницу и запрещенные символы
-    // const latinRegex = /^[a-zA-Z0-9]+$/;
-    // const forbiddenCharsRegex = /[!@#$%^&*(),.?":{}|<>]/g;
+    const latinRegex = /^[a-zA-Z0-9]+$/;
+    const forbiddenCharsRegex = /[!@#$%^&*(),.?":{}|<>]/g;
 
-    // if (isRegistering && name != "email" && !latinRegex.test(value)) {
-    //   setError("Только буквы латинского алфавита и цифры");
-    //   return;
-    // }
+    if (isRegistering && name != "email" && !latinRegex.test(value)) {
+      setError("Только буквы латинского алфавита и цифры");
+      return;
+    }
 
-    // if (isRegistering && name != "email" && forbiddenCharsRegex.test(value)) {
-    //   setError("Введены запрещенные символы");
-    //   return;
-    // }
+    if (isRegistering && name != "email" && forbiddenCharsRegex.test(value)) {
+      setError("Введены запрещенные символы");
+      return;
+    }
 
     // Обновление состояния
     setFormData({ ...formData, [name]: value || "" }); // Добавлена проверка на undefined/null
   };
 
-  // const isEmailValid = (email) => {
-  //   // Регулярное выражение для проверки email
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
+  const isEmailValid = (email) => {
+    // Регулярное выражение для проверки email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const errors = {};
 
@@ -134,30 +95,30 @@ const Profile = (props) => {
       errors.confirmPassword = "Пароли не совпадают";
     }
 
-    // if (!isEmailValid(formData.email)) {
-    //   errors.email = "Введите корректный email адрес";
-    // }
+    if (!isEmailValid(formData.email)) {
+      errors.email = "Введите корректный email адрес";
+    }
 
-    // if (formData.username.length < 3) {
-    //   errors.username = "Никнейм должен содержать минимум 3 символа";
-    // }
+    if (formData.username.length < 3) {
+      errors.username = "Никнейм должен содержать минимум 3 символа";
+    }
 
-    // if (formData.password.length < 8) {
-    //   errors.password = "Пароль должен содержать минимум 8 символов";
-    // }
+    if (formData.password.length < 8) {
+      errors.password = "Пароль должен содержать минимум 8 символов";
+    }
 
-    // if (Object.keys(errors).length > 0) {
-    //   setErrors(errors);
-    //   return;
-    // }
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
 
     // Проверка на минимальную длину никнейма и пароля
-    // if (formData.username.length < 3 || formData.password.length < 8) {
-    //   setError(
-    //     "Никнейм должен содержать минимум 3 символа, а пароль - минимум 8 символов"
-    //   );
-    //   return;
-    // }
+    if (formData.username.length < 3 || formData.password.length < 8) {
+      setError(
+        "Никнейм должен содержать минимум 3 символа, а пароль - минимум 8 символов"
+      );
+      return;
+    }
 
     // Axios.post("http://192.168.31.124:3000/register", formData)
     Axios.post("https://caapp-server.onrender.com/register", formData)
@@ -228,6 +189,55 @@ const Profile = (props) => {
           setError("Произошла ошибка");
         }
       });
+  };
+
+  const uploadProfilePhoto = async (photoUri) => {
+    const formData = new FormData();
+    formData.append('profilePhoto', {
+      uri: photoUri,
+      type: 'image/jpeg',
+      name: 'profile.jpg'
+    });
+  
+    try {
+      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Предполагается, что у вас есть токен (например, из контекста)
+        }
+      });
+      console.log('Фотография профиля успешно загружена');
+    } catch (error) {
+      console.error('Ошибка при загрузке фотографии профиля:', error);
+    }
+  };
+
+  const handleProfilePhotoChange = async () => {
+    try {
+      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+      if (permissionResult.granted === false) {
+        Alert.alert(
+          "Permission Required",
+          "Permission to access camera roll is required!"
+        );
+        return;
+      }
+  
+      let pickerResult = await ImagePicker.launchImageLibraryAsync();
+  
+      if (pickerResult.cancelled === true) {
+        return;
+      }
+  
+      // Обновляем фото в UI
+      setUserPhoto(pickerResult.uri);
+  
+      // Загружаем новое фото на сервер
+      await uploadProfilePhoto(pickerResult.uri);
+    } catch (error) {
+      console.error('Error changing profile photo:', error);
+    }
   };
 
   return (
@@ -354,7 +364,7 @@ const Profile = (props) => {
         ) : (
           <>
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={handleImagePick}>
+              <TouchableOpacity onPress={handleProfilePhotoChange}>
                 <View style={styles.profilePhoto}>
                   {user.profilePhoto ? (
                     <Image
