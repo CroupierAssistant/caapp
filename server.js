@@ -27,10 +27,10 @@ async function comparePassword(inputPassword, hashedPassword) {
 
 app.post("/register", async (req, res) => {
   try {
-    const { firstName, lastName, username, email, password, agree } = req.body;
+    const { username, email, password, agree } = req.body;
 
     // Проверка на обязательные поля
-    if (!firstName || !lastName || !username || !email || !password || !agree) {
+    if (!username || !email || !password || !agree) {
       return res.status(400).json({ error: "Заполните все обязательные поля" });
     }
 
@@ -49,8 +49,6 @@ app.post("/register", async (req, res) => {
 
     // Создание нового пользователя
     const newUser = await User.create({
-      firstName,
-      lastName,
       username,
       email,
       password: hashedPassword,
