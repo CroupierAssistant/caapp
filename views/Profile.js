@@ -9,12 +9,14 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
+import * as ImagePicker from "expo-image-picker";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,6 +30,49 @@ const Profile = (props) => {
     onSubscriptionStatus,
   } = props;
 
+  const openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        "Permission Required",
+        "Permission to access camera roll is required!"
+      );
+      return;
+    }
+  
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+  
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+  
+    setUserPhoto(pickerResult.uri);
+  
+    // Создаем объект FormData для передачи файла на сервер
+    const formData = new FormData();
+    formData.append('profilePhoto', {
+      uri: pickerResult.uri,
+      type: 'image/jpeg', // Укажите правильный MIME-тип для вашего изображения
+      name: 'profile.jpg', // Укажите имя файла
+    });
+  
+    try {
+      // Отправляем фото на сервер
+      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      // В этом месте вы можете обновить user.profilePhoto в контексте
+      // или в хранилище, чтобы обновить фото без перезагрузки приложения
+    } catch (error) {
+      console.error('Error uploading profile photo:', error);
+      // Здесь обработайте возможные ошибки при загрузке фото на сервер
+    }
+  };
+
   const { login, logout, user } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
@@ -37,6 +82,14 @@ const Profile = (props) => {
     confirmPassword: "",
     agree: false,
   });
+
+  const [userPhoto, setUserPhoto] = useState("");
+
+  useEffect(() => {
+    setUserPhoto(
+      user && user.profilePhoto ? user.profilePhoto : ''
+    );
+  }, [user]);
 
   const [error, setError] = useState(null);
 
@@ -311,10 +364,25 @@ const Profile = (props) => {
         ) : (
           <>
             <View style={styles.profileContainer}>
-              <Image
-                source={{ uri: user.profilePhoto }}
-                style={styles.profilePhoto}
-              />
+              <TouchableOpacity onPress={openImagePickerAsync}>
+                <View style={styles.profilePhoto}>
+                  {user.profilePhoto ? (
+                    <Image
+                      source={{ uri: userPhoto }}
+                      style={{ width: 150, height: 150 }}
+                    />
+                  ) : (
+                    <FontAwesome name="user" size={80} color="#29648a" />
+                  )}
+                </View>
+                <View style={styles.editIconContainer}>
+                  <FontAwesome
+                    name="pencil-square-o"
+                    size={24}
+                    color="#29648a"
+                  />
+                </View>
+              </TouchableOpacity>
               <View style={styles.textContainer}>
                 <Text style={styles.nickname}>{user.username}</Text>
                 <Text style={styles.username}>
@@ -464,6 +532,11 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     marginBottom: 20,
     alignSelf: "center",
+    borderWidth: 2,
+    borderColor: "#29648a",
+    overflow: "hidden",
+    justifyContent: "center",
+    alignItems: "center",
   },
   textContainer: {
     alignItems: "center",
@@ -505,6 +578,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: "center",
     borderRadius: 3,
+  },
+  editIconContainer: {
+    position: "absolute",
+    right: 5,
+    bottom: 15,
+    width: 20,
+    height: 20,
   },
 });
 
