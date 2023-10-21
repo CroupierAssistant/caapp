@@ -92,7 +92,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '/uploads/'); // Укажите путь, куда сохранять файлы
+    cb(null, 'uploads/'); // Укажите путь, куда сохранять файлы
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + '-' + file.originalname); // Уникальное имя файла
@@ -103,7 +103,7 @@ const upload = multer({ storage });
 
 app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
-    const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
+    const userId = req.user.userId; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
     const profilePhotoPath = req.file.path;
 
     // Здесь вы можете сохранить путь к фотографии в базу данных для данного пользователя
