@@ -93,6 +93,7 @@ app.use((req, res, next) => {
   const token = req.headers.authorization; // Предполагается, что токен передается в заголовке
 
   if (token) {
+    console.log(`token: ${token}`);
     jwt.verify(token, 'ваш_секретный_ключ', (err, user) => {
       if (err) {
         return res.status(403).json({ error: 'Невалидный токен' });
@@ -120,12 +121,14 @@ const upload = multer({ storage });
 // Обработчик для загрузки фотографии профиля
 app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
+    console.log(`req: ${req}`);
     const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
     const profilePhotoPath = req.file.path;
 
     // Здесь вы можете сохранить путь к фотографии в базе данных для данного пользователя
     await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
 
+    console.log(`res: ${res}`);
     res.json({ success: 'Фотография профиля успешно загружена' });
   } catch (error) {
     console.error(error);
