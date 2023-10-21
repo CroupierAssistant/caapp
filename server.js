@@ -119,6 +119,7 @@ const upload = multer({ storage });
 
 app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
+    console.log(req);
     const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
     const profilePhotoPath = req.file.path;
 
