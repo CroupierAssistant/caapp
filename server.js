@@ -14,33 +14,6 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
-// Задайте путь к папке с изображениями
-const picturesPath = 'assets/images/pictures';
-
-fs.readdir(picturesPath, (err, files) => {
-  if (err) {
-    console.error('Ошибка чтения директории:', err);
-    return;
-  }
-
-  const fileList = files.map(file => {
-    return `${picturesPath}/${file}`;
-  });
-
-  console.log('Массив файлов:', fileList);
-});
-
-// Обработка GET запроса на получение списка файлов
-app.get('/getImages', (req, res) => {
-  fs.readdir(picturesPath, (err, files) => {
-    if (err) {
-      return res.status(500).json({ error: 'Ошибка при чтении папки с изображениями' });
-    }
-    res.json({ files });
-  });
-});
-
 async function hashPassword(password) {
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -118,7 +91,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = 10000;
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);

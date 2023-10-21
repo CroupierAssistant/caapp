@@ -31,8 +31,6 @@ const Profile = (props) => {
   const { login, logout, user } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     username: "",
     email: "",
     password: "",
@@ -57,28 +55,28 @@ const Profile = (props) => {
 
   const handleInputChange = (name, value) => {
     // Проверка на латиницу и запрещенные символы
-    const latinRegex = /^[a-zA-Z0-9]+$/;
-    const forbiddenCharsRegex = /[!@#$%^&*(),.?":{}|<>]/g;
+    // const latinRegex = /^[a-zA-Z0-9]+$/;
+    // const forbiddenCharsRegex = /[!@#$%^&*(),.?":{}|<>]/g;
 
-    if (isRegistering && !latinRegex.test(value)) {
-      setError("Только буквы латинского алфавита и цифры");
-      return;
-    }
+    // if (isRegistering && name != "email" && !latinRegex.test(value)) {
+    //   setError("Только буквы латинского алфавита и цифры");
+    //   return;
+    // }
 
-    if (isRegistering && forbiddenCharsRegex.test(value)) {
-      setError("Введены запрещенные символы");
-      return;
-    }
+    // if (isRegistering && name != "email" && forbiddenCharsRegex.test(value)) {
+    //   setError("Введены запрещенные символы");
+    //   return;
+    // }
 
     // Обновление состояния
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value || "" }); // Добавлена проверка на undefined/null
   };
 
-  const isEmailValid = (email) => {
-    // Регулярное выражение для проверки email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  // const isEmailValid = (email) => {
+  //   // Регулярное выражение для проверки email
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   return emailRegex.test(email);
+  // };
 
   const errors = {};
 
@@ -87,41 +85,43 @@ const Profile = (props) => {
       errors.confirmPassword = "Пароли не совпадают";
     }
 
-    if (!isEmailValid(formData.email)) {
-      errors.email = "Введите корректный email адрес";
-    }
+    // if (!isEmailValid(formData.email)) {
+    //   errors.email = "Введите корректный email адрес";
+    // }
 
-    if (formData.username.length < 3) {
-      errors.username = "Никнейм должен содержать минимум 3 символа";
-    }
+    // if (formData.username.length < 3) {
+    //   errors.username = "Никнейм должен содержать минимум 3 символа";
+    // }
 
-    if (formData.password.length < 8) {
-      errors.password = "Пароль должен содержать минимум 8 символов";
-    }
+    // if (formData.password.length < 8) {
+    //   errors.password = "Пароль должен содержать минимум 8 символов";
+    // }
 
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      return;
-    }
+    // if (Object.keys(errors).length > 0) {
+    //   setErrors(errors);
+    //   return;
+    // }
 
     // Проверка на минимальную длину никнейма и пароля
-    if (formData.username.length < 3 || formData.password.length < 8) {
-      setError(
-        "Никнейм должен содержать минимум 3 символа, а пароль - минимум 8 символов"
-      );
-      return;
-    }
+    // if (formData.username.length < 3 || formData.password.length < 8) {
+    //   setError(
+    //     "Никнейм должен содержать минимум 3 символа, а пароль - минимум 8 символов"
+    //   );
+    //   return;
+    // }
+
+    // 3.75.158.163
+    // 3.125.183.140
+    // 35.157.117.28
 
     // Axios.post("http://192.168.31.124:3000/register", formData)
-    Axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-3000.app.github.dev:3000/register", formData)
+    Axios.post("https://caapp-server.onrender.com/register", formData)
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
         AsyncStorage.setItem("token", token);
         login(response.data.user); // Добавление в контекст после успешной регистрации
         setFormData({
-          firstName: "",
-          lastName: "",
           username: "",
           email: "",
           password: "",
@@ -137,6 +137,7 @@ const Profile = (props) => {
           if (error.response.status === 409) {
             setError("Имя пользователя уже используется");
           } else {
+            setError("");
             setError("Ошибка запроса. Проверьте введенные данные.");
           }
         } else if (error.request) {
@@ -149,7 +150,7 @@ const Profile = (props) => {
 
   const handleLogin = () => {
     // Axios.post("http://192.168.31.124:3000/login", {
-    Axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-3000.app.github.dev:3000/login", {
+    Axios.post("https://caapp-server.onrender.com/login", {
       username: formData.username,
       password: formData.password,
     })
@@ -292,9 +293,9 @@ const Profile = (props) => {
                 )}
               </>
             )}
-            
-        {error && <Text style={styles.errorText}>{error}</Text>}
-        
+
+            {error && <Text style={styles.errorText}>{error}</Text>}
+
             <Button
               title={isRegistering ? "Register" : "Login"}
               onPress={isRegistering ? handleRegister : handleLogin}
