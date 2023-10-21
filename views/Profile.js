@@ -205,8 +205,6 @@ const Profile = (props) => {
         AsyncStorage.setItem("token", token);
         login(response.data.user); // Добавление в контекст после успешной авторизации
         setFormData({
-          firstName: "",
-          lastName: "",
           username: "",
           email: "",
           password: "",

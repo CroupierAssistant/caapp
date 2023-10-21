@@ -24,6 +24,22 @@ async function comparePassword(inputPassword, hashedPassword) {
   return isMatch;
 }
 
+app.use((req, res, next) => {
+  const token = req.headers.authorization; // Предполагается, что токен передается в заголовке
+
+  if (token) {
+    jwt.verify(token, 'ваш_секретный_ключ', (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: 'Невалидный токен' });
+      }
+      req.user = user; // Устанавливаем объект пользователя в req
+      next(); // Переходим к следующему промежуточному ПО
+    });
+  } else {
+    return res.status(401).json({ error: 'Токен не предоставлен' });
+  }
+});
+
 app.post("/register", async (req, res) => {
   try {
     const { username, email, password, agree } = req.body;
