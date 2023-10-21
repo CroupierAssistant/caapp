@@ -42,7 +42,7 @@ const Profile = (props) => {
       await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}` // Предполагается, что вы используете JWT и у вас есть токен
+          // 'Authorization': `Bearer ${AsyncStorage.getItem("token")}` // Предполагается, что вы используете JWT и у вас есть токен
         }
       });
       console.log('Фотография профиля успешно загружена');
@@ -158,10 +158,6 @@ const Profile = (props) => {
     //   );
     //   return;
     // }
-
-    // 3.75.158.163
-    // 3.125.183.140
-    // 35.157.117.28
 
     // Axios.post("http://192.168.31.124:3000/register", formData)
     Axios.post("https://caapp-server.onrender.com/register", formData)
