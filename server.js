@@ -8,9 +8,9 @@ const fs = require('fs');
 
 const User = require("./models/User");
 
-const BlackJackResult = require("./models/BlackJackResult"); // Import the TestResult model
+const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
-const NeighbourResult = require("./models/NeighbourResult"); // Import the TestResult model
+const NeighboursResult = require("./models/NeighboursResult"); // Import the TestResult model
 const RoulettePicturesResult = require("./models/RoulettePicturesResult"); // Import the TestResult model
 const RouletteSeriesResult = require("./models/RouletteSeriesResult"); // Import the TestResult model
 const Russian5bonusResult = require("./models/Russian5bonusResult"); // Import the TestResult model
@@ -108,9 +108,9 @@ app.post("/saveTestResult", async (req, res) => {
     if (!username || !game || !mode || !timeSpentTest) {return res.status(400).json({ error: "Please provide all required fields" })}
 
     const ModelSchema = 
-      game === 'Blackjack' ? BlackJackResult : 
+      game === 'Blackjack' ? BlackjackResult : 
       game === 'Multiplication' ? MultiplicationResult : 
-      game === 'Neighbours' ? NeighbourResult : 
+      game === 'Neighbours' ? NeighboursResult : 
       game === 'Roulette pictures' ? RoulettePicturesResult : 
       game === 'Roulette series' ? RouletteSeriesResult : 
       game === 'Russian Poker 5-bonus' ? Russian5bonusResult : 
