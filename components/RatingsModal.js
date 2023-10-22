@@ -42,8 +42,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                   </Text>
                 </View>
                 <Text style={{ ...styles.text, width: "55%", paddingHorizontal: 3 }} numberOfLines={1} ellipsizeMode='tail'>{item.username}</Text>
-                <Text style={{ ...styles.text, width: "15%", paddingHorizontal: 3 }}>
-                  {item.percentage}%
+                <Text style={{ ...styles.text, width: "20%", paddingHorizontal: 3 }}>
+                  {Number(item.percentage).toFixed(2)}%
                 </Text>
                 <Text style={{ ...styles.text, width: "20%" }}>
                   {item.timeSpentTest}
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 10,
     borderRadius: 10,
     width: Dimensions.get("window").width * 0.95,
     height: Dimensions.get("window").height * 0.8,

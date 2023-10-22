@@ -15,13 +15,12 @@ function HomeScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text
-        style={[styles.greetingsText, { color: user ? `#479761` : `#a16e83` }]}
-      >
-        Hi {user ? user.username : `Guest`}!
-      </Text>
+      <Text style={[styles.textHeader]}>Select a test</Text>
 
-      <ScrollView style={{flex: 1, width: "100%"}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{ flex: 1, width: "100%" }}
+        showsVerticalScrollIndicator={false}
+      >
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Blackjack")}
@@ -163,14 +162,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
   },
-  greetingsText: {
-    color: "black",
-    fontSize: 26,
-    marginBottom: 10,
-    textAlign: "left",
-    width: "100%",
+  textHeader: {
+    textAlign: "center",
+    fontSize: 22,
+    color: "#29648a",
     fontWeight: "bold",
-    padding: 10,
+    marginBottom: 20,
   },
 });
 

@@ -174,7 +174,32 @@ app.get('/ratings/:gameName', async (req, res) => {
   }
 
   try {
-    const ratings = await resultModel.find().sort({ percentage: -1 }).limit(10); // Получаем топ-10 рейтинга
+    const ratings = await resultModel.aggregate([
+      {
+        $match: { game: gameName }, // Фильтруем по имени игры
+      },
+      {
+        $group: {
+          _id: "$username",
+          maxPercentage: { $max: "$percentage" },
+          minTimeSpentTest: { $min: "$timeSpentTest" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          username: "$_id",
+          maxPercentage: 1,
+          minTimeSpentTest: 1,
+        },
+      },
+      {
+        $sort: { maxPercentage: -1 },
+      },
+      // {
+      //   $limit: 10,
+      // },
+    ]);
     res.json(ratings);
   } catch (error) {
     console.error('Ошибка при получении рейтингов:', error);
