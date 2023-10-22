@@ -15,7 +15,6 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 import Stopwatch from "../../../components/Stopwatch";
-import saveGameTestResult from "../../../components/saveGameTestResult";
 import { AuthContext } from "../../../context/AuthContext";
 
 function CardTest({ route }) {
@@ -49,6 +48,22 @@ function CardTest({ route }) {
   const [percentageTest, setPercentageTest] = useState(0)
 
   const flatListRef = useRef(null);
+
+  const handleSaveTestResult = async () => {
+    const username = user && user.username ? user.username : ''
+    const percentage = percentageTest
+    const timeSpentTest = formatTime(timeSpent)
+    const game = gameName
+
+    try {
+      const response = await saveTestResult(username, game, percentage, timeSpentTest);
+      console.log(response);
+      // Handle success
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
   const openPaytableModal = () => {
     setShowPaytableModal(true);
@@ -89,26 +104,6 @@ function CardTest({ route }) {
     )}.${String(ms).padStart(2, "0")}`;
   };
 
-  useEffect(() => {
-    const userName = user && user.username; 
-    const game = gameName; 
-    const timeTaken = formatTime(timeSpent); 
-  
-    if (userName && game && percentageTest !== 0 && timeTaken !== 0) {
-      saveGameTestResult(userName, game, percentageTest, timeTaken)
-        .then((response) => {
-          if (response.success) {
-            console.log(response.message);
-          } else {
-            console.error(response.message);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [percentageTest, gameName, user]);
-
   const handleSubmit = () => {
     // Переходим к следующей карте
     if (activeCardIndex < cardList.length - 1) {
@@ -116,6 +111,8 @@ function CardTest({ route }) {
     } else {
       setShowActiveCard(false);
       setIsDone(true);
+
+      handleSaveTestResult()
     }
     setInputValue("");
   };

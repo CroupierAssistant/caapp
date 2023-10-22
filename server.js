@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
 const User = require("./models/User");
-const GameTestResult = require("./models/GameTestResult");
+const TestResult = require("./models/TestResult"); // Import the TestResult model
 
 const app = express();
 
@@ -89,22 +89,27 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post('/saveGameTestResult', async (req, res) => {
-  const { userName, game, percentage, timeTaken } = req.body;
-
-  console.log(req.body);
-
-  await GameTestResult.create({
-    userName: userName,
-    game: game,
-    percentage: percentage, 
-    timeTaken: timeTaken
-  });
-
+app.post("/saveTestResult", async (req, res) => {
   try {
-    res.json(response);
+    const { username, game, percentage, timeSpent } = req.body;
+
+    // Check if all required fields are provided
+    if (!username || !game || !percentage || !timeSpent) {
+      return res.status(400).json({ error: "Please provide all required fields" });
+    }
+
+    // Save test result to the database
+    const newTestResult = await TestResult.create({
+      username,
+      game,
+      percentage,
+      timeSpent,
+    });
+
+    return res.json({ success: "Test result saved successfully", testResult: newTestResult });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
