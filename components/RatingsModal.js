@@ -41,12 +41,12 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                     {index + 1}
                   </Text>
                 </View>
-                <Text style={{ ...styles.text, width: "55%", paddingHorizontal: 3 }} numberOfLines={1} ellipsizeMode='tail'>{item.username}</Text>
+                <Text style={{ ...styles.text, width: "50%", paddingHorizontal: 3 }} numberOfLines={1} ellipsizeMode='tail'>{item.username}</Text>
                 <Text style={{ ...styles.text, width: "20%", paddingHorizontal: 3 }}>
-                  {Number(item.percentage).toFixed(2)}%
+                  {Number(item.maxPercentage).toFixed(2)}%
                 </Text>
-                <Text style={{ ...styles.text, width: "20%" }}>
-                  {item.timeSpentTest}
+                <Text style={{ ...styles.text, width: "20%"}}>
+                  {item.minTimeSpentTest}
                 </Text>
               </View>
             )}
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'row',
     textAlign: "center",
+    fontSize: 14,
     lineHeight: 30,
   },
   textIndex: {

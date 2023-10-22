@@ -176,7 +176,11 @@ app.get('/ratings/:gameName', async (req, res) => {
   try {
     const ratings = await resultModel.aggregate([
       {
-        $match: { game: gameName }, // Фильтруем по имени игры
+        $match: {
+          game: gameName, // Фильтруем по имени игры
+          mode: { $ne: 'sandbox' }, // Режим не должен быть 'sandbox'
+          username: { $ne: '\/guest\/' }, // Имя пользователя не должно быть '/guest/'
+        },
       },
       {
         $group: {
