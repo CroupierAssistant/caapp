@@ -95,7 +95,7 @@ app.post('/saveGameTestResult', async (req, res) => {
   console.log(req.body);
 
   const newTest = await GameTestResult.create({
-    userName,
+    user: userName,
     game,
     percentage, 
     timeTaken

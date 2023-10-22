@@ -1,6 +1,6 @@
 import Axios from "axios";
 
-const saveGameTestResult = (userId, game, percentage, timeTaken) => {
+const saveGameTestResult = (userName, game, percentage, timeTaken) => {
   return Axios.post("https://caapp-server.onrender.com/saveGameTestResult", {
     userName,
     game,

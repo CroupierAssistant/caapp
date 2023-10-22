@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const gameTestResultSchema = new mongoose.Schema({
-  user: {
+  userName: {
     type: String,
     required: true,
   },

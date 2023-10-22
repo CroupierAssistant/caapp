@@ -94,9 +94,9 @@ function CardTest({ route }) {
     const game = gameName; 
     const timeTaken = formatTime(timeSpent); 
   
-    console.log(userId, game, percentageTest, timeTaken);
+    console.log(userName, game, percentageTest, timeTaken);
   
-    // if (userId && game && percentageTest !== 0 && timeTaken !== 0) {
+    if (userName && game && percentageTest !== 0 && timeTaken !== 0) {
       saveGameTestResult(userName, game, percentageTest, timeTaken)
         .then((response) => {
           if (response.success) {
@@ -108,7 +108,7 @@ function CardTest({ route }) {
         .catch((error) => {
           console.error(error);
         });
-    // }
+    }
   }, [percentageTest, gameName, user]);
 
   const handleSubmit = () => {
