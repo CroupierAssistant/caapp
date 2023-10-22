@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const gameTestResultSchema = new mongoose.Schema({
   user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Предполагается, что у вас есть коллекция 'User'
+    type: String,
     required: true,
   },
   game: {
@@ -15,7 +14,7 @@ const gameTestResultSchema = new mongoose.Schema({
     required: true,
   },
   timeTaken: {
-    type: Number,
+    type: String,
     required: true,
   },
   date: {

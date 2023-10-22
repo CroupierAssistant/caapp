@@ -90,14 +90,14 @@ function CardTest({ route }) {
   };
 
   useEffect(() => {
-    const userId = user && user._id; 
+    const userName = user && user.username; 
     const game = gameName; 
     const timeTaken = formatTime(timeSpent); 
   
     console.log(userId, game, percentageTest, timeTaken);
   
     // if (userId && game && percentageTest !== 0 && timeTaken !== 0) {
-      saveGameTestResult(userId, game, percentageTest, timeTaken)
+      saveGameTestResult(userName, game, percentageTest, timeTaken)
         .then((response) => {
           if (response.success) {
             console.log(response.message);
