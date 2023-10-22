@@ -192,6 +192,7 @@ function RouletteSeriesTest({ route }) {
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
+              isDone={isDone}
               setTimeSpent={setTimeSpent}
             />
           )}

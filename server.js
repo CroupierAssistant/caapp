@@ -128,6 +128,60 @@ app.post("/saveTestResult", async (req, res) => {
   }
 });
 
+app.get('/ratings/:gameName', async (req, res) => {
+  const { gameName } = req.params;
+  
+  let resultModel;
+
+  // Определите модель по имени игры
+  switch(gameName) {
+    case 'Blackjack':
+      resultModel = BlackjackResult;
+      break;
+    case 'Multiplication':
+      resultModel = MultiplicationResult;
+      break;
+    case 'Neighbours':
+      resultModel = NeighboursResult;
+      break;
+    case 'Roulette pictures':
+      resultModel = RoulettePicturesResult;
+      break;
+    case 'Roulette series':
+      resultModel = RouletteSeriesResult;
+      break;
+    case 'Russian Poker 5-bonus':
+      resultModel = Russian5bonusResult;
+      break;
+    case 'Russian Poker 6-bonus':
+      resultModel = Russian6bonusResult;
+      break;
+    case 'Russian Poker Ante':
+      resultModel = RussianAnteResult;
+      break;
+    case 'UTH Blind Bets':
+      resultModel = UTHBlindResult;
+      break;
+    case 'UTH Trips Bets':
+      resultModel = UTHTripsResult;
+      break;
+    case "Texas Hold'em":
+      resultModel = TexasHoldemResult;
+      break;
+    // Добавьте другие игры по аналогии
+    default:
+      return res.status(404).json({ message: 'Игра не найдена' });
+  }
+
+  try {
+    const ratings = await resultModel.find().sort({ percentage: -1 }).limit(10); // Получаем топ-10 рейтинга
+    res.json(ratings);
+  } catch (error) {
+    console.error('Ошибка при получении рейтингов:', error);
+    res.status(500).json({ message: 'Внутренняя ошибка сервера' });
+  }
+});
+
 const PORT = 10000;
 
 app.listen(PORT, () => {

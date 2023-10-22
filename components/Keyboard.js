@@ -125,7 +125,7 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
 const styles = StyleSheet.create({
   keyboard: {
     position: "absolute",
-    bottom: 5,
+    bottom: 10,
     left: 0,
     right: 0,
     flexDirection: "column",

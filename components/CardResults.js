@@ -49,7 +49,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     setPercentage(calculatedPercentage);
 
     handleSaveTestResult({
-      nickname: user.username,
+      nickname: user && user.username ? user.username : '\/guest\/',
       game: gameName,
       type: mode,
       percent: calculatedPercentage,

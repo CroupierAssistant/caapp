@@ -17,10 +17,10 @@ const Timer = (props) => {
       } else {
         setRemainingTime(0);
         setIsDone(true);
-        setTimeSpent(time - 1000)
+        setTimeSpent(time)
       }
       
-    }, 10);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [startTime, time]);

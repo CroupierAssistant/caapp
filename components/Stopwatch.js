@@ -14,7 +14,7 @@ const Stopwatch = ({ onTimeUpdate }) => {
         const newElapsedTime = currentTime - startTime;
         setElapsedTime(newElapsedTime);
         onTimeUpdate(newElapsedTime);
-      }, 10);
+      }, 1000);
     }
 
     return () => {

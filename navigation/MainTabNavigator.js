@@ -2,10 +2,12 @@ import React from "react";
 import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../views/Profile";
-import HomeStackNavigator from "./HomeStackNavigator";
+import HomeStackNavigator from "./TestsStackNavigator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import TestsStackNavigator from "./TestsStackNavigator";
+import Ratings from "../views/Ratings";
 
 // Создаем нижнюю навигацию
 const Tab = createBottomTabNavigator();
@@ -18,10 +20,10 @@ function MainTabNavigator() {
       }}
     >
       <Tab.Screen
-        name="Profile"
+        name="Main"
         component={Profile}
         options={{
-          tabBarLabel: "Profile",
+          tabBarLabel: "Main",
           tabBarShowLabel: false,
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#ccc",
@@ -32,10 +34,11 @@ function MainTabNavigator() {
         }}
       />
       <Tab.Screen
-        name="Home"
-        component={HomeStackNavigator}
+        name="Tests"
+        component={TestsStackNavigator}
         options={{
-          tabBarLabel: "Home",
+          
+          tabBarLabel: "Tests",
           tabBarShowLabel: false,
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#ccc",
@@ -48,7 +51,7 @@ function MainTabNavigator() {
       />
       <Tab.Screen
         name="Ratings"
-        component={Profile}
+        component={Ratings}
         options={{
           tabBarLabel: "Ratings",
           tabBarShowLabel: false,

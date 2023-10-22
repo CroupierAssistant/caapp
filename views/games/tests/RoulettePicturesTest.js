@@ -155,6 +155,7 @@ function RoulettePicturesTest({ route }) {
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
+              isDone={isDone}
               setTimeSpent={setTimeSpent}
             />
           )}
