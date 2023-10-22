@@ -67,6 +67,10 @@ function CardTest({ route }) {
     }
   };
 
+  useEffect(() => {
+    handleSaveTestResult(percentage)
+  }, [])
+
   const openPaytableModal = () => {
     setShowPaytableModal(true);
   };
@@ -114,7 +118,6 @@ function CardTest({ route }) {
       setShowActiveCard(false);
       setIsDone(true);
 
-      handleSaveTestResult()
     }
     setInputValue("");
   };

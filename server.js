@@ -96,7 +96,7 @@ app.post("/saveTestResult", async (req, res) => {
     console.log(username, game, percentage, timeSpent);
 
     // Check if all required fields are provided
-    if (!username || !game || !percentage || !timeSpent) {
+    if (!username || !game || !timeSpent) {
       return res.status(400).json({ error: "Please provide all required fields" });
     }
 
