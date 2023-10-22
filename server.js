@@ -7,7 +7,19 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
 const User = require("./models/User");
-const TestResult = require("./models/TestResult"); // Import the TestResult model
+
+const BlackJackResult = require("./models/BlackJackResult"); // Import the TestResult model
+const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
+const NeighbourResult = require("./models/NeighbourResult"); // Import the TestResult model
+const RoulettePicturesResult = require("./models/RoulettePicturesResult"); // Import the TestResult model
+const RouletteSeriesResult = require("./models/RouletteSeriesResult"); // Import the TestResult model
+const Russian5bonusResult = require("./models/Russian5bonusResult"); // Import the TestResult model
+const Russian6bonusResult = require("./models/Russian6bonusResult"); // Import the TestResult model
+const RussianAnteResult = require("./models/RussianAnteResult"); // Import the TestResult model
+const TexasHoldemResult = require("./models/TexasHoldemResult"); // Import the TestResult model
+const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestResult model
+const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
+
 
 const app = express();
 
@@ -93,19 +105,21 @@ app.post("/saveTestResult", async (req, res) => {
   try {
     const { username, game, mode, percentage, timeSpentTest } = req.body;
 
-    // Check if all required fields are provided
-    if (!username || !game || !mode || !timeSpentTest) {
-      return res.status(400).json({ error: "Please provide all required fields" });
-    }
+    if (!username || !game || !mode || !timeSpentTest) {return res.status(400).json({ error: "Please provide all required fields" })}
 
-    // Save test result to the database
-    const newTestResult = await TestResult.create({
-      username,
-      game,
-      mode,
-      percentage,
-      timeSpentTest,
-    });
+    const ModelSchema = 
+      game === 'Blackjack' ? BlackJackResult : 
+      game === 'Multiplication' ? MultiplicationResult : 
+      game === 'Neighbours' ? NeighbourResult : 
+      game === 'Roulette pictures' ? RoulettePicturesResult : 
+      game === 'Roulette series' ? RouletteSeriesResult : 
+      game === 'Russian Poker 5-bonus' ? Russian5bonusResult : 
+      game === 'Russian Poker 6-bonus' ? Russian6bonusResult : 
+      game === 'Russian Poker Ante' ? RussianAnteResult : 
+      game === 'UTH Blind Bets' ? UTHBlindResult : 
+      game === 'UTH Trips Bets' ? UTHTripsResult : TexasHoldemResult
+
+    const newTestResult = await ModelSchema.create({username, game, mode, percentage, timeSpentTest});
 
     return res.json({ success: "Test result saved successfully", testResult: newTestResult });
   } catch (error) {

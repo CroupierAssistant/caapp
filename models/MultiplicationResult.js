@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const testResultSchema = new mongoose.Schema({
+const MultiplicationSchema = new mongoose.Schema({
   username: String,
   game: String,
   mode: String,
@@ -12,6 +12,6 @@ const testResultSchema = new mongoose.Schema({
   },
 });
 
-const TestResult = mongoose.model('TestResult', testResultSchema);
+const MultiplicationResult = mongoose.model('MultiplicationResult', MultiplicationSchema);
 
-module.exports = TestResult;
+module.exports = MultiplicationResult;

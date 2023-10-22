@@ -182,7 +182,7 @@ function CardTest({ route }) {
         <>
           {mode === "timelimit" && (
             <Timer
-              time={timeLimit + 1000}
+              time={timeLimit}
               setIsDone={setIsDone}
               setTimeSpent={setTimeSpent}
             />

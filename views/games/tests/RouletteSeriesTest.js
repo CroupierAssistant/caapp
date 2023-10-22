@@ -16,7 +16,7 @@ import CardResults from "../../../components/CardResults";
 import Stopwatch from "../../../components/Stopwatch";
 
 function RouletteSeriesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations } =
+  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations, gameName } =
     route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
@@ -190,7 +190,7 @@ function RouletteSeriesTest({ route }) {
         <>
           {timerRunning && mode === "timelimit" && (
             <Timer
-              time={timeLimit + 1000}
+              time={timeLimit}
               setIsDone={setIsDone}
               setTimeSpent={setTimeSpent}
             />
@@ -290,6 +290,7 @@ function RouletteSeriesTest({ route }) {
           timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
+          gameName={gameName}
         />
       )}
     </View>
