@@ -308,8 +308,16 @@ const Profile = (props) => {
             <View style={styles.profileContainer}>
               <View style={styles.textContainer}>
                 <Text style={styles.nickname}>{user.username}</Text>
-                {user.firstName && user.lastName && <Text style={styles.username}>{user.firstName} {user.lastName}</Text>}
-                {!user.firstName && !user.lastName && <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>}
+                {user.firstName && user.lastName && (
+                  <Text style={styles.username}>
+                    {user.firstName} {user.lastName}
+                  </Text>
+                )}
+                {!user.firstName && !user.lastName && (
+                  <Text style={styles.usernameUnknown}>
+                    "A User Has No Name"
+                  </Text>
+                )}
               </View>
               <TouchableOpacity
                 onPress={onSubscriptionStatus}
@@ -453,7 +461,7 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#29648a",
-    width: Dimensions.get('screen').width
+    width: Dimensions.get("screen").width,
   },
   nickname: {
     fontSize: 22,
@@ -469,7 +477,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
     color: "#29648a",
-    fontStyle: 'italic'
+    fontStyle: "italic",
   },
   button: {
     width: Dimensions.get("screen").width,

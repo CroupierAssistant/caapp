@@ -1,19 +1,19 @@
-const axios = require('axios');
+import Axios from "axios";
 
-async function saveGameTestResult(userId, game, percentage, timeTaken) {
-  try {
-    const response = await axios.post('https://caapp-server.onrender.com/saveGameTestResult', {
-      userId,
-      game,
-      percentage,
-      timeTaken,
-    });
-
+const saveGameTestResult = (userId, game, percentage, timeTaken) => {
+  return Axios.post("https://caapp-server.onrender.com/saveGameTestResult", {
+    userId,
+    game,
+    percentage,
+    timeTaken,
+  })
+  .then((response) => {
     return response.data;
-  } catch (error) {
+  })
+  .catch((error) => {
     console.error(error);
-    return { success: false, message: 'Ошибка при сохранении результата' };
-  }
-}
+    return { success: false, message: "Ошибка при сохранении результата" };
+  });
+};
 
-module.exports = saveGameTestResult;
+export default saveGameTestResult;

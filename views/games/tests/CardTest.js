@@ -77,14 +77,26 @@ function CardTest({ route }) {
     });
   };
 
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const ms = Math.round((milliseconds % 1000) / 10);
+
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}.${String(ms).padStart(2, "0")}`;
+  };
+
   useEffect(() => {
-    const userId = user && user._id; // Замените на реальный идентификатор пользователя
-    const game = gameName; // Замените на реальное название игры
-    const timeTaken = timeSpent; // Используем затраченное время
+    const userId = user && user._id; 
+    const game = gameName; 
+    const timeTaken = formatTime(timeSpent); 
   
     console.log(userId, game, percentageTest, timeTaken);
   
-    if (userId && game && percentageTest != 0 && timeTaken != 0) {
+    // if (userId && game && percentageTest !== 0 && timeTaken !== 0) {
       saveGameTestResult(userId, game, percentageTest, timeTaken)
         .then((response) => {
           if (response.success) {
@@ -96,7 +108,7 @@ function CardTest({ route }) {
         .catch((error) => {
           console.error(error);
         });
-    }
+    // }
   }, [percentageTest, gameName, user]);
 
   const handleSubmit = () => {
