@@ -5,9 +5,9 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const multer = require('multer');
 
 const User = require("./models/User");
+const GameTestResult = require("./models/GameTestResult");
 
 const app = express();
 
@@ -89,50 +89,21 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.use((req, res, next) => {
-  const token = req.headers.authorization; // Предполагается, что токен передается в заголовке
+app.post('/saveGameTestResult', async (req, res) => {
+  const { userId, game, percentage, timeTaken } = req.body;
 
-  if (token) {
-    console.log(`token: ${token}`);
-    jwt.verify(token, 'ваш_секретный_ключ', (err, user) => {
-      if (err) {
-        return res.status(403).json({ error: 'Невалидный токен' });
-      }
-      req.user = user; // Устанавливаем объект пользователя в req
-      next(); // Переходим к следующему промежуточному ПО
-    });
-  } else {
-    return res.status(401).json({ error: 'Токен не предоставлен' });
-  }
-});
+  const newTest = await GameTestResult.create({
+    userId,
+    game,
+    percentage, 
+    timeTaken
+  });
 
-// Конфигурация multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Укажите путь, куда сохранять файлы
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Уникальное имя файла
-  }
-});
-
-const upload = multer({ storage });
-
-// Обработчик для загрузки фотографии профиля
-app.post('/upload-profile-photo', upload.single('profilePhoto'), async (req, res) => {
   try {
-    console.log(`req: ${req}`);
-    const userId = req.user._id; // Предполагается, что вы используете аутентификацию JWT и передаете userId в запросе
-    const profilePhotoPath = req.file.path;
-
-    // Здесь вы можете сохранить путь к фотографии в базе данных для данного пользователя
-    await User.findByIdAndUpdate(userId, { profilePhoto: profilePhotoPath });
-
-    console.log(`res: ${res}`);
-    res.json({ success: 'Фотография профиля успешно загружена' });
+    // const response = await saveGameTestResult(userId, game, percentage, timeTaken);
+    res.json(response);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 });
 

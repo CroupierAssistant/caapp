@@ -4,10 +4,8 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import CardResultsPicturesItem from "./CardResultPicturesItem";
-import { PicturesContext } from "../context/PicturesContext";
 
 const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards }) => {
-  // const {payouts, handleAddPayout} = useContext(PicturesContext)
 
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
@@ -40,7 +38,6 @@ const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards }) =>
   }, [cardResults]);
 
   const renderCardItem = ({ item }) => {
-    // const image = require(`../../../assets/images/pictures/${item.number}`);
     return (
       <View style={[styles.resultItem, {backgroundColor: item.userInput == item.rightAnswer ? "#3c7c49" : "#a6334d"}]}>
         <CardResultsPicturesItem item={item}/>

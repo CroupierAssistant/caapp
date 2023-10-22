@@ -16,7 +16,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
-import * as ImagePicker from "expo-image-picker";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -39,14 +38,6 @@ const Profile = (props) => {
     confirmPassword: "",
     agree: false,
   });
-
-  const [userPhoto, setUserPhoto] = useState("");
-
-  useEffect(() => {
-    setUserPhoto(
-      user && user.profilePhoto ? user.profilePhoto : ''
-    );
-  }, [user]);
 
   const [error, setError] = useState(null);
 
@@ -191,55 +182,6 @@ const Profile = (props) => {
       });
   };
 
-  const uploadProfilePhoto = async (photoUri) => {
-    const formData = new FormData();
-    formData.append('profilePhoto', {
-      uri: photoUri,
-      type: 'image/jpeg',
-      name: 'profile.jpg'
-    });
-  
-    try {
-      await Axios.post('https://caapp-server.onrender.com/upload-profile-photo', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}` // Предполагается, что у вас есть токен (например, из контекста)
-        }
-      });
-      console.log('Фотография профиля успешно загружена');
-    } catch (error) {
-      console.error('Ошибка при загрузке фотографии профиля:', error);
-    }
-  };
-
-  const handleProfilePhotoChange = async () => {
-    try {
-      let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-  
-      if (permissionResult.granted === false) {
-        Alert.alert(
-          "Permission Required",
-          "Permission to access camera roll is required!"
-        );
-        return;
-      }
-  
-      let pickerResult = await ImagePicker.launchImageLibraryAsync();
-  
-      if (pickerResult.cancelled === true) {
-        return;
-      }
-  
-      // Обновляем фото в UI
-      setUserPhoto(pickerResult.uri);
-  
-      // Загружаем новое фото на сервер
-      await uploadProfilePhoto(pickerResult.uri);
-    } catch (error) {
-      console.error('Error changing profile photo:', error);
-    }
-  };
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -364,30 +306,10 @@ const Profile = (props) => {
         ) : (
           <>
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={handleProfilePhotoChange}>
-                <View style={styles.profilePhoto}>
-                  {user.profilePhoto ? (
-                    <Image
-                      source={{ uri: userPhoto }}
-                      style={{ width: 150, height: 150 }}
-                    />
-                  ) : (
-                    <FontAwesome name="user" size={80} color="#29648a" />
-                  )}
-                </View>
-                <View style={styles.editIconContainer}>
-                  <FontAwesome
-                    name="pencil-square-o"
-                    size={24}
-                    color="#29648a"
-                  />
-                </View>
-              </TouchableOpacity>
               <View style={styles.textContainer}>
                 <Text style={styles.nickname}>{user.username}</Text>
-                <Text style={styles.username}>
-                  {user.firstName} {user.lastName}
-                </Text>
+                {user.firstName && user.lastName && <Text style={styles.username}>{user.firstName} {user.lastName}</Text>}
+                {!user.firstName && !user.lastName && <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>}
               </View>
               <TouchableOpacity
                 onPress={onSubscriptionStatus}
@@ -526,30 +448,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  profilePhoto: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    marginBottom: 20,
-    alignSelf: "center",
-    borderWidth: 2,
-    borderColor: "#29648a",
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   textContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    // marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#29648a",
+    width: Dimensions.get('screen').width
   },
   nickname: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 5,
+    color: "#29648a",
   },
   username: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 20,
+    color: "#29648a",
+  },
+  usernameUnknown: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#29648a",
+    fontStyle: 'italic'
   },
   button: {
     width: Dimensions.get("screen").width,
@@ -578,11 +498,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: "center",
     borderRadius: 3,
-  },
-  editIconContainer: {
-    position: "absolute",
-    right: 0,
-    bottom: 15,
   },
 });
 

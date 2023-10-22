@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
-const CardResults = ({ cardResults, timeSpent, mode, amountOfCards }) => {
+const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, setPercentageTest }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -32,6 +31,8 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards }) => {
     const calculatedPercentage = (correctAnswers * 100) / (mode == 'timelimit' ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
+    
+    setPercentageTest(calculatedPercentage)
   }, [cardResults]);
 
   return (

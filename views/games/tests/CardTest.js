@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 import Stopwatch from "../../../components/Stopwatch";
+import saveGameTestResult from "../../../components/saveGameTestResult";
+import { AuthContext } from "../../../context/AuthContext";
 
 function CardTest({ route }) {
   const {
@@ -26,7 +28,11 @@ function CardTest({ route }) {
     step,
     combinations,
     splitCoeff,
+    gameName
   } = route.params;
+
+  
+  const { user } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
@@ -39,6 +45,8 @@ function CardTest({ route }) {
   const [isDone, setIsDone] = useState(false);
   const [timePassedParent, setTimePassedParent] = useState("");
   const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
+
+  const [percentageTest, setPercentageTest] = useState(0)
 
   const flatListRef = useRef(null);
 
@@ -68,6 +76,28 @@ function CardTest({ route }) {
       return [...prev, newResult];
     });
   };
+
+  useEffect(() => {
+    const userId = user && user._id; // Замените на реальный идентификатор пользователя
+    const game = gameName; // Замените на реальное название игры
+    const timeTaken = timeSpent; // Используем затраченное время
+  
+    console.log(userId, game, percentageTest, timeTaken);
+  
+    if (userId && game && percentageTest != 0 && timeTaken != 0) {
+      saveGameTestResult(userId, game, percentageTest, timeTaken)
+        .then((response) => {
+          if (response.success) {
+            console.log(response.message);
+          } else {
+            console.error(response.message);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [percentageTest, gameName, user]);
 
   const handleSubmit = () => {
     // Переходим к следующей карте
@@ -180,7 +210,13 @@ function CardTest({ route }) {
           >
             <TouchableOpacity
               onPress={openPaytableModal}
-              style={{ padding: 5, backgroundColor: "#ccc", minWidth: 100, justifyContent: "space-between", alignItems: "center", }}
+              style={{
+                padding: 5,
+                backgroundColor: "#ccc",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Text style={{ textAlign: "center" }}>Show paytable</Text>
             </TouchableOpacity>
@@ -189,7 +225,13 @@ function CardTest({ route }) {
 
             <TouchableOpacity
               onPress={handleStopTest}
-              style={{ padding: 5, backgroundColor: "#a16e83", minWidth: 100,justifyContent: "space-between", alignItems: "center", }}
+              style={{
+                padding: 5,
+                backgroundColor: "#a16e83",
+                minWidth: 100,
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
               <Text style={{ textAlign: "center", color: "#fff" }}>Stop</Text>
             </TouchableOpacity>
@@ -241,6 +283,7 @@ function CardTest({ route }) {
           timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
+          setPercentageTest={setPercentageTest}
         />
       )}
     </View>

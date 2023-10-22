@@ -1,33 +1,22 @@
 import React from "react";
+import { TouchableOpacity, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../views/Profile";
 import HomeStackNavigator from "./HomeStackNavigator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 // Создаем нижнюю навигацию
 const Tab = createBottomTabNavigator();
 
 function MainTabNavigator() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={HomeStackNavigator}
-        options={{
-          tabBarLabel: "Main",
-          tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#29648a",
-          tabBarInactiveBackgroundColor: "#ccc",
-          tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons
-              name="home"
-              color={focused ? "#ccc" : "#29648a"}
-              size={30}
-            />
-          ),
-          headerShown: false,
-        }}
-      />
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a'},
+      }}
+    >
       <Tab.Screen
         name="Profile"
         component={Profile}
@@ -37,14 +26,39 @@ function MainTabNavigator() {
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons
-              name="account"
-              color={focused ? "#ccc" : "#29648a"}
-              size={30}
-            />
+            <AntDesign name="home" size={30} color={focused ? "#ccc" : "#29648a"} />
           ),
           headerShown: false,
-          detachPreviousScreen: true
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={HomeStackNavigator}
+        options={{
+          tabBarLabel: "Home",
+          tabBarShowLabel: false,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#ccc",
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialCommunityIcons name="poker-chip" size={30} color={focused ? "#ccc" : "#29648a"} />
+          ),
+          headerShown: false,
+          detachPreviousScreen: true,
+        }}
+      />
+      <Tab.Screen
+        name="Ratings"
+        component={Profile}
+        options={{
+          tabBarLabel: "Ratings",
+          tabBarShowLabel: false,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#ccc",
+          tabBarIcon: ({ focused, color, size }) => (
+            <MaterialIcons name="leaderboard" size={30} color={focused ? "#ccc" : "#29648a"} />
+          ),
+          headerShown: false,
+          detachPreviousScreen: true,
         }}
       />
     </Tab.Navigator>

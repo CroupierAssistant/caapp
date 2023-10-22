@@ -125,14 +125,14 @@ function HomeScreen({ route }) {
           <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
         </TouchableOpacity>
 
-        <View style={styles.break} />
+        {/* <View style={styles.break} />
 
         <TouchableOpacity
           style={{ ...styles.button, backgroundColor: "#aaa" }}
           onPress={() => navigation.navigate("NiuNiuCombinations")}
         >
           <Text style={styles.buttonText}>Niu-Niu Combinations</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -154,12 +154,13 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     backgroundColor: "#29648a",
-    padding: 10,
-    marginVertical: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    marginVertical: 3,
     borderRadius: 3,
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontSize: 20,
   },
   greetingsText: {
@@ -169,6 +170,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     width: "100%",
     fontWeight: "bold",
+    padding: 10,
   },
 });
 

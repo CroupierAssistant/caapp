@@ -1,26 +1,30 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import MainTabNavigator from "./navigation/MainTabNavigator";
-import { StyleSheet, SafeAreaView } from "react-native";
+import { StyleSheet, SafeAreaView, View, StatusBar } from "react-native";
 import { AuthProvider } from "./context/AuthContext";
-import { PicturesProvider } from "./context/PicturesContext";
 
 function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <AuthProvider>
-        <PicturesProvider>
+    <View style={styles.container}>
+    <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <SafeAreaView style={styles.safeArea}>
+        <AuthProvider>
           <NavigationContainer>
             <MainTabNavigator />
           </NavigationContainer>
-        </PicturesProvider>
-      </AuthProvider>
-    </SafeAreaView>
+        </AuthProvider>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: 'rgb(242, 242, 242)', // Цвет фона вокруг SafeAreaView
+  },
+  safeArea: {
     flex: 1,
   },
 });

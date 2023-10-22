@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { PicturesContext } from "../../../context/PicturesContext";
 
 function RoulettePicturesTwo() {
-  const {payouts, handleAddPayout} = useContext(PicturesContext)
 
   const [firstFour, setFirstFour] = useState(false);
   const [rightSL, setRightSL] = useState(false);

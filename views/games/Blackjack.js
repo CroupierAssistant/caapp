@@ -18,6 +18,7 @@ function Blackjack() {
       timeLimit: 60000,
       splitCoeff: false,
       combinations: combinations,
+      gameName: 'Blackjack'
     });
   };
   
