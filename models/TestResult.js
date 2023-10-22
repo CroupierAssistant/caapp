@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const testResultSchema = new mongoose.Schema({
   username: String,
   game: String,
+  mode: String,
   percentage: Number,
   timeSpentTest: String,
   date: {
