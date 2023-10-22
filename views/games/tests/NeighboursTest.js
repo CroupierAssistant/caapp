@@ -15,7 +15,7 @@ import Timer from "../../../components/Timer";
 import Stopwatch from "../../../components/Stopwatch";
 
 function NeighboursTest({ route }) {
-  const { mode, amountOfCards, timeLimit } = route.params;
+  const { mode, amountOfCards, timeLimit, gameName } = route.params;
   const [isDone, setIsDone] = useState(false);
   const [cardList, setCardList] = useState([]);
   const [showActiveCard, setShowActiveCard] = useState(true);
@@ -220,6 +220,7 @@ function NeighboursTest({ route }) {
           mode={mode}
           amountOfCards={amountOfCards}
           timeSpent={timeSpent}
+          gameName={gameName}
         />
       )}
     </View>

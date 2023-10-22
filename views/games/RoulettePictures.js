@@ -15,6 +15,7 @@ function RoulettePictures() {
         amountOfCards: 50,
         splitCoeff: false,
         timeLimit: 600000,
+        gameName: 'Roulette pictures',
         combinations: { 
           selected10: selected10,
           selected20: selected20,

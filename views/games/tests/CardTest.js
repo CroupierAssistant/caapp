@@ -271,7 +271,6 @@ function CardTest({ route }) {
           timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
-          setPercentageTest={setPercentageTest}
           gameName={gameName}
         />
       )}

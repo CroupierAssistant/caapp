@@ -25,6 +25,7 @@ function UTHTripsBets() {
       step: Number(selectedStep),
       timeLimit: 90000,
       splitCoeff: false,
+      gameName: 'UTH Trips Bets',
       combinations: combinations,
     });
   };

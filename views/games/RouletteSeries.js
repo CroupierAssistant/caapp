@@ -17,6 +17,7 @@ function RouletteSeries() {
       timeLimit: 150000,
       splitCoeff: false,
       step: selectedStep,
+      gameName: 'Roulette series',
       combinations: [
         {
           name: "Voisins de zero",

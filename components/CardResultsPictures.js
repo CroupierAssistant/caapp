@@ -4,11 +4,27 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import CardResultsPicturesItem from "./CardResultPicturesItem";
+import saveTestResult from "../functions/saveTestResult";
+import { AuthContext } from "../context/AuthContext";
 
-const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards }) => {
+const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
 
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+  
+  const { user } = useContext(AuthContext);
+
+  const handleSaveTestResult = async ({nickname, game, type, percent, time}) => {
+
+    try {
+      const response = await saveTestResult(nickname, game, type, percent, time);
+      console.log(response);
+      // Handle success
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -34,6 +50,14 @@ const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards }) =>
     const calculatedPercentage = (correctAnswers * 100) / amountOfCards;
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
+
+    handleSaveTestResult({
+      nickname: user.username,
+      game: gameName,
+      type: mode,
+      percent: calculatedPercentage,
+      time: formatTime(timeSpent)
+    })
 
   }, [cardResults]);
 

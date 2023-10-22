@@ -24,6 +24,7 @@ function Neighbours() {
       mode: isEnabled ? "sandbox" : "timelimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 37),
       timeLimit: 60000,
+      gameName: 'Neighbours'
     });
   };
 

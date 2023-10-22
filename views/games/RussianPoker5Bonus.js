@@ -25,6 +25,7 @@ function RussianPoker5Bonus() {
       step: Number(selectedStep),
       timeLimit: 90000,
       splitCoeff: false,
+      gameName: 'Russian Poker 5-bonus',
       combinations: combinations,
     });
   };

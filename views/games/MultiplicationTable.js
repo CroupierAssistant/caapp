@@ -16,6 +16,7 @@ function MultiplicationTable() {
         minBet: Number(selectedMinBet),
         maxBet: Number(selectedMaxBet),
         splitCoeff: false,
+        gameName: 'Multiplication',
         combinations: [
           {
             name: "5", coeff: 5, selected: selected5

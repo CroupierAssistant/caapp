@@ -3,16 +3,27 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import saveTestResult from "../functions/saveTestResult";
+import { AuthContext } from "../context/AuthContext";
 
-const CardResults = ({
-  cardResults,
-  timeSpent,
-  mode,
-  amountOfCards,
-}) => {
+const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
   
+  const { user } = useContext(AuthContext);
+
+  const handleSaveTestResult = async ({nickname, game, type, percent, time}) => {
+
+    try {
+      const response = await saveTestResult(nickname, game, type, percent, time);
+      console.log(response);
+      // Handle success
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
+
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -39,6 +50,14 @@ const CardResults = ({
       (mode == "timelimit" ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
+    
+    handleSaveTestResult({
+      nickname: user.username,
+      game: gameName,
+      type: mode,
+      percent: calculatedPercentage,
+      time: formatTime(timeSpent)
+    })
   }, [cardResults]);
 
   function areAllElementsPresent(arrA, arrB) {

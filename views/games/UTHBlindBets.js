@@ -18,6 +18,7 @@ function UTHBlindBets() {
       step: Number(selectedStep),
       timeLimit: 90000,
       splitCoeff: false,
+      gameName: 'UTH Blind Bets',
       combinations: combinations,
     });
   };

@@ -25,6 +25,7 @@ function RussianPokerAnte() {
       step: Number(selectedStep),
       timeLimit: 90000,
       splitCoeff: true,
+      gameName: 'Russian Poker Ante',
       combinations: combinations,
     });
   };

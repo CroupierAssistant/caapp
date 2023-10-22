@@ -19,7 +19,7 @@ import { PICTURE20_PATH } from "../../../components/PICTURE20_PATH";
 import Stopwatch from "../../../components/Stopwatch";
 
 function RoulettePicturesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, combinations, numbers } =
+  const { timeLimit, mode, amountOfCards, combinations, numbers, gameName } =
     route.params;
   const [images, setImages] = useState([]);
   const [showActiveCard, setShowActiveCard] = useState(true);
@@ -261,6 +261,7 @@ function RoulettePicturesTest({ route }) {
           timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
+          gameName={gameName}
         />
       )}
     </View>
