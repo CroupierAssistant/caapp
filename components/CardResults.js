@@ -1,11 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import saveTestResult from "../functions/saveTestResult";
+import { AuthContext } from "../context/AuthContext";
 
-const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, setPercentageTest }) => {
+
+const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
+  
+  const { user } = useContext(AuthContext);
 
+  const handleSaveTestResult = async ({nickname, game, percent, time}) => {
+
+    try {
+      const response = await saveTestResult(nickname, game, percent, time);
+      console.log(response);
+      // Handle success
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -31,8 +47,16 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, setPercentag
     const calculatedPercentage = (correctAnswers * 100) / (mode == 'timelimit' ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
+
+    console.log(user.username, gameName, calculatedPercentage, timeSpent);
+
+    handleSaveTestResult({
+      nickname: user.username,
+      game: gameName,
+      percent: calculatedPercentage,
+      time: formatTime(timeSpent)
+    })
     
-    setPercentageTest(calculatedPercentage)
   }, [cardResults]);
 
   return (

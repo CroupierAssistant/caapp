@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -16,7 +16,6 @@ import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 import Stopwatch from "../../../components/Stopwatch";
 import { AuthContext } from "../../../context/AuthContext";
-import saveTestResult from "../../../functions/saveTestResult";
 
 
 function CardTest({ route }) {
@@ -31,9 +30,6 @@ function CardTest({ route }) {
     splitCoeff,
     gameName
   } = route.params;
-
-  
-  const { user } = useContext(AuthContext);
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
@@ -50,26 +46,6 @@ function CardTest({ route }) {
   const [percentageTest, setPercentageTest] = useState(0)
 
   const flatListRef = useRef(null);
-
-  const handleSaveTestResult = async () => {
-    const username = user && user.username ? user.username : ''
-    const percentage = percentageTest
-    const timeSpentTest = formatTime(timeSpent)
-    const game = gameName
-
-    try {
-      const response = await saveTestResult(username, game, percentage, timeSpentTest);
-      console.log(response);
-      // Handle success
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
-  };
-
-  useEffect(() => {
-    handleSaveTestResult(percentage)
-  }, [])
 
   const openPaytableModal = () => {
     setShowPaytableModal(true);
@@ -296,6 +272,7 @@ function CardTest({ route }) {
           mode={mode}
           amountOfCards={amountOfCards}
           setPercentageTest={setPercentageTest}
+          gameName={gameName}
         />
       )}
     </View>
