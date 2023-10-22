@@ -16,6 +16,8 @@ import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 import Stopwatch from "../../../components/Stopwatch";
 import { AuthContext } from "../../../context/AuthContext";
+import saveTestResult from "../../../functions/saveTestResult";
+
 
 function CardTest({ route }) {
   const {
