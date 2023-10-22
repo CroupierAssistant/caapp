@@ -102,7 +102,6 @@ app.post('/saveGameTestResult', async (req, res) => {
   });
 
   try {
-    // const response = await saveGameTestResult(userId, game, percentage, timeTaken);
     res.json(response);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Internal Server Error' });
