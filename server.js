@@ -91,12 +91,12 @@ app.post("/login", async (req, res) => {
 
 app.post("/saveTestResult", async (req, res) => {
   try {
-    const { username, game, percentage, timeSpent } = req.body;
+    const { username, game, mode, percentage, timeSpentTest } = req.body;
 
     console.log(`serv`, username, game, percentage, timeSpent);
 
     // Check if all required fields are provided
-    if (!username || !game || !mode || !timeSpent) {
+    if (!username || !game || !mode || !timeSpentTest) {
       return res.status(400).json({ error: "Please provide all required fields" });
     }
 

@@ -48,7 +48,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
 
-    console.log(user.username, gameName, calculatedPercentage, timeSpent);
+    console.log(user.username, gameName, calculatedPercentage, formatTime(timeSpent));
 
     handleSaveTestResult({
       nickname: user.username,
