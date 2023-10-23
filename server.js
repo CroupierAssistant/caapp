@@ -215,6 +215,32 @@ app.get('/ratings/:gameName', async (req, res) => {
   }
 });
 
+app.get('/userExists', async (req, res) => {
+  const { username } = req.query;
+
+  try {
+    const user = await User.findOne({ username });
+    const userExists = !!user;
+    res.json({ exists: userExists });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Произошла ошибка при проверке пользователя' });
+  }
+});
+
+app.get('/emailExists', async (req, res) => {
+  const { email } = req.query;
+
+  try {
+    const user = await User.findOne({ email });
+    const emailExists = !!user;
+    res.json({ exists: emailExists });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Произошла ошибка при проверке адреса почты' });
+  }
+});
+
 const PORT = 10000;
 
 app.listen(PORT, () => {

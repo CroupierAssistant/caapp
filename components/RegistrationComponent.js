@@ -24,7 +24,46 @@ const RegistrationComponent = () => {
     lastName: "",
   });
 
-  const handleInputChange = (field, value) => {
+  async function checkIfUserExists(username) {
+    try {
+      const response = await Axios.get(
+        `https://caapp-server.onrender.com/userExists?username=${username}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error(error);
+      return false; // В случае ошибки также считаем, что пользователь не существует
+    }
+  }
+
+  async function checkIfEmailExists(email) {
+    try {
+      const response = await Axios.get(
+        `https://caapp-server.onrender.com/emailExists?email=${email}`
+      );
+      return response.data.exists;
+    } catch (error) {
+      console.error(error);
+      return false; // В случае ошибки также считаем, что пользователь не существует
+    }
+  }
+
+  const handleInputChange = async (field, value) => {
+    if (field === "username") {
+      const userExists = await checkIfUserExists(value);
+      if (userExists) {
+        alert("Пользователь с таким именем уже существует");
+        return;
+      }
+    }
+    if (field === "email") {
+      const userExists = await checkIfEmailExists(value);
+      if (userExists) {
+        alert("Этот почтовый ящик уже зарегистрирован");
+        return;
+      }
+    }
+
     setFormData({ ...formData, [field]: value });
   };
 
