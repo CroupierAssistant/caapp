@@ -98,10 +98,10 @@ const Profile = (props) => {
       errors.password = "Пароль должен содержать минимум 8 символов";
     }
 
-    if (Object.keys(errors).length > 0) {
-      setErrors(errors);
-      return;
-    }
+    // if (Object.keys(errors).length > 0) {
+    //   setErrors(errors);
+    //   return;
+    // }
 
     // Проверка на минимальную длину никнейма и пароля
     if (formData.username.length < 3 || formData.password.length < 8) {

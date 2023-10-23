@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const saveTestResult = async (username, game, mode, percentage, timeSpentTest) => {
+const saveTestResult = async (user, game, mode, percentage, timeSpentTest) => {
   try {
     const response = await axios.post('https://caapp-server.onrender.com/saveTestResult', {
-      username,
+      user,
       game,
       mode,
       percentage,

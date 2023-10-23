@@ -103,9 +103,9 @@ app.post("/login", async (req, res) => {
 
 app.post("/saveTestResult", async (req, res) => {
   try {
-    const { username, game, mode, percentage, timeSpentTest } = req.body;
+    const { user, game, mode, percentage, timeSpentTest } = req.body;
 
-    if (!username || !game || !mode || !timeSpentTest) {return res.status(400).json({ error: "Please provide all required fields" })}
+    if (!user || !game || !mode || !timeSpentTest) {return res.status(400).json({ error: "Please provide all required fields" })}
 
     const ModelSchema = 
       game === 'Blackjack' ? BlackjackResult : 
@@ -119,7 +119,7 @@ app.post("/saveTestResult", async (req, res) => {
       game === 'UTH Blind Bets' ? UTHBlindResult : 
       game === 'UTH Trips Bets' ? UTHTripsResult : TexasHoldemResult
 
-    const newTestResult = await ModelSchema.create({username, game, mode, percentage, timeSpentTest});
+    const newTestResult = await ModelSchema.create({user, game, mode, percentage, timeSpentTest});
 
     return res.json({ success: "Test result saved successfully", testResult: newTestResult });
   } catch (error) {
@@ -185,6 +185,8 @@ app.get('/ratings/:gameName', async (req, res) => {
       {
         $group: {
           _id: "$username",
+          firstName: firstName,
+          lastName: lastName,
           maxPercentage: { $max: "$percentage" },
           minTimeSpentTest: { $min: "$timeSpentTest" },
         },
@@ -195,6 +197,7 @@ app.get('/ratings/:gameName', async (req, res) => {
           username: "$_id",
           maxPercentage: 1,
           minTimeSpentTest: 1,
+
         },
       },
       {

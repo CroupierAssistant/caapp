@@ -15,42 +15,64 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
-          <FlatList
-            data={ratings}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View style={[styles.row]}>
-                <View
-                  style={[
-                    styles.textIndexContainer,
-                    index === 0
-                      ? styles.gold
-                      : index === 1
-                      ? styles.silver
-                      : index === 2
-                      ? styles.bronze
-                      : "",
-                  ]}
-                >
+          {ratings ? (
+            <FlatList
+              data={ratings}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <View style={[styles.row]}>
+                  <View
+                    style={[
+                      styles.textIndexContainer,
+                      index === 0
+                        ? styles.gold
+                        : index === 1
+                        ? styles.silver
+                        : index === 2
+                        ? styles.bronze
+                        : "",
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        ...styles.textIndex,
+                        color: index >= 0 && index <= 2 ? "#fff" : "",
+                      }}
+                    >
+                      {index + 1}
+                    </Text>
+                  </View>
                   <Text
                     style={{
-                      ...styles.textIndex,
-                      color: index >= 0 && index <= 2 ? "#fff" : "",
+                      ...styles.text,
+                      width: "50%",
+                      paddingHorizontal: 3,
+                    }}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.username}
+                  </Text>
+                  <Text
+                    style={{
+                      ...styles.text,
+                      width: "20%",
+                      paddingHorizontal: 3,
                     }}
                   >
-                    {index + 1}
+                    {Number(item.maxPercentage).toFixed(2)}%
+                  </Text>
+                  <Text style={{ ...styles.text, width: "20%" }}>
+                    {item.minTimeSpentTest}
                   </Text>
                 </View>
-                <Text style={{ ...styles.text, width: "50%", paddingHorizontal: 3 }} numberOfLines={1} ellipsizeMode='tail'>{item.username}</Text>
-                <Text style={{ ...styles.text, width: "20%", paddingHorizontal: 3 }}>
-                  {Number(item.maxPercentage).toFixed(2)}%
-                </Text>
-                <Text style={{ ...styles.text, width: "20%"}}>
-                  {item.minTimeSpentTest}
-                </Text>
-              </View>
-            )}
-          />
+              )}
+            />
+          ) : (
+            <Text style={styles.text}>
+              No one's here... You can be the first!
+            </Text>
+          )}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
@@ -82,7 +104,7 @@ const styles = StyleSheet.create({
   },
   text: {
     // flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
     textAlign: "center",
     fontSize: 14,
     lineHeight: 30,

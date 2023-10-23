@@ -7,7 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 function App() {
   return (
     <View style={styles.container}>
-    <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+    <StatusBar barStyle="dark-content" backgroundColor="#ccc" />
       <SafeAreaView style={styles.safeArea}>
         <AuthProvider>
           <NavigationContainer>
@@ -22,7 +22,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'rgb(242, 242, 242)', // Цвет фона вокруг SafeAreaView
+    backgroundColor: '#ccc', // Цвет фона вокруг SafeAreaView
   },
   safeArea: {
     flex: 1,

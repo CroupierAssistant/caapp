@@ -16,7 +16,7 @@ function MainTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a'},
+        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a', backgroundColor: "#ccc"},
       }}
     >
       <Tab.Screen
@@ -25,10 +25,10 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: "Main",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#29648a",
+          tabBarActiveBackgroundColor: "#ccc",
           tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign name="home" size={30} color={focused ? "#ccc" : "#29648a"} />
+            <AntDesign name="home" size={30} color={focused ? "#a16e83" : "#29648a"} />
           ),
           headerShown: false,
         }}
@@ -40,13 +40,12 @@ function MainTabNavigator() {
           
           tabBarLabel: "Tests",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#29648a",
+          tabBarActiveBackgroundColor: "#ccc",
           tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons name="poker-chip" size={30} color={focused ? "#ccc" : "#29648a"} />
+            <MaterialCommunityIcons name="poker-chip" size={30} color={focused ? "#a16e83" : "#29648a"} />
           ),
           headerShown: false,
-          detachPreviousScreen: true,
         }}
       />
       <Tab.Screen
@@ -55,10 +54,10 @@ function MainTabNavigator() {
         options={{
           tabBarLabel: "Ratings",
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#29648a",
+          tabBarActiveBackgroundColor: "#ccc",
           tabBarInactiveBackgroundColor: "#ccc",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialIcons name="leaderboard" size={30} color={focused ? "#ccc" : "#29648a"} />
+            <MaterialIcons name="leaderboard" size={30} color={focused ? "#a16e83" : "#29648a"} />
           ),
           headerShown: false,
           detachPreviousScreen: true,
