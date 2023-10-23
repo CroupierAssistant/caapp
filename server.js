@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const db = require("./db");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 const User = require("./models/User");
 
@@ -19,7 +19,6 @@ const RussianAnteResult = require("./models/RussianAnteResult"); // Import the T
 const TexasHoldemResult = require("./models/TexasHoldemResult"); // Import the TestResult model
 const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestResult model
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
-
 
 const app = express();
 
@@ -66,7 +65,7 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ userId: newUser._id }, 'ваш_секретный_ключ');
+    const token = jwt.sign({ userId: newUser._id }, "ваш_секретный_ключ");
 
     return res.json({ success: "Регистрация успешна", user: newUser, token });
   } catch (error) {
@@ -93,7 +92,7 @@ app.post("/login", async (req, res) => {
         .json({ error: "Неверные имя пользователя или пароль" });
     }
 
-    const token = jwt.sign({ userId: user._id }, 'ваш_секретный_ключ');
+    const token = jwt.sign({ userId: user._id }, "ваш_секретный_ключ");
     return res.json({ success: "Авторизация успешна", user, token });
   } catch (error) {
     console.error(error);
@@ -103,66 +102,102 @@ app.post("/login", async (req, res) => {
 
 app.post("/saveTestResult", async (req, res) => {
   try {
-    const { username, firstName, lastName, amountOfCards, game, mode, percentage, timeSpentTest } = req.body;
+    const {
+      username,
+      firstName,
+      lastName,
+      amountOfCards,
+      game,
+      mode,
+      percentage,
+      timeSpentTest,
+    } = req.body;
 
-    if (!username || !game || !mode || !timeSpentTest) {return res.status(400).json({ error: "Please provide all required fields" })}
+    if (!username || !game || !mode || !timeSpentTest) {
+      return res
+        .status(400)
+        .json({ error: "Please provide all required fields" });
+    }
 
-    const ModelSchema = 
-      game === 'Blackjack' ? BlackjackResult : 
-      game === 'Multiplication' ? MultiplicationResult : 
-      game === 'Neighbours' ? NeighboursResult : 
-      game === 'Roulette pictures' ? RoulettePicturesResult : 
-      game === 'Roulette series' ? RouletteSeriesResult : 
-      game === 'Russian Poker 5-bonus' ? Russian5bonusResult : 
-      game === 'Russian Poker 6-bonus' ? Russian6bonusResult : 
-      game === 'Russian Poker Ante' ? RussianAnteResult : 
-      game === 'UTH Blind Bets' ? UTHBlindResult : 
-      game === 'UTH Trips Bets' ? UTHTripsResult : TexasHoldemResult
+    const ModelSchema =
+      game === "Blackjack"
+        ? BlackjackResult
+        : game === "Multiplication"
+        ? MultiplicationResult
+        : game === "Neighbours"
+        ? NeighboursResult
+        : game === "Roulette pictures"
+        ? RoulettePicturesResult
+        : game === "Roulette series"
+        ? RouletteSeriesResult
+        : game === "Russian Poker 5-bonus"
+        ? Russian5bonusResult
+        : game === "Russian Poker 6-bonus"
+        ? Russian6bonusResult
+        : game === "Russian Poker Ante"
+        ? RussianAnteResult
+        : game === "UTH Blind Bets"
+        ? UTHBlindResult
+        : game === "UTH Trips Bets"
+        ? UTHTripsResult
+        : TexasHoldemResult;
 
-    const newTestResult = await ModelSchema.create({username, firstName, lastName, amountOfCards, game, mode, percentage, timeSpentTest});
+    const newTestResult = await ModelSchema.create({
+      username,
+      firstName,
+      lastName,
+      amountOfCards,
+      game,
+      mode,
+      percentage,
+      timeSpentTest,
+    });
 
-    return res.json({ success: "Test result saved successfully", testResult: newTestResult });
+    return res.json({
+      success: "Test result saved successfully",
+      testResult: newTestResult,
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error" });
   }
 });
 
-app.get('/ratings/:gameName', async (req, res) => {
+app.get("/ratings/:gameName", async (req, res) => {
   const { gameName } = req.params;
-  
+
   let resultModel;
 
   // Определите модель по имени игры
-  switch(gameName) {
-    case 'Blackjack':
+  switch (gameName) {
+    case "Blackjack":
       resultModel = BlackjackResult;
       break;
-    case 'Multiplication':
+    case "Multiplication":
       resultModel = MultiplicationResult;
       break;
-    case 'Neighbours':
+    case "Neighbours":
       resultModel = NeighboursResult;
       break;
-    case 'Roulette pictures':
+    case "Roulette pictures":
       resultModel = RoulettePicturesResult;
       break;
-    case 'Roulette series':
+    case "Roulette series":
       resultModel = RouletteSeriesResult;
       break;
-    case 'Russian Poker 5-bonus':
+    case "Russian Poker 5-bonus":
       resultModel = Russian5bonusResult;
       break;
-    case 'Russian Poker 6-bonus':
+    case "Russian Poker 6-bonus":
       resultModel = Russian6bonusResult;
       break;
-    case 'Russian Poker Ante':
+    case "Russian Poker Ante":
       resultModel = RussianAnteResult;
       break;
-    case 'UTH Blind Bets':
+    case "UTH Blind Bets":
       resultModel = UTHBlindResult;
       break;
-    case 'UTH Trips Bets':
+    case "UTH Trips Bets":
       resultModel = UTHTripsResult;
       break;
     case "Texas Hold'em":
@@ -170,52 +205,62 @@ app.get('/ratings/:gameName', async (req, res) => {
       break;
     // Добавьте другие игры по аналогии
     default:
-      return res.status(404).json({ message: 'Игра не найдена' });
+      return res.status(404).json({ message: "Игра не найдена" });
   }
 
   try {
     const ratings = await resultModel.aggregate([
       {
         $match: {
-          game: gameName, // Фильтруем по имени игры
-          mode: { $ne: 'sandbox' }, // Режим не должен быть 'sandbox'
-          username: { $ne: '\/guest\/' }, // Имя пользователя не должно быть '/guest/'
+              game: gameName,
+              mode: { $ne: "sandbox" },
+              username: { $ne: "/guest/" },
         },
       },
       {
         $group: {
           _id: "$username",
           maxPercentage: { $max: "$percentage" },
-          minTimeSpentTest: { $min: "$timeSpentTest" },
-          firstName: { $first: "$firstName" }, // Взять первое firstName
-          lastName: { $first: "$lastName" },   // Взять первое lastName
+          data: { $push: { percentage: "$percentage", timeSpentTest: "$timeSpentTest" } },
+          firstName: { $first: "$firstName" },
+          lastName: { $first: "$lastName" },
         },
+      },
+      {
+        $addFields: {
+          maxData: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$data",
+                  as: "item",
+                  cond: { $eq: ["$$item.percentage", "$maxPercentage"] }
+                }
+              },
+              0
+            ]
+          }
+        }
       },
       {
         $project: {
           _id: 0,
           username: "$_id",
           maxPercentage: 1,
-          minTimeSpentTest: 1,
-          firstName: 1, // Включить firstName
-          lastName: 1,  // Включить lastName
+          minTimeSpentTest: "$maxData.timeSpentTest",
+          firstName: 1,
+          lastName: 1,
         },
       },
-      {
-        $sort: { maxPercentage: -1 },
-      },
-      // {
-      //   $limit: 10,
-      // },
     ]);
     res.json(ratings);
   } catch (error) {
-    console.error('Ошибка при получении рейтингов:', error);
-    res.status(500).json({ message: 'Внутренняя ошибка сервера' });
+    console.error("Ошибка при получении рейтингов:", error);
+    res.status(500).json({ message: "Внутренняя ошибка сервера" });
   }
 });
 
-app.get('/userExists', async (req, res) => {
+app.get("/userExists", async (req, res) => {
   const { username } = req.query;
 
   try {
@@ -224,11 +269,13 @@ app.get('/userExists', async (req, res) => {
     res.json({ exists: userExists });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Произошла ошибка при проверке пользователя' });
+    res
+      .status(500)
+      .json({ error: "Произошла ошибка при проверке пользователя" });
   }
 });
 
-app.get('/emailExists', async (req, res) => {
+app.get("/emailExists", async (req, res) => {
   const { email } = req.query;
 
   try {
@@ -237,7 +284,9 @@ app.get('/emailExists', async (req, res) => {
     res.json({ exists: emailExists });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Произошла ошибка при проверке адреса почты' });
+    res
+      .status(500)
+      .json({ error: "Произошла ошибка при проверке адреса почты" });
   }
 });
 
@@ -246,4 +295,3 @@ const PORT = 10000;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
-
