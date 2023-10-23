@@ -212,16 +212,21 @@ app.get("/ratings/:gameName", async (req, res) => {
     const ratings = await resultModel.aggregate([
       {
         $match: {
-              game: gameName,
-              mode: { $ne: "sandbox" },
-              username: { $ne: "/guest/" },
+          game: gameName,
+          mode: { $ne: "sandbox" },
+          username: { $ne: "/guest/" },
         },
       },
       {
         $group: {
           _id: "$username",
           maxPercentage: { $max: "$percentage" },
-          data: { $push: { percentage: "$percentage", timeSpentTest: "$timeSpentTest" } },
+          data: {
+            $push: {
+              percentage: "$percentage",
+              timeSpentTest: "$timeSpentTest",
+            },
+          },
           firstName: { $first: "$firstName" },
           lastName: { $first: "$lastName" },
         },
@@ -234,13 +239,13 @@ app.get("/ratings/:gameName", async (req, res) => {
                 $filter: {
                   input: "$data",
                   as: "item",
-                  cond: { $eq: ["$$item.percentage", "$maxPercentage"] }
-                }
+                  cond: { $eq: ["$$item.percentage", "$maxPercentage"] },
+                },
               },
-              0
-            ]
-          }
-        }
+              0,
+            ],
+          },
+        },
       },
       {
         $project: {
@@ -251,6 +256,9 @@ app.get("/ratings/:gameName", async (req, res) => {
           firstName: 1,
           lastName: 1,
         },
+      },
+      {
+        $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
       },
     ]);
     res.json(ratings);
