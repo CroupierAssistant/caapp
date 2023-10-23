@@ -19,12 +19,12 @@ const Ratings = () => {
     // "Roulette Pictures",
     "Roulette series",
     "Neighbours",
-    "Russian poker ante",
-    "Russian poker 5-bonus",
-    "Russian poker 6-bonus",
-    "UTH blind",
-    "UTH trips",
-    "Texas hold'em",
+    "Russian Poker Ante",
+    "Russian Poker 5-bonus",
+    "Russian Poker 6-bonus",
+    "UTH Blind Bets",
+    "UTH Trips Bets",
+    "Texas Hold'em",
   ];
 
   const handlePress = (gameName) => {
@@ -34,7 +34,7 @@ const Ratings = () => {
     fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setRatings(data); // Предполагается, что данные приходят в формате JSON
       })
       .catch((error) => {

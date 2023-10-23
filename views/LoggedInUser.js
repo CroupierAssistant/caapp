@@ -30,7 +30,7 @@ const LoggedInUser = ({
             <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
           )}
         </View>
-        <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
+        {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
             <MaterialCommunityIcons
               name="crown-circle"
@@ -39,7 +39,7 @@ const LoggedInUser = ({
             />
             <Text style={styles.buttonText}>Subscription</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={onAccountSettings} style={styles.button}>
           <View style={styles.buttonContent}>
             <FontAwesome name="gear" size={24} color="#29648a" />
@@ -58,12 +58,12 @@ const LoggedInUser = ({
             <Text style={styles.buttonText}>Test history</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onNotifications} style={styles.button}>
+        {/* <TouchableOpacity onPress={onNotifications} style={styles.button}>
           <View style={styles.buttonContent}>
             <Ionicons name="notifications" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Notification settings</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={onSupport}
           style={{ ...styles.button, borderBottomWidth: 0 }}

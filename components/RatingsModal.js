@@ -10,12 +10,14 @@ import {
 } from "react-native";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
+  const ratingsToShow = ratings;
+  console.log(ratingsToShow);
   return (
     <Modal visible={isVisible} transparent animationType="none">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
-          {ratings ? (
+          {ratingsToShow.length > 0 ? (
             <FlatList
               data={ratings}
               keyExtractor={(item, index) => index.toString()}
@@ -69,9 +71,11 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               )}
             />
           ) : (
-            <Text style={styles.text}>
-              No one's here... You can be the first!
-            </Text>
+            <>
+              <Text style={styles.textNoData}>
+              {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
+              </Text>
+            </>
           )}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
@@ -107,6 +111,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     textAlign: "center",
     fontSize: 14,
+    lineHeight: 30,
+  },
+  textNoData: {
+    flex: 1,
+    flexDirection: "row",
+    textAlign: "center",
+    fontSize: 18,
     lineHeight: 30,
   },
   textIndex: {
