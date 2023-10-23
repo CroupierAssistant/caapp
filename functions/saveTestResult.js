@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const saveTestResult = async (
-  user,
+  username,
   firstName,
   lastName,
   amountOfCards,
@@ -14,7 +14,7 @@ const saveTestResult = async (
     const response = await axios.post(
       "https://caapp-server.onrender.com/saveTestResult",
       {
-        user,
+        username,
         firstName,
         lastName,
         amountOfCards,

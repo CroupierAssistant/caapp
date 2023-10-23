@@ -1,23 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   View,
-  TextInput,
-  Button,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Image,
   Dimensions,
-  Alert,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
 import { AuthContext } from "../context/AuthContext";
-import Axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoggedInUser from "./LoggedInUser";
+import RegistrationComponent from "../components/RegistrationComponent";
+import AuthorizationComponent from "../components/AuthorizationComponent";
 
 const Profile = (props) => {
   const {
@@ -31,156 +24,10 @@ const Profile = (props) => {
 
   const { login, logout, user } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    agree: false,
-  });
-
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      agree: false,
-    });
     setIsRegistering(false);
   }, []);
-
-  const handleInputChange = (name, value) => {
-    // Проверка на латиницу и запрещенные символы
-    const latinRegex = /^[a-zA-Z0-9]+$/;
-    const forbiddenCharsRegex = /[!@#$%^&*(),.?":{}|<>]/g;
-
-    if (isRegistering && name != "email" && !latinRegex.test(value)) {
-      setError("Только буквы латинского алфавита и цифры");
-      return;
-    }
-
-    if (isRegistering && name != "email" && forbiddenCharsRegex.test(value)) {
-      setError("Введены запрещенные символы");
-      return;
-    }
-
-    // Обновление состояния
-    setFormData({ ...formData, [name]: value }); // Добавлена проверка на undefined/null
-  };
-
-  const isEmailValid = (email) => {
-    // Регулярное выражение для проверки email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const errors = {};
-
-  const handleRegister = () => {
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = "Пароли не совпадают";
-    }
-
-    if (!isEmailValid(formData.email)) {
-      errors.email = "Введите корректный email адрес";
-    }
-
-    if (formData.username.length < 3) {
-      errors.username = "Никнейм должен содержать минимум 3 символа";
-    }
-
-    if (formData.password.length < 8) {
-      errors.password = "Пароль должен содержать минимум 8 символов";
-    }
-
-    // if (Object.keys(errors).length > 0) {
-    //   setErrors(errors);
-    //   return;
-    // }
-
-    // Проверка на минимальную длину никнейма и пароля
-    if (formData.username.length < 3 || formData.password.length < 8) {
-      setError(
-        "Никнейм должен содержать минимум 3 символа, а пароль - минимум 8 символов"
-      );
-      return;
-    }
-
-    // Axios.post("http://192.168.31.124:3000/register", formData)
-    Axios.post("https://caapp-server.onrender.com/register", formData)
-      .then((response) => {
-        console.log(response.data);
-        const { token } = response.data;
-        AsyncStorage.setItem("token", token);
-        login(response.data.user); // Добавление в контекст после успешной регистрации
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          agree: false,
-        });
-        setError(null);
-      })
-      .catch((error) => {
-        console.error(error);
-
-        if (error.response) {
-          if (error.response.status === 409) {
-            setError("Username already taken");
-          } else {
-            setError("");
-            setError("The request failed. Check the entered data.");
-          }
-        } else if (error.request) {
-          setError("No response from server");
-        } else {
-          setError("An error has occurred");
-        }
-      });
-  };
-
-  const handleLogin = () => {
-    // Axios.post("http://192.168.31.124:3000/login", {
-    Axios.post("https://caapp-server.onrender.com/login", {
-      username: formData.username,
-      password: formData.password,
-    })
-      .then((response) => {
-        console.log(response.data);
-        const { token } = response.data;
-        AsyncStorage.setItem("token", token);
-        login(response.data.user); // Добавление в контекст после успешной авторизации
-        setFormData({
-          username: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          agree: false,
-        });
-        setError(null);
-      })
-      .catch((error) => {
-        console.error(error);
-
-        if (error.response) {
-          if (error.response.status === 401) {
-            setError("User not found or password entered incorrectly");
-          } else {
-            setError("The request failed. Check the entered data.");
-          }
-        } else if (error.request) {
-          setError("No response from server");
-        } else {
-          setError("An error has occurred");
-        }
-      });
-  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -194,125 +41,11 @@ const Profile = (props) => {
             }}
           >
             {isRegistering ? (
-              <>
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Username</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.username}
-                    onChangeText={(text) => handleInputChange("username", text)}
-                  />
-                </View>
-                {errors.username && (
-                  <Text style={styles.error}>{errors.username}</Text>
-                )}
-
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>E-mail</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.email}
-                    textContentType="emailAddress"
-                    onChangeText={(text) => handleInputChange("email", text)}
-                  />
-                </View>
-                {errors.email && (
-                  <Text style={styles.error}>{errors.email}</Text>
-                )}
-
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Password</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.password}
-                    onChangeText={(text) => handleInputChange("password", text)}
-                    secureTextEntry
-                  />
-                </View>
-                {errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Repeat password</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.confirmPassword}
-                    onChangeText={(text) =>
-                      handleInputChange("confirmPassword", text)
-                    }
-                    secureTextEntry
-                  />
-                </View>
-                {errors.confirmPassword && (
-                  <Text style={styles.error}>{errors.confirmPassword}</Text>
-                )}
-
-                <View style={styles.checkboxContainer}>
-                  <TouchableOpacity
-                    onPress={() => handleInputChange("agree", !formData.agree)}
-                  >
-                    <View style={styles.checkbox}>
-                      {formData.agree && <View style={styles.checkboxInner} />}
-                    </View>
-                  </TouchableOpacity>
-                  <Text
-                    onPress={() => handleInputChange("agree", !formData.agree)}
-                    style={styles.checkboxLabel}
-                  >
-                    I agree with the processing of personal data
-                  </Text>
-                </View>
-
-                {/* {error && <Text style={styles.error}>{error}</Text>} */}
-              </>
+              <RegistrationComponent />
             ) : (
-              <>
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Username</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.username}
-                    onChangeText={(text) => handleInputChange("username", text)}
-                  />
-                </View>
-                {errors.username && (
-                  <Text style={styles.error}>{errors.username}</Text>
-                )}
-
-                <View style={styles.labelContainer}>
-                  <Text style={styles.label}>Password</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.password}
-                    onChangeText={(text) => handleInputChange("password", text)}
-                    secureTextEntry
-                  />
-                </View>
-                {errors.password && (
-                  <Text style={styles.error}>{errors.password}</Text>
-                )}
-              </>
+              <AuthorizationComponent />
             )}
 
-            {error && <Text style={styles.errorText}>{error}</Text>}
-
-            <TouchableOpacity
-              style={{
-                marginVertical: 15,
-                backgroundColor: "#29648a",
-                borderRadius: 3,
-                width: 200,
-                padding: 10,
-              }}
-              onPress={isRegistering ? handleRegister : handleLogin}
-            >
-              <Text
-                style={{ color: "#fff", fontSize: 20, textAlign: "center" }}
-              >
-                {isRegistering ? "Register" : "Login"}
-              </Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
               <Text style={styles.toggleButton}>
                 {isRegistering
@@ -323,81 +56,16 @@ const Profile = (props) => {
           </View>
         ) : (
           <>
-            <View style={styles.profileContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.nickname}>{user.username}</Text>
-                {user.firstName && user.lastName && (
-                  <Text style={styles.username}>
-                    {user.firstName} {user.lastName}
-                  </Text>
-                )}
-                {!user.firstName && !user.lastName && (
-                  <Text style={styles.usernameUnknown}>
-                    "A User Has No Name"
-                  </Text>
-                )}
-              </View>
-              <TouchableOpacity
-                onPress={onSubscriptionStatus}
-                style={styles.button}
-              >
-                <View style={styles.buttonContent}>
-                  <MaterialCommunityIcons
-                    name="crown-circle"
-                    size={24}
-                    color="#ffbf00"
-                  />
-                  <Text style={styles.buttonText}>Subscription</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={onAccountSettings}
-                style={styles.button}
-              >
-                <View style={styles.buttonContent}>
-                  <FontAwesome name="gear" size={24} color="#29648a" />
-                  <Text style={styles.buttonText}>Account settings</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onAchievements} style={styles.button}>
-                <View style={styles.buttonContent}>
-                  <Ionicons name="ios-medal" size={24} color="#29648a" />
-                  <Text style={styles.buttonText}>Achievements</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={onWorkoutHistory}
-                style={styles.button}
-              >
-                <View style={styles.buttonContent}>
-                  <MaterialIcons name="history" size={24} color="#29648a" />
-                  <Text style={styles.buttonText}>Test history</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onNotifications} style={styles.button}>
-                <View style={styles.buttonContent}>
-                  <Ionicons name="notifications" size={24} color="#29648a" />
-                  <Text style={styles.buttonText}>Notification settings</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={onSupport}
-                style={{ ...styles.button, borderBottomWidth: 0 }}
-              >
-                <View style={styles.buttonContent}>
-                  <Ionicons name="help-circle" size={24} color="#29648a" />
-                  <Text style={styles.buttonText}>Help and support</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={logout}
-                style={{ ...styles.button, ...styles.logoutButton }}
-              >
-                <Text style={{ color: "#fff", textAlign: "center" }}>
-                  Logout
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <LoggedInUser
+              user={user}
+              onSubscriptionStatus={onSubscriptionStatus}
+              onAccountSettings={onAccountSettings}
+              onAchievements={onAchievements}
+              onWorkoutHistory={onWorkoutHistory}
+              onNotifications={onNotifications}
+              onSupport={onSupport}
+              logout={logout}
+            />
           </>
         )}
       </View>
@@ -414,180 +82,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderTopWidth: 2,
     borderTopColor: "#29648a",
-    height: Dimensions.get('window').height - 130
-    // marginVertical: 50,
-  },
-  // input: {
-  //   height: 40,
-  //   width: "100%",
-  //   borderColor: "#ccc",
-  //   borderWidth: 1,
-  //   marginBottom: 3,
-  //   paddingLeft: 10,
-  //   borderRadius: 3,
-  // },
-  // toggleButton: {
-  //   color: "#29648a",
-  //   textDecorationLine: "underline",
-  //   marginTop: 10,
-  // },
-  // checkboxContainer: {
-  //   flexDirection: "row",
-  //   marginBottom: 20,
-  //   alignItems: "center",
-  // },
-  // checkbox: {
-  //   width: 20,
-  //   height: 20,
-  //   borderWidth: 1,
-  //   borderColor: "#000",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
-  // checkboxInner: {
-  //   width: 15,
-  //   height: 15,
-  //   backgroundColor: "#000",
-  // },
-  // checkboxLabel: {
-  //   marginLeft: 10,
-  //   fontSize: 16,
-  //   color: "#333",
-  //   fontWeight: "bold",
-  // },
-
-  // labelContainer: {
-  //   width: "100%",
-  //   marginBottom: 10,
-  // },
-  // label: {
-  //   marginBottom: 2,
-  //   color: "#333",
-  //   fontWeight: "bold",
-  // },
-  // menu: {
-  //   alignItems: "center",
-  // },
-  // errorText: {
-  //   color: "#FF0000",
-  //   marginBottom: 10,
-  // },
-  profileContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textContainer: {
-    alignItems: "center",
-    // marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#29648a",
-    width: Dimensions.get("screen").width,
-  },
-  nickname: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#29648a",
-  },
-  username: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "#29648a",
-  },
-  usernameUnknown: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "#29648a",
-    fontStyle: "italic",
-  },
-  button: {
-    width: Dimensions.get("screen").width,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderBottomColor: "#29648a",
-    borderBottomWidth: 1,
-    justifyContent: "center",
-  },
-  buttonContent: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  buttonText: {
-    fontSize: 18,
-    marginLeft: 10,
-    color: "#29648a",
-    position: "absolute",
-    left: 25,
-  },
-  logoutButton: {
-    backgroundColor: "#a16e83",
-    marginVertical: 20,
-    borderWidth: 0,
-    width: Dimensions.get("screen").width * 0.6,
-    paddingVertical: 15,
-    alignItems: "center",
-    borderRadius: 3,
-  },
-  mainContainer: {
-    backgroundColor: "#29648a",
-    padding: 20,
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  labelContainer: {
-    marginBottom: 10,
-    width: "100%",
-  },
-  label: {
-    color: "#555",
-    fontSize: 16,
-  },
-  input: {
-    height: 40,
-    width: "100%",
-    borderColor: "#29648a",
-    borderWidth: 1,
-    borderRadius: 3,
-    paddingHorizontal: 10,
-    color: "#555",
-  },
-  error: {
-    color: "#a16e83",
-    fontSize: 12,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  checkbox: {
-    height: 20,
-    width: 20,
-    borderRadius: 5,
-    borderColor: "#29648a",
-    borderWidth: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  checkboxInner: {
-    height: 10,
-    width: 10,
-    backgroundColor: "#29648a",
-    borderRadius: 2,
-  },
-  checkboxLabel: {
-    color: "#555",
-    fontSize: 16,
-  },
-  errorText: {
-    color: "#a16e83",
-    fontSize: 16,
-    textAlign: "center",
+    height: Dimensions.get("window").height - 130,
   },
   toggleButton: {
-    color: "#479761",
+    color: "#808080",
     fontSize: 16,
     textAlign: "center",
     marginTop: 10,

@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UTHBlindSchema = new mongoose.Schema({
-username: String,
-lastName: String,
-firstName: String,
-amountOfCards: Number,
+  username: String,
+  lastName: String,
+  firstName: String,
+  amountOfCards: Number,
   game: String,
   mode: String,
   percentage: Number,
@@ -15,6 +15,6 @@ amountOfCards: Number,
   },
 });
 
-const UTHBlindResult = mongoose.model('UTHBlindResult', UTHBlindSchema);
+const UTHBlindResult = mongoose.model("UTHBlindResult", UTHBlindSchema);
 
 module.exports = UTHBlindResult;

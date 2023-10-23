@@ -6,6 +6,7 @@ import HomeStackNavigator from "./TestsStackNavigator";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import TestsStackNavigator from "./TestsStackNavigator";
 import Ratings from "../views/Ratings";
 
@@ -16,19 +17,22 @@ function MainTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a', backgroundColor: "#ccc"},
+        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a', backgroundColor: "#29648a"},
       }}
     >
       <Tab.Screen
         name="Main"
         component={Profile}
         options={{
-          tabBarLabel: "Main",
-          tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#ccc",
-          tabBarInactiveBackgroundColor: "#ccc",
+          // tabBarLabel: "Main",
+          tabBarShowLabel: true,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign name="home" size={30} color={focused ? "#a16e83" : "#29648a"} />
+            <AntDesign name="home" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+          ),
+          tabBarLabel: ({ focused, color, size }) => (
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>MAIN</Text>
           ),
           headerShown: false,
         }}
@@ -38,12 +42,15 @@ function MainTabNavigator() {
         component={TestsStackNavigator}
         options={{
           
-          tabBarLabel: "Tests",
-          tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#ccc",
-          tabBarInactiveBackgroundColor: "#ccc",
+          // tabBarLabel: "Tests",
+          tabBarShowLabel: true,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons name="poker-chip" size={30} color={focused ? "#a16e83" : "#29648a"} />
+            <MaterialCommunityIcons name="poker-chip" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+          ),
+          tabBarLabel: ({ focused, color, size }) => (
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>TESTS</Text>
           ),
           headerShown: false,
         }}
@@ -52,12 +59,15 @@ function MainTabNavigator() {
         name="Ratings"
         component={Ratings}
         options={{
-          tabBarLabel: "Ratings",
-          tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#ccc",
-          tabBarInactiveBackgroundColor: "#ccc",
+          // tabBarLabel: "Ratings",
+          tabBarShowLabel: true,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialIcons name="leaderboard" size={30} color={focused ? "#a16e83" : "#29648a"} />
+            <MaterialIcons name="leaderboard" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+          ),
+          tabBarLabel: ({ focused, color, size }) => (
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>RATINGS</Text>
           ),
           headerShown: false,
           detachPreviousScreen: true,

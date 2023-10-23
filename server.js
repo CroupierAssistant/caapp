@@ -185,10 +185,10 @@ app.get('/ratings/:gameName', async (req, res) => {
       {
         $group: {
           _id: "$username",
-          firstName: firstName,
-          lastName: lastName,
           maxPercentage: { $max: "$percentage" },
           minTimeSpentTest: { $min: "$timeSpentTest" },
+          firstName: { $first: "$firstName" }, // Взять первое firstName
+          lastName: { $first: "$lastName" },   // Взять первое lastName
         },
       },
       {
@@ -197,7 +197,8 @@ app.get('/ratings/:gameName', async (req, res) => {
           username: "$_id",
           maxPercentage: 1,
           minTimeSpentTest: 1,
-
+          firstName: 1, // Включить firstName
+          lastName: 1,  // Включить lastName
         },
       },
       {
