@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 
 const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
@@ -17,9 +18,9 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
       setInputValue((prev) => (prev.includes(".") ? prev : prev + value));
     } else if (value === "OK") {
       // Ваша логика для обработки нажатия "Ok"
-      handleInputChange(inputValue)
-      onKeyboardPress("submit")
-      setInputValue("")
+      handleInputChange(inputValue);
+      onKeyboardPress("submit");
+      setInputValue("");
     } else {
       setInputValue((prev) => prev + value);
     }
@@ -29,7 +30,12 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
     <View style={styles.keyboard}>
       <View style={styles.row}>
         <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="0" value={inputValue} editable={false} />
+          <TextInput
+            style={styles.input}
+            placeholder="0"
+            value={inputValue}
+            editable={false}
+          />
         </View>
         <TouchableOpacity
           style={styles.delButton}
@@ -129,25 +135,28 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: "column",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     rowGap: 2,
+    height: 250,
+    maxHeight: (Dimensions.get('screen').height) * 0.3
   },
-    inputContainer: {
-      flex: 1,
-    },
+  inputContainer: {
+    flex: 1,
+  },
   input: {
     width: "99%",
-    height: 50,
+    // height: 49,
+    height: '100%',
     backgroundColor: "#ccc",
     borderRadius: 2,
     paddingHorizontal: 10,
     fontSize: 30,
-    textAlign: 'right',
-    color: '#000'
+    textAlign: "right",
+    color: "#000",
   },
   inputButton: {
     width: "33%",
-    height: 50,
+    // height: 49,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#29648a",
@@ -156,7 +165,7 @@ const styles = StyleSheet.create({
   },
   delButton: {
     width: "33%",
-    height: 50,
+    // height: 49,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#a16e83",
@@ -165,7 +174,7 @@ const styles = StyleSheet.create({
   },
   okButton: {
     width: "33%",
-    height: 50,
+    // height: 49,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#479761",
@@ -178,10 +187,11 @@ const styles = StyleSheet.create({
   },
   row: {
     width: "100%",
+    height: '20%',
     display: "flex",
     flexDirection: "row",
     flexWrap: "nowrap",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
 });
 

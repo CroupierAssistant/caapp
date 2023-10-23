@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     borderWidth: 1,
     borderColor: "#29648a",
-    borderRadius: 5,
+    borderRadius: 3,
     padding: 5,
     width: "90%",
     backgroundColor: "#29648a",

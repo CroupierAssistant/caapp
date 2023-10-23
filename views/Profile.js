@@ -70,7 +70,7 @@ const Profile = (props) => {
     }
 
     // Обновление состояния
-    setFormData({ ...formData, [name]: value || "" }); // Добавлена проверка на undefined/null
+    setFormData({ ...formData, [name]: value }); // Добавлена проверка на undefined/null
   };
 
   const isEmailValid = (email) => {
@@ -132,15 +132,15 @@ const Profile = (props) => {
 
         if (error.response) {
           if (error.response.status === 409) {
-            setError("Имя пользователя уже используется");
+            setError("Username already taken");
           } else {
             setError("");
-            setError("Ошибка запроса. Проверьте введенные данные.");
+            setError("The request failed. Check the entered data.");
           }
         } else if (error.request) {
-          setError("Нет ответа от сервера");
+          setError("No response from server");
         } else {
-          setError("Произошла ошибка");
+          setError("An error has occurred");
         }
       });
   };
@@ -170,14 +170,14 @@ const Profile = (props) => {
 
         if (error.response) {
           if (error.response.status === 401) {
-            setError("Пользователь не найден или пароль введен неверно");
+            setError("User not found or password entered incorrectly");
           } else {
-            setError("Ошибка запроса. Проверьте введенные данные.");
+            setError("The request failed. Check the entered data.");
           }
         } else if (error.request) {
-          setError("Нет ответа от сервера");
+          setError("No response from server");
         } else {
-          setError("Произошла ошибка");
+          setError("An error has occurred");
         }
       });
   };
@@ -186,7 +186,13 @@ const Profile = (props) => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {!user ? (
-          <>
+          <View
+            style={{
+              width: "100%",
+              alignItems: "center",
+              // justifyContent: "center",
+            }}
+          >
             {isRegistering ? (
               <>
                 <View style={styles.labelContainer}>
@@ -258,7 +264,7 @@ const Profile = (props) => {
                   </Text>
                 </View>
 
-                {error && <Text style={styles.error}>{error}</Text>}
+                {/* {error && <Text style={styles.error}>{error}</Text>} */}
               </>
             ) : (
               <>
@@ -291,10 +297,22 @@ const Profile = (props) => {
 
             {error && <Text style={styles.errorText}>{error}</Text>}
 
-            <Button
-              title={isRegistering ? "Register" : "Login"}
+            <TouchableOpacity
+              style={{
+                marginVertical: 15,
+                backgroundColor: "#29648a",
+                borderRadius: 3,
+                width: 200,
+                padding: 10,
+              }}
               onPress={isRegistering ? handleRegister : handleLogin}
-            />
+            >
+              <Text
+                style={{ color: "#fff", fontSize: 20, textAlign: "center" }}
+              >
+                {isRegistering ? "Register" : "Login"}
+              </Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
               <Text style={styles.toggleButton}>
                 {isRegistering
@@ -302,7 +320,7 @@ const Profile = (props) => {
                   : "Don't have an account? Register"}
               </Text>
             </TouchableOpacity>
-          </>
+          </View>
         ) : (
           <>
             <View style={styles.profileContainer}>
@@ -392,65 +410,68 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 20,
+    borderTopWidth: 2,
+    borderTopColor: "#29648a",
+    height: Dimensions.get('window').height - 130
     // marginVertical: 50,
   },
-  input: {
-    height: 40,
-    width: "100%",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 3,
-    paddingLeft: 10,
-    borderRadius: 3,
-  },
-  toggleButton: {
-    color: "#29648a",
-    textDecorationLine: "underline",
-    marginTop: 10,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: "#000",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  checkboxInner: {
-    width: 15,
-    height: 15,
-    backgroundColor: "#000",
-  },
-  checkboxLabel: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: "#333",
-    fontWeight: "bold",
-  },
+  // input: {
+  //   height: 40,
+  //   width: "100%",
+  //   borderColor: "#ccc",
+  //   borderWidth: 1,
+  //   marginBottom: 3,
+  //   paddingLeft: 10,
+  //   borderRadius: 3,
+  // },
+  // toggleButton: {
+  //   color: "#29648a",
+  //   textDecorationLine: "underline",
+  //   marginTop: 10,
+  // },
+  // checkboxContainer: {
+  //   flexDirection: "row",
+  //   marginBottom: 20,
+  //   alignItems: "center",
+  // },
+  // checkbox: {
+  //   width: 20,
+  //   height: 20,
+  //   borderWidth: 1,
+  //   borderColor: "#000",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  // checkboxInner: {
+  //   width: 15,
+  //   height: 15,
+  //   backgroundColor: "#000",
+  // },
+  // checkboxLabel: {
+  //   marginLeft: 10,
+  //   fontSize: 16,
+  //   color: "#333",
+  //   fontWeight: "bold",
+  // },
 
-  labelContainer: {
-    width: "100%",
-    marginBottom: 10,
-  },
-  label: {
-    marginBottom: 2,
-    color: "#333",
-    fontWeight: "bold",
-  },
-  menu: {
-    alignItems: "center",
-  },
-  errorText: {
-    color: "#FF0000",
-    marginBottom: 10,
-  },
+  // labelContainer: {
+  //   width: "100%",
+  //   marginBottom: 10,
+  // },
+  // label: {
+  //   marginBottom: 2,
+  //   color: "#333",
+  //   fontWeight: "bold",
+  // },
+  // menu: {
+  //   alignItems: "center",
+  // },
+  // errorText: {
+  //   color: "#FF0000",
+  //   marginBottom: 10,
+  // },
   profileContainer: {
     flex: 1,
     alignItems: "center",
@@ -506,6 +527,70 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: "center",
     borderRadius: 3,
+  },
+  mainContainer: {
+    backgroundColor: "#29648a",
+    padding: 20,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  labelContainer: {
+    marginBottom: 10,
+    width: "100%",
+  },
+  label: {
+    color: "#555",
+    fontSize: 16,
+  },
+  input: {
+    height: 40,
+    width: "100%",
+    borderColor: "#29648a",
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingHorizontal: 10,
+    color: "#555",
+  },
+  error: {
+    color: "#a16e83",
+    fontSize: 12,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  checkbox: {
+    height: 20,
+    width: 20,
+    borderRadius: 5,
+    borderColor: "#29648a",
+    borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  checkboxInner: {
+    height: 10,
+    width: 10,
+    backgroundColor: "#29648a",
+    borderRadius: 2,
+  },
+  checkboxLabel: {
+    color: "#555",
+    fontSize: 16,
+  },
+  errorText: {
+    color: "#a16e83",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  toggleButton: {
+    color: "#479761",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 

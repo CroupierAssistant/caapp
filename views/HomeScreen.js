@@ -35,8 +35,6 @@ function HomeScreen({ route }) {
           <Text style={styles.buttonText}>Multiplication Table</Text>
         </TouchableOpacity>
 
-        <View style={styles.break} />
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("RouletteSeries")}
@@ -78,8 +76,6 @@ function HomeScreen({ route }) {
           </Text>
         </TouchableOpacity> */}
 
-        <View style={styles.break} />
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("RussianPokerAnte")}
@@ -100,8 +96,6 @@ function HomeScreen({ route }) {
         >
           <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
         </TouchableOpacity>
-
-        <View style={styles.break} />
 
         <TouchableOpacity
           style={styles.button}
@@ -143,6 +137,8 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     alignItems: "center",
     padding: 10,
+    borderTopWidth: 2,
+    borderTopColor: "#29648a",
   },
   break: {
     height: 2,

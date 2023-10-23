@@ -137,7 +137,7 @@ function RoulettePicturesTest({ route }) {
         {showActiveCard && (
           <CardPicture index={cardList[activeCardIndex].index}>
             <Image
-              style={{ width: 239, height: 254 }}
+              style={{ width: 239, height: 254, transform: [{ scale: 0.9 }] }}
               resizeMode={"cover"}
               source={cardList[activeCardIndex].number}
             />
@@ -155,7 +155,6 @@ function RoulettePicturesTest({ route }) {
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
-              isDone={isDone}
               setTimeSpent={setTimeSpent}
             />
           )}

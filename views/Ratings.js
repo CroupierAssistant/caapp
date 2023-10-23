@@ -49,8 +49,11 @@ const Ratings = () => {
   return (
     <View style={styles.container}>
       <Text style={[styles.textHeader]}>Ratings</Text>
-      <ScrollView showsVerticalScrollIndicator={false} style={{width: "100%"}}>
-        <View style={{width: "100%"}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ width: "100%" }}
+      >
+        <View style={{ width: "100%" }}>
           {games.map((game) => (
             <RatingButton key={game} onPress={handlePress} gameName={game} />
           ))}
@@ -73,8 +76,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
     paddingVertical: 20,
+    borderTopWidth: 2,
+    borderTopColor: "#29648a",
   },
   textHeader: {
     textAlign: "center",

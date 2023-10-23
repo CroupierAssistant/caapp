@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const NeighboursSchema = new mongoose.Schema({
-  username: String,
+username: String,
+lastName: String,
+firstName: String,
+amountOfCards: Number,
   game: String,
   mode: String,
   percentage: Number,

@@ -5,12 +5,12 @@ function CardPicture({ index, children }) {
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        <Text style={{ textAlign: "right", fontSize: 14, color: "#fff" }}>
+        {/* <Text style={{ textAlign: "right", fontSize: 14, color: "#fff" }}>
           {" "}
-        </Text>
+        </Text> */}
         {children}
         {/* Размещаем children (в данном случае RoulettePictureCenter) */}
-        <Text style={{ width: '100%', textAlign: "right", fontSize: 14, color: "#000" }}>
+        <Text style={{ width: '100%', textAlign: "right", fontSize: 14, color: "#000", position: 'absolute', top: 5 }}>
           {index}
         </Text>
       </View>
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     transform: [{scale: 0.9}]
   },
   cardContainer: {
-    borderRadius: 5,
+    borderRadius: 3,
     padding: 10,
     width: "90%",
     backgroundColor: "#29648a57",

@@ -1,7 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const BlackjackSchema = new mongoose.Schema({
   username: String,
+  lastName: String,
+  firstName: String,
+  amountOfCards: Number,
   game: String,
   mode: String,
   percentage: Number,
@@ -12,6 +15,6 @@ const BlackjackSchema = new mongoose.Schema({
   },
 });
 
-const BlackjackResult = mongoose.model('BlackjackResult', BlackjackSchema);
+const BlackjackResult = mongoose.model("BlackjackResult", BlackjackSchema);
 
 module.exports = BlackjackResult;
