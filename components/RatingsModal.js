@@ -1,8 +1,48 @@
 import React from "react";
-import { View, Text, StyleSheet, FlatList, Modal, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Modal,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
-  
+  const data = [
+    /* ваш массив данных здесь */
+  ];
+
+  // Группировка данных по пользователям
+  const groupedData = ratings.reduce((result, item) => {
+    const key = item.username;
+    if (!result[key]) {
+      result[key] = { maxPercentage: -Infinity, minTimeSpentTest: Infinity };
+    }
+
+    // Находим максимальный процент и минимальное время
+    if (item.percentage > result[key].maxPercentage) {
+      result[key].maxPercentage = item.percentage;
+      result[key].minTimeSpentTest = item.timeSpentTest;
+    } else if (item.percentage === result[key].maxPercentage) {
+      if (item.timeSpentTest < result[key].minTimeSpentTest) {
+        result[key].minTimeSpentTest = item.timeSpentTest;
+      }
+    }
+
+    return result;
+  }, {});
+
+  // Преобразование сгруппированных данных обратно в массив
+  const aggregatedData = Object.keys(groupedData).map((username) => ({
+    username,
+    maxPercentage: groupedData[username].maxPercentage,
+    minTimeSpentTest: groupedData[username].minTimeSpentTest,
+  }));
+
+  console.log(aggregatedData);
+
   return (
     <Modal visible={isVisible} transparent animationType="none">
       <View style={styles.modalContainer}>
@@ -14,18 +54,58 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <View style={[styles.row]}>
-                  <View style={[styles.textIndexContainer, index === 0 ? styles.gold : index === 1 ? styles.silver : index === 2 ? styles.bronze : ""]}>
-                    <Text style={{ ...styles.textIndex, color: index >= 0 && index <= 2 ? "#fff" : "" }} >{index + 1}</Text>
+                  <View
+                    style={[
+                      styles.textIndexContainer,
+                      index === 0
+                        ? styles.gold
+                        : index === 1
+                        ? styles.silver
+                        : index === 2
+                        ? styles.bronze
+                        : "",
+                    ]}
+                  >
+                    <Text
+                      style={{
+                        ...styles.textIndex,
+                        color: index >= 0 && index <= 2 ? "#fff" : "",
+                      }}
+                    >
+                      {index + 1}
+                    </Text>
                   </View>
-                  <Text style={{...styles.text, width: "50%", paddingHorizontal: 3}} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
-                  <Text style={{...styles.text, width: "20%", paddingHorizontal: 3}}>{Number(item.maxPercentage).toFixed(2)}%</Text>
-                  <Text style={{ ...styles.text, width: "20%" }}>{item.minTimeSpentTest}</Text>
+                  <Text
+                    style={{
+                      ...styles.text,
+                      width: "50%",
+                      paddingHorizontal: 3,
+                    }}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.username}
+                  </Text>
+                  <Text
+                    style={{
+                      ...styles.text,
+                      width: "20%",
+                      paddingHorizontal: 3,
+                    }}
+                  >
+                    {Number(item.percentage).toFixed(2)}%
+                  </Text>
+                  <Text style={{ ...styles.text, width: "20%" }}>
+                    {item.timeSpentTest}
+                  </Text>
                 </View>
               )}
             />
           ) : (
             <>
-              <Text style={styles.textNoData}>{`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}</Text>
+              <Text
+                style={styles.textNoData}
+              >{`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}</Text>
             </>
           )}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
