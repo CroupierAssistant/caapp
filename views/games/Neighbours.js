@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
 import Switcher from "../../components/Switcher";
+import { FontAwesome } from '@expo/vector-icons';
 
 function Neighbours() {
   const navigation = useNavigation();

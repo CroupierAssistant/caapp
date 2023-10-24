@@ -220,7 +220,6 @@ app.get("/ratings/:gameName", async (req, res) => {
       {
         $group: {
           _id: "$username",
-          maxPercentage: { $max: "$percentage" },
           data: {
             $push: {
               percentage: "$percentage",
@@ -239,7 +238,23 @@ app.get("/ratings/:gameName", async (req, res) => {
                 $filter: {
                   input: "$data",
                   as: "item",
-                  cond: { $eq: ["$$item.percentage", "$maxPercentage"] },
+                  cond: { $eq: ["$$item.percentage", { $max: "$data.percentage" }] },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      },
+      {
+        $addFields: {
+          maxData: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$data",
+                  as: "item",
+                  cond: { $eq: ["$$item.timeSpentTest", { $min: "$data.timeSpentTest" }] },
                 },
               },
               0,
@@ -251,16 +266,17 @@ app.get("/ratings/:gameName", async (req, res) => {
         $project: {
           _id: 0,
           username: "$_id",
-          maxPercentage: 1,
+          maxPercentage: "$maxData.percentage",
           minTimeSpentTest: "$maxData.timeSpentTest",
           firstName: 1,
           lastName: 1,
         },
       },
       {
-        $sort: { maxPercentage: -1, minTimeSpentTest: -1 },
+        $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
       },
     ]);
+    
     res.json(ratings);
   } catch (error) {
     console.error("Ошибка при получении рейтингов:", error);
