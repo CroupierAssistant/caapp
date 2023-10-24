@@ -238,7 +238,9 @@ app.get("/ratings/:gameName", async (req, res) => {
                 $filter: {
                   input: "$data",
                   as: "item",
-                  cond: { $eq: ["$$item.percentage", { $max: "$data.percentage" }] },
+                  cond: {
+                    $eq: ["$$item.percentage", { $max: "$data.percentage" }],
+                  },
                 },
               },
               0,
@@ -254,7 +256,12 @@ app.get("/ratings/:gameName", async (req, res) => {
                 $filter: {
                   input: "$data",
                   as: "item",
-                  cond: { $eq: ["$$item.timeSpentTest", { $min: "$data.timeSpentTest" }] },
+                  cond: {
+                    $eq: [
+                      "$$item.timeSpentTest",
+                      { $min: "$data.timeSpentTest" },
+                    ],
+                  },
                 },
               },
               0,
@@ -276,7 +283,7 @@ app.get("/ratings/:gameName", async (req, res) => {
         $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
       },
     ]);
-    
+
     res.json(ratings);
   } catch (error) {
     console.error("Ошибка при получении рейтингов:", error);
