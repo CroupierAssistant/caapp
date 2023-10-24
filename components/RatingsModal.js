@@ -1,80 +1,50 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Modal,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, FlatList, Modal, TouchableOpacity, Dimensions } from "react-native";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
-  const ratingsToShow = ratings;
-  console.log(ratingsToShow);
+  const [selectedTab, setSelectedTab] = useState(10); // По умолчанию выбрано 10 карт
+
+  // Фильтруем рейтинги по выбранному количеству карт
+  const filteredRatings = ratings.filter(item => item.amountOfCards === selectedTab);
+  console.log(filteredRatings);
+  console.log(ratings);
+
   return (
     <Modal visible={isVisible} transparent animationType="none">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
-          {ratingsToShow.length > 0 ? (
+
+          <View style={styles.tabContainer}>
+            {[10, 20, 30].map(cards => (
+              <TouchableOpacity
+                key={cards}
+                style={[styles.tab, selectedTab === cards && styles.activeTab]}
+                onPress={() => setSelectedTab(cards)}
+              >
+                <Text style={styles.tabText}>{`${cards} Cards`}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {filteredRatings.length > 0 ? (
             <FlatList
-              data={ratings}
+              data={filteredRatings}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <View style={[styles.row]}>
-                  <View
-                    style={[
-                      styles.textIndexContainer,
-                      index === 0
-                        ? styles.gold
-                        : index === 1
-                        ? styles.silver
-                        : index === 2
-                        ? styles.bronze
-                        : "",
-                    ]}
-                  >
-                    <Text
-                      style={{
-                        ...styles.textIndex,
-                        color: index >= 0 && index <= 2 ? "#fff" : "",
-                      }}
-                    >
-                      {index + 1}
-                    </Text>
+                  <View style={[styles.textIndexContainer, index === 0 ? styles.gold : index === 1 ? styles.silver : index === 2 ? styles.bronze : ""]}>
+                    <Text style={{ ...styles.textIndex, color: index >= 0 && index <= 2 ? "#fff" : "" }} >{index + 1}</Text>
                   </View>
-                  <Text
-                    style={{
-                      ...styles.text,
-                      width: "50%",
-                      paddingHorizontal: 3,
-                    }}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.username}
-                  </Text>
-                  <Text
-                    style={{
-                      ...styles.text,
-                      width: "20%",
-                      paddingHorizontal: 3,
-                    }}
-                  >
-                    {Number(item.maxPercentage).toFixed(2)}%
-                  </Text>
-                  <Text style={{ ...styles.text, width: "20%" }}>
-                    {item.minTimeSpentTest}
-                  </Text>
+                  <Text style={{...styles.text, width: "50%", paddingHorizontal: 3}} numberOfLines={1} ellipsizeMode="tail">{item.username}</Text>
+                  <Text style={{...styles.text, width: "20%", paddingHorizontal: 3}}>{Number(item.maxPercentage).toFixed(2)}%</Text>
+                  <Text style={{ ...styles.text, width: "20%" }}>{item.minTimeSpentTest}</Text>
                 </View>
               )}
             />
           ) : (
             <>
-              <Text style={styles.textNoData}>
-              {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
-              </Text>
+              <Text style={styles.textNoData}>{`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}</Text>
             </>
           )}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -87,7 +57,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: {
+  // Остальные стили...
+modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -154,6 +125,24 @@ const styles = StyleSheet.create({
   },
   bronze: {
     backgroundColor: "#CD7F32", // Бронзовый цвет
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
+  },
+  tab: {
+    padding: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#ccc",
+  },
+  activeTab: {
+    borderBottomColor: "#29648a",
+  },
+  tabText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#555",
   },
 });
 

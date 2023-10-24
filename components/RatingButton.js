@@ -12,7 +12,7 @@ const RatingButton = ({ onPress, gameName }) => {
 const styles = StyleSheet.create({
   button: {
     width: "100%",
-    backgroundColor: "#29648a",
+    backgroundColor: "#3F5C6F",
     paddingHorizontal: 10,
     paddingVertical: 15,
     marginVertical: 3,

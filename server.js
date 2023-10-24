@@ -225,6 +225,7 @@ app.get("/ratings/:gameName", async (req, res) => {
             $push: {
               percentage: "$percentage",
               timeSpentTest: "$timeSpentTest",
+              amountOfCards: "$timeSpentTest"
             },
           },
           firstName: { $first: "$firstName" },
