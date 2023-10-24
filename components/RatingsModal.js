@@ -15,54 +15,61 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const groupedByAmountOfCards = {
     10: [],
     20: [],
-    30: []
+    30: [],
   };
-  
-  ratings.forEach(item => {
+
+  ratings.forEach((item) => {
     if (item.amountOfCards) {
       const key = item.amountOfCards.toString();
       groupedByAmountOfCards[key].push(item);
     }
   });
-  
+
   const aggregatedData = {};
-  
-  Object.keys(groupedByAmountOfCards).forEach(amountOfCards => {
-    const groupedData = groupedByAmountOfCards[amountOfCards].reduce((result, item) => {
-      const key = item.username;
-      if (!result[key]) {
-        result[key] = {
-          maxPercentage: -Infinity,
-          minTimeSpentTest: Infinity,
-          amountOfCards: item.amountOfCards,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          showUserData: item.showData,
-        };
-      }
-  
-      if (item.percentage > result[key].maxPercentage) {
-        result[key].maxPercentage = item.percentage;
-        result[key].minTimeSpentTest = item.timeSpentTest;
-      } else if (item.percentage === result[key].maxPercentage) {
-        if (item.timeSpentTest < result[key].minTimeSpentTest) {
-          result[key].minTimeSpentTest = item.timeSpentTest;
+
+  Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+    const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
+      (result, item) => {
+        const key = item.username;
+        if (!result[key]) {
+          result[key] = {
+            maxPercentage: -Infinity,
+            minTimeSpentTest: Infinity,
+            amountOfCards: item.amountOfCards,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            showUserData: item.showUserData,
+          };
         }
-      }
-  
-      return result;
-    }, {});
-  
-    aggregatedData[amountOfCards] = Object.keys(groupedData).map(username => ({
-      username,
-      maxPercentage: groupedData[username].maxPercentage,
-      minTimeSpentTest: groupedData[username].minTimeSpentTest,
-      amountOfCards: groupedData[username].amountOfCards,
-      firstName: groupedData[username].firstName,
-      lastName: groupedData[username].lastName,
-      showUserData: groupedData[username].showData,
-    }));
+
+        if (item.percentage > result[key].maxPercentage) {
+          result[key].maxPercentage = item.percentage;
+          result[key].minTimeSpentTest = item.timeSpentTest;
+        } else if (item.percentage === result[key].maxPercentage) {
+          if (item.timeSpentTest < result[key].minTimeSpentTest) {
+            result[key].minTimeSpentTest = item.timeSpentTest;
+          }
+        }
+
+        return result;
+      },
+      {}
+    );
+
+    aggregatedData[amountOfCards] = Object.keys(groupedData).map(
+      (username) => ({
+        username,
+        maxPercentage: groupedData[username].maxPercentage,
+        minTimeSpentTest: groupedData[username].minTimeSpentTest,
+        amountOfCards: groupedData[username].amountOfCards,
+        firstName: groupedData[username].firstName,
+        lastName: groupedData[username].lastName,
+        showUserData: groupedData[username].showUserData,
+      })
+    );
   });
+
+  console.log(aggregatedData);
 
   return (
     <Modal visible={isVisible} transparent animationType="none">
@@ -72,95 +79,93 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
 
           <View style={styles.tabs}>
             <TouchableOpacity
-              style={[
-                styles.tab,
-                activeTab === 10 ? styles.activeTab : null,
-              ]}
+              style={[styles.tab, activeTab === 10 ? styles.activeTab : null]}
               onPress={() => setActiveTab(10)}
             >
               <Text style={styles.tabText}>10 Cards</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.tab,
-                activeTab === 20 ? styles.activeTab : null,
-              ]}
+              style={[styles.tab, activeTab === 20 ? styles.activeTab : null]}
               onPress={() => setActiveTab(20)}
             >
               <Text style={styles.tabText}>20 Cards</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.tab,
-                activeTab === 30 ? styles.activeTab : null,
-              ]}
+              style={[styles.tab, activeTab === 30 ? styles.activeTab : null]}
               onPress={() => setActiveTab(30)}
             >
               <Text style={styles.tabText}>30 Cards</Text>
             </TouchableOpacity>
           </View>
-<View style={{borderWidth: 2, flex: 1, borderColor: "#29648a", padding: 5,
-    borderBottomLeftRadius: 3,
-    borderBottomRightRadius: 3,}}>
-          {aggregatedData[activeTab].length > 0 ? (
-            <FlatList
-              data={aggregatedData[activeTab]}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
-                <View style={[styles.row]}>
-                  <View
-                    style={[
-                      styles.textIndexContainer,
-                      index === 0
-                        ? styles.gold
-                        : index === 1
-                        ? styles.silver
-                        : index === 2
-                        ? styles.bronze
-                        : "",
-                    ]}
-                  >
+          <View
+            style={{
+              borderWidth: 2,
+              flex: 1,
+              borderColor: "#29648a",
+              padding: 5,
+              borderBottomLeftRadius: 3,
+              borderBottomRightRadius: 3,
+            }}
+          >
+            {aggregatedData[activeTab].length > 0 ? (
+              <FlatList
+                data={aggregatedData[activeTab]}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                  <View style={[styles.row]}>
+                    <View
+                      style={[
+                        styles.textIndexContainer,
+                        index === 0
+                          ? styles.gold
+                          : index === 1
+                          ? styles.silver
+                          : index === 2
+                          ? styles.bronze
+                          : "",
+                      ]}
+                    >
+                      <Text
+                        style={{
+                          ...styles.textIndex,
+                          color: index >= 0 && index <= 2 ? "#fff" : "",
+                        }}
+                      >
+                        {index + 1}
+                      </Text>
+                    </View>
                     <Text
                       style={{
-                        ...styles.textIndex,
-                        color: index >= 0 && index <= 2 ? "#fff" : "",
+                        ...styles.text,
+                        width: "50%",
+                        paddingHorizontal: 3,
+                      }}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.username}{item.showUserData && `${item.firstName} ${item.lastName}`}
+                    </Text>
+                    <Text
+                      style={{
+                        ...styles.text,
+                        width: "20%",
+                        paddingHorizontal: 3,
                       }}
                     >
-                      {index + 1}
+                      {Number(item.maxPercentage).toFixed(2)}%
+                    </Text>
+                    <Text style={{ ...styles.text, width: "20%" }}>
+                      {item.minTimeSpentTest}
                     </Text>
                   </View>
-                  <Text
-                    style={{
-                      ...styles.text,
-                      width: "50%",
-                      paddingHorizontal: 3,
-                    }}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.username}
-                  </Text>
-                  <Text
-                    style={{
-                      ...styles.text,
-                      width: "20%",
-                      paddingHorizontal: 3,
-                    }}
-                  >
-                    {Number(item.maxPercentage).toFixed(2)}%
-                  </Text>
-                  <Text style={{ ...styles.text, width: "20%" }}>
-                    {item.minTimeSpentTest}
-                  </Text>
-                </View>
-              )}
-            />
-          ) : (
-            <Text style={styles.textNoData}>
-              {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
-            </Text>
-          )}
-</View>
+                )}
+              />
+            ) : (
+              <Text style={styles.textNoData}>
+                {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
+              </Text>
+            )}
+          </View>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
@@ -221,7 +226,7 @@ const styles = StyleSheet.create({
     color: "#29648a",
     fontWeight: "bold",
     marginBottom: 10,
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
   closeButton: {
     alignSelf: "center",
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 16,
     color: "#29648a", // Цвет кнопки закрытия
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
   gold: {
     backgroundColor: "#FFD700", // Золотой цвет
@@ -247,7 +252,7 @@ const styles = StyleSheet.create({
     // marginBottom: 10,
     borderBottomColor: "#29648a",
     // borderBottomWidth: 2,
-    gap: 1
+    gap: 1,
   },
   tab: {
     flex: 1,
@@ -264,7 +269,7 @@ const styles = StyleSheet.create({
   tabText: {
     color: "#fff",
     fontSize: 16,
-    textAlign: 'center'
+    textAlign: "center",
   },
 });
 

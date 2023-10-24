@@ -28,12 +28,6 @@ const AuthorizationComponent = () => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const isEmailValid = (email) => {
-    // Регулярное выражение для проверки email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleLogin = () => {
     // Axios.post("http://192.168.31.124:3000/login", {
     Axios.post("https://caapp-server.onrender.com/login", {
@@ -53,6 +47,7 @@ const AuthorizationComponent = () => {
           agree: false,
         });
         setError(null);
+        console.log(response.data.user);
       })
       .catch((error) => {
         console.error(error);

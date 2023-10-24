@@ -8,7 +8,8 @@ const saveTestResult = async (
   game,
   mode,
   percentage,
-  timeSpentTest
+  timeSpentTest,
+  showUserData
 ) => {
   try {
     const response = await axios.post(
@@ -22,6 +23,7 @@ const saveTestResult = async (
         mode,
         percentage,
         timeSpentTest,
+        showUserData
       }
     );
 

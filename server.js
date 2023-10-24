@@ -215,7 +215,7 @@ app.get("/ratings/:gameName", async (req, res) => {
       game: gameName,
       mode: { $ne: "sandbox" },
       username: { $ne: "/guest/" },
-    }).select("username percentage timeSpentTest firstName lastName amountOfCards");
+    }).select("username percentage timeSpentTest firstName lastName amountOfCards showUserData");
 
     res.json(ratings);
   } catch (error) {
