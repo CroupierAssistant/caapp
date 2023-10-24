@@ -225,7 +225,7 @@ app.get("/ratings/:gameName", async (req, res) => {
             $push: {
               percentage: "$percentage",
               timeSpentTest: "$timeSpentTest",
-              amountOfCards: "$timeSpentTest"
+              amountOfCards: "$amountOfCards" // Добавляем amountOfCards
             },
           },
           firstName: { $first: "$firstName" },
@@ -256,12 +256,14 @@ app.get("/ratings/:gameName", async (req, res) => {
           minTimeSpentTest: "$maxData.timeSpentTest",
           firstName: 1,
           lastName: 1,
+          amountOfCards: "$maxData.amountOfCards" // Добавляем amountOfCards
         },
       },
       {
         $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
       },
     ]);
+    
     res.json(ratings);
   } catch (error) {
     console.error("Ошибка при получении рейтингов:", error);
