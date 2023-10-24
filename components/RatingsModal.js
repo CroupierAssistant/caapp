@@ -12,6 +12,18 @@ import {
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
 
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const ms = Math.round((milliseconds % 1000) / 10);
+
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+      2,
+      "0"
+    )}.${String(ms).padStart(2, "0")}`;
+  };
+
   const groupedByAmountOfCards = {
     10: [],
     20: [],
@@ -55,6 +67,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       },
       {}
     );
+
+    console.log(groupedData);
 
     aggregatedData[amountOfCards] = Object.keys(groupedData).map(
       (username) => ({
@@ -155,7 +169,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       {Number(item.maxPercentage).toFixed(2)}%
                     </Text>
                     <Text style={{ ...styles.text, width: "20%" }}>
-                      {item.minTimeSpentTest}
+                      {formatTime(item.minTimeSpentTest)}
                     </Text>
                   </View>
                 )}
