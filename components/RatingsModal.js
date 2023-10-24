@@ -1,35 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet, FlatList, Modal, TouchableOpacity, Dimensions } from "react-native";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
-  const [selectedTab, setSelectedTab] = useState(10); // По умолчанию выбрано 10 карт
-
-  // Фильтруем рейтинги по выбранному количеству карт
-  const filteredRatings = ratings.filter(item => item.amountOfCards === selectedTab);
-  console.log(filteredRatings);
-  console.log(ratings);
-
+  
   return (
     <Modal visible={isVisible} transparent animationType="none">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
-
-          <View style={styles.tabContainer}>
-            {[10, 20, 30].map(cards => (
-              <TouchableOpacity
-                key={cards}
-                style={[styles.tab, selectedTab === cards && styles.activeTab]}
-                onPress={() => setSelectedTab(cards)}
-              >
-                <Text style={styles.tabText}>{`${cards} Cards`}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {filteredRatings.length > 0 ? (
+          {ratings.length > 0 ? (
             <FlatList
-              data={filteredRatings}
+              data={ratings}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <View style={[styles.row]}>
@@ -57,8 +38,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
 };
 
 const styles = StyleSheet.create({
-  // Остальные стили...
-modalContainer: {
+  modalContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -125,24 +105,6 @@ modalContainer: {
   },
   bronze: {
     backgroundColor: "#CD7F32", // Бронзовый цвет
-  },
-  tabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 10,
-  },
-  tab: {
-    padding: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "#ccc",
-  },
-  activeTab: {
-    borderBottomColor: "#29648a",
-  },
-  tabText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#555",
   },
 });
 

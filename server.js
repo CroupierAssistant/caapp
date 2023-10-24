@@ -220,25 +220,30 @@ app.get("/ratings/:gameName", async (req, res) => {
       {
         $group: {
           _id: "$username",
+          maxPercentage: { $max: "$percentage" },
           data: {
             $push: {
               percentage: "$percentage",
               timeSpentTest: "$timeSpentTest",
-              amountOfCards: "$amountOfCards", // Добавляем amountOfCards
             },
           },
           firstName: { $first: "$firstName" },
           lastName: { $first: "$lastName" },
-          amountOfCards: { $first: "$amountOfCards" }, // Включаем amountOfCards
         },
       },
       {
         $addFields: {
-          data: {
-            $sort: {
-              percentage: -1,
-              timeSpentTest: 1,
-            },
+          maxData: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$data",
+                  as: "item",
+                  cond: { $eq: ["$$item.percentage", "$maxPercentage"] },
+                },
+              },
+              0,
+            ],
           },
         },
       },
@@ -246,15 +251,16 @@ app.get("/ratings/:gameName", async (req, res) => {
         $project: {
           _id: 0,
           username: "$_id",
-          maxPercentage: { $first: "$data.percentage" },
-          minTimeSpentTest: { $first: "$data.timeSpentTest" },
+          maxPercentage: 1,
+          minTimeSpentTest: "$maxData.timeSpentTest",
           firstName: 1,
           lastName: 1,
-          amountOfCards: 1, // Включаем amountOfCards
         },
       },
+      {
+        $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
+      },
     ]);
-    
     res.json(ratings);
   } catch (error) {
     console.error("Ошибка при получении рейтингов:", error);
