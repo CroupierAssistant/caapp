@@ -209,80 +209,11 @@ app.get("/ratings/:gameName", async (req, res) => {
   }
 
   try {
-    const ratings = await resultModel.aggregate([
-      {
-        $match: {
-          game: gameName,
-          mode: { $ne: "sandbox" },
-          username: { $ne: "/guest/" },
-        },
-      },
-      {
-        $group: {
-          _id: "$username",
-          data: {
-            $push: {
-              percentage: "$percentage",
-              timeSpentTest: "$timeSpentTest",
-            },
-          },
-          firstName: { $first: "$firstName" },
-          lastName: { $first: "$lastName" },
-        },
-      },
-      {
-        $addFields: {
-          maxData: {
-            $arrayElemAt: [
-              {
-                $filter: {
-                  input: "$data",
-                  as: "item",
-                  cond: {
-                    $eq: ["$$item.percentage", { $max: "$data.percentage" }],
-                  },
-                },
-              },
-              0,
-            ],
-          },
-        },
-      },
-      {
-        $addFields: {
-          maxData: {
-            $arrayElemAt: [
-              {
-                $filter: {
-                  input: "$data",
-                  as: "item",
-                  cond: {
-                    $eq: [
-                      "$$item.timeSpentTest",
-                      { $min: "$data.timeSpentTest" },
-                    ],
-                  },
-                },
-              },
-              0,
-            ],
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          username: "$_id",
-          maxPercentage: "$maxData.percentage",
-          minTimeSpentTest: "$maxData.timeSpentTest",
-          firstName: 1,
-          lastName: 1,
-        },
-      },
-      {
-        $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
-      },
-    ]);
+    const ratings = await resultModel.find({
+      game: gameName,
+      mode: { $ne: "sandbox" },
+      username: { $ne: "/guest/" },
+    }).select("username percentage timeSpentTest firstName lastName amountOfCards");
 
     res.json(ratings);
   } catch (error) {
@@ -290,6 +221,7 @@ app.get("/ratings/:gameName", async (req, res) => {
     res.status(500).json({ message: "Внутренняя ошибка сервера" });
   }
 });
+
 
 app.get("/userExists", async (req, res) => {
   const { username } = req.query;
