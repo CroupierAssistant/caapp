@@ -236,6 +236,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#29648a", // Цвет кнопки закрытия
     textTransform: "uppercase",
+    fontWeight: "bold",
   },
   gold: {
     backgroundColor: "#FFD700", // Золотой цвет
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    paddingVertical: 7,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     // marginHorizontal: 1,
     borderTopLeftRadius: 3,
@@ -268,8 +269,9 @@ const styles = StyleSheet.create({
   },
   tabText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 14,
     textAlign: "center",
+    textTransform: "uppercase",
   },
 });
 

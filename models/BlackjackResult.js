@@ -8,7 +8,7 @@ const BlackjackSchema = new mongoose.Schema({
   game: String,
   mode: String,
   percentage: Number,
-  timeSpentTest: String,
+  timeSpentTest: Number,
   showUserData: Boolean,
   date: {
     type: Date,

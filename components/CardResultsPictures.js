@@ -59,7 +59,7 @@ const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards, game
       game: gameName,
       type: mode,
       percent: calculatedPercentage,
-      time: formatTime(timeSpent)
+      time: timeSpent
     })
 
   }, [cardResults]);
