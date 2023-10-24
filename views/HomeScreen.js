@@ -136,7 +136,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "start",
     alignItems: "center",
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     borderTopWidth: 2,
     borderTopColor: "#29648a",
   },
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
     color: "#29648a",
     fontWeight: "bold",
     marginBottom: 20,
+    textTransform: "uppercase"
   },
 });
 

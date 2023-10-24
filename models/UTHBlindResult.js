@@ -9,6 +9,7 @@ const UTHBlindSchema = new mongoose.Schema({
   mode: String,
   percentage: Number,
   timeSpentTest: String,
+  showUserData: Boolean,
   date: {
     type: Date,
     default: Date.now,

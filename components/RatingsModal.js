@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,47 +10,101 @@ import {
 } from "react-native";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
-  const data = [
-    /* ваш массив данных здесь */
-  ];
+  const [activeTab, setActiveTab] = useState(10);
 
-  // Группировка данных по пользователям
-  const groupedData = ratings.reduce((result, item) => {
-    const key = item.username;
-    if (!result[key]) {
-      result[key] = { maxPercentage: -Infinity, minTimeSpentTest: Infinity };
+  const groupedByAmountOfCards = {
+    10: [],
+    20: [],
+    30: []
+  };
+  
+  ratings.forEach(item => {
+    if (item.amountOfCards) {
+      const key = item.amountOfCards.toString();
+      groupedByAmountOfCards[key].push(item);
     }
-
-    // Находим максимальный процент и минимальное время
-    if (item.percentage > result[key].maxPercentage) {
-      result[key].maxPercentage = item.percentage;
-      result[key].minTimeSpentTest = item.timeSpentTest;
-    } else if (item.percentage === result[key].maxPercentage) {
-      if (item.timeSpentTest < result[key].minTimeSpentTest) {
-        result[key].minTimeSpentTest = item.timeSpentTest;
+  });
+  
+  const aggregatedData = {};
+  
+  Object.keys(groupedByAmountOfCards).forEach(amountOfCards => {
+    const groupedData = groupedByAmountOfCards[amountOfCards].reduce((result, item) => {
+      const key = item.username;
+      if (!result[key]) {
+        result[key] = {
+          maxPercentage: -Infinity,
+          minTimeSpentTest: Infinity,
+          amountOfCards: item.amountOfCards,
+          firstName: item.firstName,
+          lastName: item.lastName,
+          showUserData: item.showData,
+        };
       }
-    }
-
-    return result;
-  }, {});
-
-  // Преобразование сгруппированных данных обратно в массив
-  const aggregatedData = Object.keys(groupedData).map((username) => ({
-    username,
-    maxPercentage: groupedData[username].maxPercentage,
-    minTimeSpentTest: groupedData[username].minTimeSpentTest,
-  }));
-
-  console.log(aggregatedData);
+  
+      if (item.percentage > result[key].maxPercentage) {
+        result[key].maxPercentage = item.percentage;
+        result[key].minTimeSpentTest = item.timeSpentTest;
+      } else if (item.percentage === result[key].maxPercentage) {
+        if (item.timeSpentTest < result[key].minTimeSpentTest) {
+          result[key].minTimeSpentTest = item.timeSpentTest;
+        }
+      }
+  
+      return result;
+    }, {});
+  
+    aggregatedData[amountOfCards] = Object.keys(groupedData).map(username => ({
+      username,
+      maxPercentage: groupedData[username].maxPercentage,
+      minTimeSpentTest: groupedData[username].minTimeSpentTest,
+      amountOfCards: groupedData[username].amountOfCards,
+      firstName: groupedData[username].firstName,
+      lastName: groupedData[username].lastName,
+      showUserData: groupedData[username].showData,
+    }));
+  });
 
   return (
     <Modal visible={isVisible} transparent animationType="none">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
-          {ratings.length > 0 ? (
+
+          <View style={styles.tabs}>
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === 10 ? styles.activeTab : null,
+              ]}
+              onPress={() => setActiveTab(10)}
+            >
+              <Text style={styles.tabText}>10 Cards</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === 20 ? styles.activeTab : null,
+              ]}
+              onPress={() => setActiveTab(20)}
+            >
+              <Text style={styles.tabText}>20 Cards</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.tab,
+                activeTab === 30 ? styles.activeTab : null,
+              ]}
+              onPress={() => setActiveTab(30)}
+            >
+              <Text style={styles.tabText}>30 Cards</Text>
+            </TouchableOpacity>
+          </View>
+<View style={{borderWidth: 2, flex: 1, borderColor: "#29648a", padding: 5,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,}}>
+          {aggregatedData[activeTab].length > 0 ? (
             <FlatList
-              data={ratings}
+              data={aggregatedData[activeTab]}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <View style={[styles.row]}>
@@ -93,21 +147,20 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       paddingHorizontal: 3,
                     }}
                   >
-                    {Number(item.percentage).toFixed(2)}%
+                    {Number(item.maxPercentage).toFixed(2)}%
                   </Text>
                   <Text style={{ ...styles.text, width: "20%" }}>
-                    {item.timeSpentTest}
+                    {item.minTimeSpentTest}
                   </Text>
                 </View>
               )}
             />
           ) : (
-            <>
-              <Text
-                style={styles.textNoData}
-              >{`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}</Text>
-            </>
+            <Text style={styles.textNoData}>
+              {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
+            </Text>
           )}
+</View>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
@@ -127,7 +180,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "#fff",
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 5,
     width: Dimensions.get("window").width * 0.95,
     height: Dimensions.get("window").height * 0.8,
   },
@@ -164,18 +217,20 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 24,
     color: "#29648a",
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 10,
+    textTransform: "uppercase"
   },
   closeButton: {
     alignSelf: "center",
-    padding: 5,
+    padding: 10,
   },
   closeButtonText: {
     fontSize: 16,
     color: "#29648a", // Цвет кнопки закрытия
+    textTransform: "uppercase"
   },
   gold: {
     backgroundColor: "#FFD700", // Золотой цвет
@@ -185,6 +240,31 @@ const styles = StyleSheet.create({
   },
   bronze: {
     backgroundColor: "#CD7F32", // Бронзовый цвет
+  },
+  tabs: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // marginBottom: 10,
+    borderBottomColor: "#29648a",
+    // borderBottomWidth: 2,
+    gap: 1
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    // marginHorizontal: 1,
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3,
+    backgroundColor: "#C0C0C0",
+  },
+  activeTab: {
+    backgroundColor: "#29648a", // Цвет активной вкладки
+  },
+  tabText: {
+    color: "#fff",
+    fontSize: 16,
+    textAlign: 'center'
   },
 });
 

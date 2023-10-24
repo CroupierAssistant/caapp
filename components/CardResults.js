@@ -11,9 +11,9 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
   
   const { user } = useContext(AuthContext);
 
-  const handleSaveTestResult = async ({nickname, firstN, lastN, cards, game, type, percent, time}) => {
+  const handleSaveTestResult = async ({nickname, firstN, lastN, cards, game, type, percent, time, showData}) => {
     try {
-      const response = await saveTestResult(nickname, firstN, lastN, cards, game, type, percent, time);
+      const response = await saveTestResult(nickname, firstN, lastN, cards, game, type, percent, time, showData);
       console.log(response);
       // Handle success
     } catch (error) {
@@ -55,7 +55,8 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
       game: gameName,
       type: mode,
       percent: calculatedPercentage,
-      time: formatTime(timeSpent)
+      time: formatTime(timeSpent),
+      showData: user && user.showUserData ? user.showUserData : false,
     })
     
   }, [cardResults]);

@@ -111,6 +111,7 @@ app.post("/saveTestResult", async (req, res) => {
       mode,
       percentage,
       timeSpentTest,
+      showUserData
     } = req.body;
 
     if (!username || !game || !mode || !timeSpentTest) {
@@ -151,6 +152,7 @@ app.post("/saveTestResult", async (req, res) => {
       mode,
       percentage,
       timeSpentTest,
+      showUserData,
     });
 
     return res.json({

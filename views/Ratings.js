@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     color: "#29648a",
     fontWeight: "bold",
     marginBottom: 20,
+    textTransform: "uppercase"
   },
 });
 
