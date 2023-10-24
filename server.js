@@ -258,7 +258,7 @@ app.get("/ratings/:gameName", async (req, res) => {
         },
       },
       {
-        $sort: { maxPercentage: -1, minTimeSpentTest: 1 },
+        $sort: { maxPercentage: -1, minTimeSpentTest: -1 },
       },
     ]);
     res.json(ratings);
