@@ -13,7 +13,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const AuthorizationComponent = () => {
   const { login, logout, user } = useContext(AuthContext);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -68,6 +68,7 @@ const AuthorizationComponent = () => {
 
   return (
     <>
+    <Text style={[styles.textHeader]}>Sign in</Text>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>Username</Text>
         <TextInput
@@ -86,6 +87,10 @@ const AuthorizationComponent = () => {
           secureTextEntry
         />
       </View>
+
+      {error && (
+        <Text style={styles.error}>{error}</Text>
+      )}
 
       <TouchableOpacity
         style={{
@@ -116,6 +121,14 @@ const styles = StyleSheet.create({
     borderTopColor: "#29648a",
     height: Dimensions.get("window").height - 130,
   },
+  textHeader: {
+    textAlign: "center",
+    fontSize: 22,
+    color: "#29648a",
+    fontWeight: "bold",
+    marginBottom: 20,
+    textTransform: "uppercase"
+  },
   mainContainer: {
     backgroundColor: "#29648a",
     padding: 20,
@@ -141,8 +154,9 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   error: {
-    color: "#a16e83",
+    color: "red",
     fontSize: 12,
+    textAlign: "center",
   },
   errorText: {
     color: "#a16e83",

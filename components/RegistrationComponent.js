@@ -13,13 +13,13 @@ import { AuthContext } from "../context/AuthContext";
 
 const RegistrationComponent = () => {
   const { login, logout, user } = useContext(AuthContext);
-  const [error, setError] = useState([]);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    repeatPassword: "",
-    checkbox: false,
+    confirmPassword: "",
+    agree: false,
     firstName: "",
     lastName: "",
   });
@@ -50,20 +50,23 @@ const RegistrationComponent = () => {
 
   const handleInputChange = async (field, value) => {
     if (field === "username") {
-      const userExists = await checkIfUserExists(value);
-      if (userExists) {
-        alert("Пользователь с таким именем уже существует");
-        return;
-      }
+      setErrors({ ...errors, userExists: "", usernameLong: "", isUsernameValid: "" });
+    }
+    if (field === "firstName") {
+      setErrors({ ...errors, isFirstnameValid: "" });
+    }
+    if (field === "lastName") {
+      setErrors({ ...errors, isLastnameValid: "" });
     }
     if (field === "email") {
-      const userExists = await checkIfEmailExists(value);
-      if (userExists) {
-        alert("Этот почтовый ящик уже зарегистрирован");
-        return;
-      }
+      setErrors({ ...errors, emailTaken: "", invalidEmail: "" });
     }
-
+    if (field === "password") {
+      setErrors({ ...errors, passwordMatch: "", passwordLong: "" });
+    }
+    if (field === "confirmPassword") {
+      setErrors({ ...errors, passwordMatch: "" });
+    }
     setFormData({ ...formData, [field]: value });
   };
 
@@ -73,7 +76,114 @@ const RegistrationComponent = () => {
     return emailRegex.test(email);
   };
 
+  const passwordMatch = (pass, confirmPass) => {
+    return pass === confirmPass;
+  };
+
+  const isLatinAndDigits = /^[a-zA-Z0-9]+$/;
+
+  const [errors, setErrors] = useState({
+    userExists: "",
+    emailTaken: "",
+    invalidEmail: "",
+    passwordMatch: "",
+    isFormFilled: "",
+    usernameLong: "",
+    passwordLong: "",
+    isUsernameValid: "",
+    isFirstnameValid: "",
+    isLastnameValid: "",
+  });
+
   const handleRegister = async () => {
+    const userExists = await checkIfUserExists(formData.username);
+    const usernameLong = (await formData.username.length) >= 3;
+    const passwordLong = (await formData.password.length) >= 8;
+
+    const isUsernameValid = await isLatinAndDigits.test(formData.username);
+    const isFirstnameValid = await isLatinAndDigits.test(formData.firstName);
+    const isLastnameValid = await isLatinAndDigits.test(formData.lastName);
+    
+    const emailTaken = await checkIfEmailExists(formData.email);
+    const username = await formData.username;
+    const email = await formData.email;
+    const isMailValid = await isEmailValid(formData.email);
+    const password = await formData.password;
+    const confirmPassword = await formData.confirmPassword;
+    const agree = await formData.agree;
+    const passMatch = await passwordMatch(
+      formData.password,
+      formData.confirmPassword
+    );
+
+    if (userExists) {
+      setErrors({
+        ...errors,
+        userExists: "Пользователь с таким именем уже существует",
+      });
+      return;
+    }
+
+    if (!isUsernameValid) {
+      setErrors({
+        ...errors,
+        isUsernameValid: "Разрешены только буквы латинского алфавита и цифры",
+      });
+      return;
+    }
+
+    if (!isFirstnameValid) {
+      setErrors({
+        ...errors,
+        isFirstnameValid: "Разрешены только буквы латинского алфавита и цифры",
+      });
+      return;
+    }
+
+    if (!isLastnameValid) {
+      setErrors({
+        ...errors,
+        isLastnameValid: "Разрешены только буквы латинского алфавита и цифры",
+      });
+      return;
+    }
+
+    if (!usernameLong) {
+      setErrors({ ...errors, usernameLong: "Минимум 3 символа" });
+      return;
+    }
+
+    if (emailTaken) {
+      setErrors({
+        ...errors,
+        emailTaken: "Этот почтовый ящик уже зарегистрирован",
+      });
+      return;
+    }
+
+    if (!isMailValid) {
+      setErrors({
+        ...errors,
+        invalidEmail: "Неверный формат адреса электронной почты",
+      });
+      return;
+    }
+
+    if (!passwordLong) {
+      setErrors({ ...errors, passwordLong: "Минимум 8 символов" });
+      return;
+    }
+
+    if (!passMatch) {
+      setErrors({ ...errors, passwordMatch: "Пароли не совпадают" });
+      return;
+    }
+
+    if (!username || !email || !password || !confirmPassword || !agree) {
+      setErrors({ ...errors, isFormFilled: "Заполните все необходимые поля" });
+      return;
+    }
+
     try {
       const response = await Axios.post(
         "https://caapp-server.onrender.com/register",
@@ -88,13 +198,30 @@ const RegistrationComponent = () => {
 
   return (
     <>
+      <Text style={[styles.textHeader]}>Registration</Text>
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Username</Text>
+        <Text style={styles.label}>
+          Username <Text style={styles.asterix}>*</Text>
+        </Text>
         <TextInput
-          style={styles.input}
+          style={{
+            ...styles.input,
+            borderColor: errors && errors.userExists ? "red" : "#29648a",
+          }}
           value={formData.username}
           onChangeText={(text) => handleInputChange("username", text)}
         />
+        {errors && errors.userExists ? (
+          <Text style={styles.error}>
+            Пользователь с таким именем уже существует
+          </Text>
+        ) : null}
+        {errors && errors.usernameLong ? (
+          <Text style={styles.error}>Минимум 3 символа</Text>
+        ) : null}
+        {errors && errors.isUsernameValid ? (
+          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
+        ) : null}
       </View>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>First Name</Text>
@@ -103,6 +230,9 @@ const RegistrationComponent = () => {
           value={formData.firstName}
           onChangeText={(text) => handleInputChange("firstName", text)}
         />
+        {errors && errors.isFirstnameValid ? (
+          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
+        ) : null}
       </View>
 
       <View style={styles.labelContainer}>
@@ -112,36 +242,69 @@ const RegistrationComponent = () => {
           value={formData.lastName}
           onChangeText={(text) => handleInputChange("lastName", text)}
         />
+        {errors && errors.isLastnameValid ? (
+          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
+        ) : null}
       </View>
 
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>E-mail</Text>
+        <Text style={styles.label}>
+          E-mail <Text style={styles.asterix}>*</Text>
+        </Text>
         <TextInput
-          style={styles.input}
+          style={{
+            ...styles.input,
+            borderColor:
+              (errors && errors.emailTaken) || errors.invalidEmail
+                ? "red"
+                : "#29648a",
+          }}
           value={formData.email}
           textContentType="emailAddress"
           onChangeText={(text) => handleInputChange("email", text)}
         />
+        {errors && errors.emailTaken ? (
+          <Text style={styles.error}>Электронная почта уже занята</Text>
+        ) : null}
+        {errors && errors.invalidEmail ? (
+          <Text style={styles.error}>Неверный формат электронной почты</Text>
+        ) : null}
       </View>
 
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Password</Text>
+        <Text style={styles.label}>
+          Password <Text style={styles.asterix}>*</Text>
+        </Text>
         <TextInput
-          style={styles.input}
+          style={{
+            ...styles.input,
+            borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
+          }}
           value={formData.password}
           onChangeText={(text) => handleInputChange("password", text)}
           secureTextEntry
         />
+        {errors && errors.passwordLong ? (
+          <Text style={styles.error}>Минимум 8 символов</Text>
+        ) : null}
       </View>
 
       <View style={styles.labelContainer}>
-        <Text style={styles.label}>Repeat password</Text>
+        <Text style={styles.label}>
+          Repeat password <Text style={styles.asterix}>*</Text>
+        </Text>
         <TextInput
-          style={styles.input}
+          style={{
+            ...styles.input,
+            borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
+          }}
           value={formData.confirmPassword}
           onChangeText={(text) => handleInputChange("confirmPassword", text)}
           secureTextEntry
         />
+        {errors && errors.passwordMatch ? (
+          <Text style={styles.error}>Пароли не совпадают</Text>
+        ) : null}
       </View>
 
       <View style={styles.checkboxContainer}>
@@ -156,9 +319,14 @@ const RegistrationComponent = () => {
           onPress={() => handleInputChange("agree", !formData.agree)}
           style={styles.checkboxLabel}
         >
-          I agree with the processing of personal data
+          I agree with the processing of personal data{" "}
+          <Text style={styles.asterix}>*</Text>
         </Text>
       </View>
+
+      {errors && errors.isFormFilled ? (
+        <Text style={styles.error}>Заполните все необходимые поля</Text>
+      ) : null}
 
       <TouchableOpacity
         style={{
@@ -189,6 +357,14 @@ const styles = StyleSheet.create({
     borderTopColor: "#29648a",
     height: Dimensions.get("window").height - 130,
   },
+  textHeader: {
+    textAlign: "center",
+    fontSize: 22,
+    color: "#29648a",
+    fontWeight: "bold",
+    marginBottom: 20,
+    textTransform: "uppercase",
+  },
   mainContainer: {
     backgroundColor: "#29648a",
     padding: 20,
@@ -214,8 +390,9 @@ const styles = StyleSheet.create({
     color: "#555",
   },
   error: {
-    color: "#a16e83",
+    color: "red",
     fontSize: 12,
+    textAlign: "center",
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -252,6 +429,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     marginTop: 10,
+  },
+  asterix: {
+    color: "red",
+    fontSize: 18,
   },
 });
 

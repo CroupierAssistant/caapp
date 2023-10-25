@@ -10,9 +10,11 @@ function Neighbours() {
   const { user } = useContext(AuthContext);
   const [isPremium, setIsPremium] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [timeLimit, setTimeLimit] = useState(60000)
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
+    setTimeLimit(value * 6000)
     setSelectedButton(value);
   };
 
@@ -24,7 +26,7 @@ function Neighbours() {
     navigation.navigate("NeighboursTest", {
       mode: isEnabled ? "sandbox" : "timelimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 37),
-      timeLimit: 60000,
+      timeLimit: timeLimit,
       gameName: 'Neighbours'
     });
   };
@@ -118,7 +120,7 @@ function Neighbours() {
 
             <Text style={styles.timeLimitDescription}>
               The goal is to pick the right neighbours for given amount of
-              numbers in 60 seconds. The order of selection does not matter. You can also change your selection before clicking "Confirm".
+              numbers in {timeLimit / 1000} seconds. The order of selection does not matter. You can also change your selection before clicking "Confirm".
             </Text>
           </>
         </>

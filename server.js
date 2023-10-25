@@ -103,18 +103,15 @@ app.post("/login", async (req, res) => {
 app.post("/saveTestResult", async (req, res) => {
   try {
     const {
-      username,
-      firstName,
-      lastName,
+      user,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
-      showUserData
     } = req.body;
 
-    if (!username || !game || !mode || !timeSpentTest) {
+    if (!user || !game || !mode || !timeSpentTest) {
       return res
         .status(400)
         .json({ error: "Please provide all required fields" });
@@ -144,15 +141,12 @@ app.post("/saveTestResult", async (req, res) => {
         : TexasHoldemResult;
 
     const newTestResult = await ModelSchema.create({
-      username,
-      firstName,
-      lastName,
+      user,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
-      showUserData,
     });
 
     return res.json({
@@ -214,8 +208,7 @@ app.get("/ratings/:gameName", async (req, res) => {
     const ratings = await resultModel.find({
       game: gameName,
       mode: { $ne: "sandbox" },
-      username: { $ne: "/guest/" },
-    }).select("username percentage timeSpentTest firstName lastName amountOfCards showUserData");
+    }).select("user percentage timeSpentTest amountOfCards");
 
     res.json(ratings);
   } catch (error) {
