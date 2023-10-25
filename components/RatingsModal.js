@@ -27,60 +27,61 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const groupedByAmountOfCards = {
     10: [],
     20: [],
-    30: [],
+    30: []
   };
-
-  ratings.forEach((item) => {
+  
+  ratings.forEach(item => {
     if (item.amountOfCards) {
       const key = item.amountOfCards.toString();
       groupedByAmountOfCards[key].push(item);
     }
   });
-
+  
   const aggregatedData = {};
-
-  Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
-    const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
-      (result, item) => {
-        const key = item.username;
-        if (!result[key]) {
-          result[key] = {
-            maxPercentage: -Infinity,
-            minTimeSpentTest: Infinity,
-            amountOfCards: item.amountOfCards,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            showUserData: item.showUserData,
-          };
-        }
-
-        if (item.percentage > result[key].maxPercentage) {
-          result[key].maxPercentage = item.percentage;
+  
+  Object.keys(groupedByAmountOfCards).forEach(amountOfCards => {
+    const groupedData = groupedByAmountOfCards[amountOfCards].reduce((result, item) => {
+      const key = item.username;
+      if (!result[key]) {
+        result[key] = {
+          maxPercentage: -Infinity,
+          minTimeSpentTest: Infinity,
+          amountOfCards: item.amountOfCards,
+          firstName: item.firstName,
+          lastName: item.lastName,
+          showData: item.showData,
+        };
+      }
+  
+      if (item.percentage > result[key].maxPercentage) {
+        result[key].maxPercentage = item.percentage;
+        result[key].minTimeSpentTest = item.timeSpentTest;
+      } else if (item.percentage === result[key].maxPercentage) {
+        if (item.timeSpentTest < result[key].minTimeSpentTest) {
           result[key].minTimeSpentTest = item.timeSpentTest;
-        } else if (item.percentage === result[key].maxPercentage) {
-          if (item.timeSpentTest < result[key].minTimeSpentTest) {
-            result[key].minTimeSpentTest = item.timeSpentTest;
-          }
         }
-
-        return result;
-      },
-      {}
-    );
-
-    console.log(groupedData);
-
-    aggregatedData[amountOfCards] = Object.keys(groupedData).map(
-      (username) => ({
-        username,
-        maxPercentage: groupedData[username].maxPercentage,
-        minTimeSpentTest: groupedData[username].minTimeSpentTest,
-        amountOfCards: groupedData[username].amountOfCards,
-        firstName: groupedData[username].firstName,
-        lastName: groupedData[username].lastName,
-        showUserData: groupedData[username].showUserData,
-      })
-    );
+      }
+  
+      return result;
+    }, {});
+  
+    aggregatedData[amountOfCards] = Object.keys(groupedData).map(username => ({
+      username,
+      maxPercentage: groupedData[username].maxPercentage,
+      minTimeSpentTest: groupedData[username].minTimeSpentTest,
+      amountOfCards: groupedData[username].amountOfCards,
+      firstName: groupedData[username].firstName,
+      lastName: groupedData[username].lastName,
+      showData: groupedData[username].showData,
+    })).sort((a, b) => {
+      // Сначала сортируем по maxPercentage в убывающем порядке
+      if (a.maxPercentage !== b.maxPercentage) {
+        return b.maxPercentage - a.maxPercentage;
+      }
+  
+      // Если maxPercentage совпадают, сортируем по minTimeSpentTest в возрастающем порядке
+      return a.minTimeSpentTest - b.minTimeSpentTest;
+    });
   });
 
   console.log(aggregatedData);
@@ -157,8 +158,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.username}
-                      {item.showUserData && `${item.firstName} ${item.lastName}`}
+                      {item.username}{item.showUserData && `${item.firstName} ${item.lastName}`}
                     </Text>
                     <Text
                       style={{
