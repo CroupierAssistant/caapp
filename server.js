@@ -61,6 +61,8 @@ app.post("/register", async (req, res) => {
     // Создание нового пользователя
     const newUser = await User.create({
       username,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
