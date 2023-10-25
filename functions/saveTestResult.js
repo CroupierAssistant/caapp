@@ -12,7 +12,7 @@ const saveTestResult = async (
     const response = await axios.post(
       "https://caapp-server.onrender.com/saveTestResult",
       {
-        user: user, // Передаем объект пользователя
+        user, // Передаем объект пользователя
         amountOfCards,
         game,
         mode,

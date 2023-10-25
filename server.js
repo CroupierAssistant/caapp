@@ -104,6 +104,7 @@ app.post("/login", async (req, res) => {
 
 app.post("/saveTestResult", async (req, res) => {
   try {
+    console.log(req.body);
     const {
       user,
       amountOfCards,
