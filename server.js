@@ -38,7 +38,7 @@ async function comparePassword(inputPassword, hashedPassword) {
 
 app.post("/register", async (req, res) => {
   try {
-    const { username, email, password, agree } = req.body;
+    const { username, firstName, lastName, email, password, agree } = req.body;
 
     // Проверка на обязательные поля
     if (!username || !email || !password || !agree) {
