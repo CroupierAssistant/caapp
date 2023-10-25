@@ -157,7 +157,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.username}{item.showUserData && `${item.firstName} ${item.lastName}`}
+                      {item.username}
+                      {item.showUserData && `${item.firstName} ${item.lastName}`}
                     </Text>
                     <Text
                       style={{

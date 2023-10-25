@@ -211,7 +211,7 @@ app.get("/ratings/:gameName", async (req, res) => {
     const ratings = await resultModel.find({
       game: gameName,
       mode: { $ne: "sandbox" },
-    }).select("user percentage timeSpentTest amountOfCards");
+    }).select("user percentage timeSpentTest amountOfCards firstName lastName showUserData");
 
     res.json(ratings);
   } catch (error) {
