@@ -1,24 +1,32 @@
 import axios from "axios";
 
-const saveTestResult = async (user, amountOfCards, game, mode, percentage, timeSpentTest) => {
+const saveTestResult = async (
+  username,
+  firstName,
+  lastName,
+  amountOfCards,
+  game,
+  mode,
+  percentage,
+  timeSpentTest,
+  showUserData
+) => {
   try {
-    console.log(user, amountOfCards, game, mode, percentage, timeSpentTest);
     const response = await axios.post(
-      'https://caapp-server.onrender.com/saveTestResult',
+      "https://caapp-server.onrender.com/saveTestResult",
       {
-        user,
+        username,
+        firstName,
+        lastName,
         amountOfCards,
         game,
         mode,
         percentage,
         timeSpentTest,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        showUserData
       }
     );
+
     return response.data;
   } catch (error) {
     throw error.response.data;

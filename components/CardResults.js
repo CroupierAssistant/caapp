@@ -1,20 +1,26 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import saveTestResult from "../functions/saveTestResult";
 import { AuthContext } from "../context/AuthContext";
 
-const CardResults = ({
-  cardResults,
-  timeSpent,
-  mode,
-  amountOfCards,
-  gameName,
-}) => {
+
+const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
-
+  
   const { user } = useContext(AuthContext);
+
+  const handleSaveTestResult = async ({nickname, firstN, lastN, cards, game, type, percent, time, showData}) => {
+    try {
+      const response = await saveTestResult(nickname, firstN, lastN, cards, game, type, percent, time, showData);
+      console.log(response);
+      // Handle success
+    } catch (error) {
+      console.error(error);
+      // Handle error
+    }
+  };
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -28,17 +34,6 @@ const CardResults = ({
     )}.${String(ms).padStart(2, "0")}`;
   };
 
-  const handleSaveTestResult = async ({user,amountOfCards,game,mode,percentage,time,}) => {
-    try {
-      const response = await saveTestResult(user._id,amountOfCards,game,mode,percentage,time);
-      console.log(response);
-      // Handle success
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
-  };
-
   useEffect(() => {
     let correctAnswers = 0;
 
@@ -48,31 +43,31 @@ const CardResults = ({
       }
     });
 
-    const calculatedPercentage =
-      (correctAnswers * 100) /
-      (mode == "timelimit" ? amountOfCards : cardResults.length);
+    const calculatedPercentage = (correctAnswers * 100) / (mode == 'timelimit' ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
 
     handleSaveTestResult({
-      user: user,
-      amountOfCards,
+      nickname: user && user.username ? user.username : '\/guest\/',
+      firstN: user && user.firstName ? user.firstName : '',
+      lastN: user && user.lastName ? user.lastName : '',
+      cards: amountOfCards,
       game: gameName,
-      mode,
-      percentage: calculatedPercentage,
+      type: mode,
+      percent: calculatedPercentage,
       time: timeSpent,
-    });
+      showData: user && user.showUserData ? user.showUserData : false,
+    })
+    
   }, [cardResults]);
 
   return (
     <View style={styles.container}>
       <Text style={[styles.header, { lineHeight: 22 }]}>
-        Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}%{" "}
-        {` in ${formatTime(timeSpent)}`}
+        Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}% {` in ${formatTime(timeSpent)}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
-        Correct answers: {rightAnswersAmount} /{" "}
-        {mode == "timelimit" ? amountOfCards : cardResults.length}
+        Correct answers: {rightAnswersAmount} / {(mode == 'timelimit' ? amountOfCards : cardResults.length)}
       </Text>
       <FlatList
         data={cardResults}
@@ -108,20 +103,10 @@ const CardResults = ({
               Your answer: {item.userInput ? item.userInput : "—"}
             </Text>
             {item.userInput != item.rightAnswer && (
-              <Ionicons
-                name="close-sharp"
-                style={styles.icon}
-                size={40}
-                color="#fff"
-              />
+              <Ionicons name="close-sharp" style={styles.icon} size={40} color="#fff" />
             )}
             {item.userInput == item.rightAnswer && (
-              <Ionicons
-                name="checkmark-sharp"
-                style={styles.icon}
-                size={40}
-                color="#fff"
-              />
+              <Ionicons name="checkmark-sharp" style={styles.icon} size={40} color="#fff" />
             )}
           </View>
         )}

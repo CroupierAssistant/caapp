@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const RussianAnteSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Это указывает на модель, с которой у вас есть отношение
-  },
+  username: String,
+  firstName: String,
+  lastName: String,
+  showUserData: Boolean,
   amountOfCards: Number,
   game: String,
   mode: String,
