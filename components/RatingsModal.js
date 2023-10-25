@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+const User = require("../models/User");
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
@@ -37,29 +38,43 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     }
   });
 
+  const getUserById = async (userId) => {
+    try {
+      const response = await axios.get(
+        `https://caapp-server.onrender.com/users/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const aggregatedData = {};
 
-  Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+  Object.keys(groupedByAmountOfCards).forEach(async (amountOfCards) => {
     const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
-      (result, item) => {
-        const key = item.username;
-        if (!result[key]) {
-          result[key] = {
+      async (result, item) => {
+        const key = item.user;
+        const user = await getUserById(key); // Находим пользователя по _id
+        console.log(user);
+
+        if (!result[user._id]) {
+          result[user._id] = {
             maxPercentage: -Infinity,
             minTimeSpentTest: Infinity,
             amountOfCards: item.amountOfCards,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            showUserData: item.showUserData,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            showUserData: user.showUserData,
           };
         }
 
-        if (item.percentage > result[key].maxPercentage) {
-          result[key].maxPercentage = item.percentage;
-          result[key].minTimeSpentTest = item.timeSpentTest;
-        } else if (item.percentage === result[key].maxPercentage) {
-          if (item.timeSpentTest < result[key].minTimeSpentTest) {
-            result[key].minTimeSpentTest = item.timeSpentTest;
+        if (item.percentage > result[user._id].maxPercentage) {
+          result[user._id].maxPercentage = item.percentage;
+          result[user._id].minTimeSpentTest = item.timeSpentTest;
+        } else if (item.percentage === result[user._id].maxPercentage) {
+          if (item.timeSpentTest < result[user._id].minTimeSpentTest) {
+            result[user._id].minTimeSpentTest = item.timeSpentTest;
           }
         }
 
@@ -70,20 +85,16 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
 
     console.log(groupedData);
 
-    aggregatedData[amountOfCards] = Object.keys(groupedData).map(
-      (username) => ({
-        username,
-        maxPercentage: groupedData[username].maxPercentage,
-        minTimeSpentTest: groupedData[username].minTimeSpentTest,
-        amountOfCards: groupedData[username].amountOfCards,
-        firstName: groupedData[username].firstName,
-        lastName: groupedData[username].lastName,
-        showUserData: groupedData[username].showUserData,
-      })
-    );
+    aggregatedData[amountOfCards] = Object.keys(groupedData).map((userId) => ({
+      username: groupedData[userId].username,
+      maxPercentage: groupedData[userId].maxPercentage,
+      minTimeSpentTest: groupedData[userId].minTimeSpentTest,
+      amountOfCards: groupedData[userId].amountOfCards,
+      firstName: groupedData[userId].firstName,
+      lastName: groupedData[userId].lastName,
+      showUserData: groupedData[userId].showUserData,
+    }));
   });
-
-  console.log(aggregatedData);
 
   return (
     <Modal visible={isVisible} transparent animationType="none">
@@ -157,7 +168,9 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.username}{item.showUserData && `${item.firstName} ${item.lastName}`}
+                      {item.username}
+                      {item.showUserData &&
+                        `${item.firstName} ${item.lastName}`}
                     </Text>
                     <Text
                       style={{

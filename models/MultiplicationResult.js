@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
 const MultiplicationSchema = new mongoose.Schema({
-  username: String,
-  lastName: String,
-  firstName: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", // Это указывает на модель, с которой у вас есть отношение
+  },
   amountOfCards: Number,
   game: String,
   mode: String,
   percentage: Number,
   timeSpentTest: Number,
-  showUserData: Boolean,
   date: {
     type: Date,
     default: Date.now,

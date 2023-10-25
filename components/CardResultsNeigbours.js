@@ -12,10 +12,9 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
   
   const { user } = useContext(AuthContext);
 
-  const handleSaveTestResult = async ({nickname, firstName, lastName, amountOfCards, game, type, percent, time}) => {
-
+  const handleSaveTestResult = async ({user,amountOfCards,game,mode,percentage,time,}) => {
     try {
-      const response = await saveTestResult(nickname, firstName, lastName, amountOfCards, game, type, percent, time);
+      const response = await saveTestResult(user._id,amountOfCards,game,mode,percentage,time);
       console.log(response);
       // Handle success
     } catch (error) {
@@ -52,15 +51,13 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     setPercentage(calculatedPercentage);
     
     handleSaveTestResult({
-      nickname: user && user.username ? user.username : '\/guest\/',
-      firstName: user && user.firstName ? user.firstName : '',
-      lastName: user && user.lastName ? user.lastName : '',
-      amountOfCards: amountOfCards,
+      user: user,
+      amountOfCards,
       game: gameName,
-      type: mode,
-      percent: calculatedPercentage,
-      time: timeSpent
-    })
+      mode,
+      percentage: calculatedPercentage,
+      time: timeSpent,
+    });
   }, [cardResults]);
 
   function areAllElementsPresent(arrA, arrB) {
