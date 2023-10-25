@@ -38,7 +38,7 @@ async function comparePassword(inputPassword, hashedPassword) {
 
 app.post("/register", async (req, res) => {
   try {
-    const { username, firstName, lastName, email, password, agree } = req.body;
+    const { username, email, password, agree } = req.body;
 
     // Проверка на обязательные поля
     if (!username || !email || !password || !agree) {
@@ -61,8 +61,6 @@ app.post("/register", async (req, res) => {
     // Создание нового пользователя
     const newUser = await User.create({
       username,
-      firstName,
-      lastName,
       email,
       password: hashedPassword,
     });
@@ -104,17 +102,19 @@ app.post("/login", async (req, res) => {
 
 app.post("/saveTestResult", async (req, res) => {
   try {
-    console.log(req.body);
     const {
-      user,
+      username,
+      firstName,
+      lastName,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
+      showUserData
     } = req.body;
 
-    if (!user || !game || !mode || !timeSpentTest) {
+    if (!username || !game || !mode || !timeSpentTest) {
       return res
         .status(400)
         .json({ error: "Please provide all required fields" });
@@ -144,12 +144,15 @@ app.post("/saveTestResult", async (req, res) => {
         : TexasHoldemResult;
 
     const newTestResult = await ModelSchema.create({
-      user,
+      username,
+      firstName,
+      lastName,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
+      showUserData,
     });
 
     return res.json({
@@ -211,7 +214,8 @@ app.get("/ratings/:gameName", async (req, res) => {
     const ratings = await resultModel.find({
       game: gameName,
       mode: { $ne: "sandbox" },
-    }).select("user percentage timeSpentTest amountOfCards firstName lastName showUserData");
+      username: { $ne: "/guest/" },
+    }).select("username percentage timeSpentTest firstName lastName amountOfCards showUserData");
 
     res.json(ratings);
   } catch (error) {

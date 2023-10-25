@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const RouletteSeriesSchema = new mongoose.Schema({
   username: String,
-  firstName: String,
   lastName: String,
-  showUserData: Boolean,
+  firstName: String,
   amountOfCards: Number,
   game: String,
   mode: String,
   percentage: Number,
   timeSpentTest: Number,
+  showUserData: Boolean,
   date: {
     type: Date,
     default: Date.now,
