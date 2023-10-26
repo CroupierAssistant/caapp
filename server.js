@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const User = require("./models/User");
+const findUserByUsername = require("./models/User");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -111,7 +112,7 @@ app.post("/saveTestResult", async (req, res) => {
       mode,
       percentage,
       timeSpentTest,
-      showUserData
+      showUserData,
     } = req.body;
 
     if (!username || !game || !mode || !timeSpentTest) {
@@ -211,19 +212,35 @@ app.get("/ratings/:gameName", async (req, res) => {
   }
 
   try {
-    const ratings = await resultModel.find({
-      game: gameName,
-      mode: { $ne: "sandbox" },
-      username: { $ne: "/guest/" },
-    }).select("username percentage timeSpentTest firstName lastName amountOfCards showUserData");
+    const ratings = await resultModel
+      .find({
+        game: gameName,
+        mode: { $ne: "sandbox" },
+        username: { $ne: "/guest/" },
+      })
+      .select("username percentage timeSpentTest amountOfCards");
 
-    res.json(ratings);
+    const updatedRatings = await Promise.all(
+      ratings.map(async (rating) => {
+        const user = await findUserByUsername(rating.username);
+        return {
+          percentage: rating.percentage,
+          timeSpentTest: rating.timeSpentTest,
+          amountOfCards: rating.amountOfCards,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          showUserData: user.showUserData,
+        };
+      })
+    );
+
+    res.json(updatedRatings);
   } catch (error) {
     console.error("Ошибка при получении рейтингов:", error);
     res.status(500).json({ message: "Внутренняя ошибка сервера" });
   }
 });
-
 
 app.get("/userExists", async (req, res) => {
   const { username } = req.query;
@@ -255,15 +272,15 @@ app.get("/emailExists", async (req, res) => {
   }
 });
 
-app.get('/users/:userId', async (req, res) => {
+app.get("/users/:userId", async (req, res) => {
   const userId = req.params.userId;
 
   try {
     const user = await User.findById(userId);
     res.json(user);
   } catch (error) {
-    console.error('Ошибка при поиске пользователя:', error);
-    res.status(500).json({ error: 'Ошибка сервера' });
+    console.error("Ошибка при поиске пользователя:", error);
+    res.status(500).json({ error: "Ошибка сервера" });
   }
 });
 
