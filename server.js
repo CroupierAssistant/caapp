@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
+const multer  = require('multer');
+
 // const {findUserById} = require("./models/User");
 // const User = require("./models/User");
 const { User, findUserById } = require('./models/User');
@@ -23,6 +25,16 @@ const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestRes
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
 
 const app = express();
+const upload = multer({ dest: 'uploads/' });
+app.post('/upload', upload.single('photo'), (req, res) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error('Please upload a file');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  res.send(file);
+});
 
 app.use(cors());
 app.use(bodyParser.json());

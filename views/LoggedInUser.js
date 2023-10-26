@@ -1,10 +1,22 @@
-import React from "react";
-import { View, TouchableOpacity, Text, StyleSheet, Dimensions } from "react-native";
+import React, {useState} from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Button,
+  Image,
+  Alert,
+} from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+
+import ImagePicker from "react-native-image-picker";
+import axios from "axios";
 
 const LoggedInUser = ({
   user,
@@ -16,6 +28,35 @@ const LoggedInUser = ({
   onSupport,
   logout,
 }) => {
+  const [photo, setPhoto] = useState(null);
+
+  const handleUpload = () => {
+    const formData = new FormData();
+    formData.append("photo", {
+      uri: photo.uri,
+      type: "image/jpeg", // или другой подходящий MIME-тип
+      name: "photo.jpg",
+    });
+
+    axios
+      .post("https://caapp-server.onrender.com/upload", formData)
+      .then((response) => {
+        Alert.alert("Success", "Photo uploaded successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+        Alert.alert("Error", "An error occurred while uploading the photo");
+      });
+  };
+
+  const handleChoosePhoto = () => {
+    ImagePicker.showImagePicker({ title: "Choose Photo" }, (response) => {
+      if (response.uri) {
+        setPhoto(response);
+      }
+    });
+  };
+
   return (
     <View>
       <View style={styles.profileContainer}>
@@ -26,9 +67,19 @@ const LoggedInUser = ({
               {user.firstName} {user.lastName}
             </Text>
           )}
-          {!user.firstName && !user.lastName && (
+          {!user.firstName || !user.lastName && (
             <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
           )}
+        </View>
+        <View>
+          <Button title="Choose Photo" onPress={handleChoosePhoto} />
+          {photo && (
+            <Image
+              source={{ uri: photo.uri }}
+              style={{ width: 200, height: 200 }}
+            />
+          )}
+          {photo && <Button title="Upload Photo" onPress={handleUpload} />}
         </View>
         {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
