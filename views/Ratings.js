@@ -27,6 +27,7 @@ const Ratings = () => {
     "Texas Hold'em",
   ];
 
+  
   const handlePress = (gameName) => {
     setSelectedGame(gameName);
     setModalVisible(true);
