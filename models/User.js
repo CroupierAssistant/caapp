@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema, 'users');
 
 module.exports = { User };
-module.exports = User;
 
 const findUserById = async (userId) => {
   try {

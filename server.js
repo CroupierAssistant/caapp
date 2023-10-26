@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const {User, findUserById} = require("./models/User");
-const User = require("./models/User");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
