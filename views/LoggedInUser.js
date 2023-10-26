@@ -8,6 +8,7 @@ import {
   Button,
   Image,
   Alert,
+  Platform,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -15,7 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-import * as ImagePicker from "expo-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 
 import axios from "axios";
 
@@ -30,47 +31,45 @@ const LoggedInUser = ({
   logout,
 }) => {
   const [photo, setPhoto] = useState(null);
+  const SERVER_URL = "https://caapp-server.onrender.com";
 
-  const openImagePickerAsync = async () => {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const createFormData = (photo, body = {}) => {
+    const data = new FormData();
 
-    if (permissionResult.granted === false) {
-      Alert.alert(
-        "Permission Required",
-        "Permission to access camera roll is required!"
-      );
-      return;
-    }
+    data.append("photo", {
+      name: photo.fileName,
+      type: photo.type,
+      uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
+    });
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    Object.keys(body).forEach((key) => {
+      data.append(key, body[key]);
+    });
 
-    if (pickerResult.cancelled === true) {
-      return;
-    }
-
-    setPhoto(pickerResult.uri);
-    uploadImage(pickerResult);
+    return data;
   };
 
-  const uploadImage = async (imageData) => {
-    console.log(photo);
-    try {
-      const formData = new FormData();
-      formData.append("photo", {
-        uri: imageData.uri,
-        type: "image/jpeg",
-        name: "photo.jpg",
-      });
+  const handleChoosePhoto = () => {
+    launchImageLibrary({ noData: true }, (response) => {
+      // console.log(response);
+      if (response) {
+        setPhoto(response);
+      }
+    });
+  };
 
-      const response = await axios.post(
-        "https://caapp-server.onrender.com/upload",
-        formData
-      );
-      console.log("Upload success:", response.data);
-    } catch (error) {
-      console.error("Upload error:", error);
-    }
+  const handleUploadPhoto = () => {
+    fetch(`${SERVER_URL}/api/upload`, {
+      method: "POST",
+      body: createFormData(photo, { userId: "123" }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log("response", response);
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   return (
@@ -88,14 +87,22 @@ const LoggedInUser = ({
               <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
             ))}
         </View>
+
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           {photo && (
-            <Image source={photo} style={{ width: 200, height: 200 }} />
+            <>
+              <Image
+                source={{ uri: photo.uri }}
+                style={{ width: 300, height: 300 }}
+              />
+              <Button title="Upload Photo" onPress={handleUploadPhoto} />
+            </>
           )}
-          <Button title="Choose Image" onPress={openImagePickerAsync} />
+          <Button title="Choose Photo" onPress={handleChoosePhoto} />
         </View>
+
         {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
             <MaterialCommunityIcons

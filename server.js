@@ -27,31 +27,27 @@ const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestRes
 
 const app = express();
 
-const uploadFolder = path.join(__dirname, 'uploads');
+app.use(cors());
+app.use(bodyParser.json());
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+  destination(req, file, callback) {
+    callback(null, './images');
   },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + ext);
-  }
+  filename(req, file, callback) {
+    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+  },
 });
 
 const upload = multer({ storage });
 
-app.post('/upload', upload.single('photo'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    return res.status(400).send('Please upload a file');
-  }
-  res.send('File uploaded!');
+app.post('/api/upload', upload.array('photo', 3), (req, res) => {
+  console.log('file', req.files);
+  console.log('body', req.body);
+  res.status(200).json({
+    message: 'success!',
+  });
 });
-
-
-app.use(cors());
-app.use(bodyParser.json());
 
 async function hashPassword(password) {
   const saltRounds = 10;
