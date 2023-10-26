@@ -26,13 +26,26 @@ const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestRes
 
 const app = express();
 
-const upload = multer({ dest: 'uploads/' }); // Папка для сохранения загруженных файлов
+const uploadFolder = path.join(__dirname, 'uploads');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadFolder);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + ext);
+  }
+});
+
+const upload = multer({ storage });
 
 app.post('/upload', upload.single('photo'), (req, res) => {
-  const file = req.file; // Это объект, представляющий загруженный файл
-  // Теперь `file` можно обработать, сохранить или отправить куда-то еще
-
-  res.status(200).json({ message: 'File uploaded successfully' });
+  const file = req.file;
+  if (!file) {
+    return res.status(400).send('Please upload a file');
+  }
+  res.send('File uploaded!');
 });
 
 

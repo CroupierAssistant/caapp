@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-import ImagePicker from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
 
 import axios from "axios";
 
@@ -31,45 +31,43 @@ const LoggedInUser = ({
 }) => {
   const [photo, setPhoto] = useState(null);
 
-  const chooseImage = () => {
-    const options = {
-      title: "Select Image",
-      storageOptions: {
-        skipBackup: true,
-        path: "images",
-      },
-    };
+  const openImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker Error: ", response.error);
-      } else {
-        const source = { uri: response.uri };
-        setPhoto(source);
-        uploadImage(response);
-      }
-    });
+    if (permissionResult.granted === false) {
+      Alert.alert(
+        "Permission Required",
+        "Permission to access camera roll is required!"
+      );
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+  
+  if (pickerResult.cancelled === true) {
+    return;
+  }
+  
+  setPhoto(pickerResult.uri);
+  uploadImage(pickerResult);
   };
 
-  const uploadImage = (imageData) => {
-    const formData = new FormData();
-    formData.append("photo", {
-      uri: imageData.uri,
-      type: "image/jpeg",
-      name: "photo.jpg",
-    });
-
-    axios
-      .post("http://localhost:3000/upload", formData)
-      .then((response) => {
-        console.log("Upload success");
-      })
-      .catch((error) => {
-        console.error("Upload error", error);
+  const uploadImage = async (imageData) => {
+    try {
+      const formData = new FormData();
+      formData.append('photo', {
+        uri: imageData.uri,
+        type: 'image/jpeg',
+        name: 'photo.jpg',
       });
+  
+      const response = await axios.post('https://caapp-server.onrender.com/upload', formData);
+      console.log('Upload success:', response.data);
+    } catch (error) {
+      console.error('Upload error:', error);
+    }
   };
+
 
   return (
     <View>
@@ -92,7 +90,7 @@ const LoggedInUser = ({
           {photo && (
             <Image source={photo} style={{ width: 200, height: 200 }} />
           )}
-          <Button title="Choose Image" onPress={chooseImage} />
+          <Button title="Choose Image" onPress={openImagePickerAsync} />
         </View>
         {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
