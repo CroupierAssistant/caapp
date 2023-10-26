@@ -25,15 +25,27 @@ const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestRes
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
-app.post('/upload', upload.single('photo'), (req, res) => {
-  const file = req.file;
-  if (!file) {
-    const error = new Error('Please upload a file');
-    error.httpStatusCode = 400;
-    return next(error);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Specify the upload directory
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Rename file if needed
   }
-  res.send(file);
+});
+
+const upload = multer({ storage }).single('photo');
+
+app.post('/upload', (req, res) => {
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json(err);
+    } else if (err) {
+      return res.status(500).json(err);
+    }
+    return res.status(200).send(req.file);
+  });
 });
 
 app.use(cors());

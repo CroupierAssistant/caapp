@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from "react-native-image-picker";
 import axios from "axios";
 
 const LoggedInUser = ({
@@ -28,36 +28,37 @@ const LoggedInUser = ({
   onSupport,
   logout,
 }) => {
-  const [photo, setPhoto] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append('photo', {
-      uri: photo.path, // Путь к изображению
-      type: 'image/jpeg', // или другой подходящий MIME-тип
-      name: 'photo.jpg',
-    });
-
-    axios.post('https://caapp-server.onrender.com/upload', formData)
-      .then(response => {
-        Alert.alert('Success', 'Photo uploaded successfully');
-      })
-      .catch(error => {
-        console.error(error);
-        Alert.alert('Error', 'An error occurred while uploading the photo');
+  const handleImageUpload = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: selectedImage.uri,
+        name: selectedImage.fileName,
+        type: selectedImage.type,
       });
+
+      const response = await axios.post(
+        "https://caapp-server.onrender.com/upload",
+        formData
+      );
+      console.log("File uploaded successfully:", response.data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
 
-  const handleChoosePhoto = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true
-    }).then(image => {
-      setPhoto(image);
-    });
-  };
+  const handleImageSelect = async () => {
+    const options = {
+      mediaType: "photo",
+    };
+    const result = await DocumentPicker.getDocumentAsync(options);
 
+    if (!result.cancelled) {
+      setSelectedImage(result);
+    }
+  };
 
   return (
     <View>
@@ -69,19 +70,19 @@ const LoggedInUser = ({
               {user.firstName} {user.lastName}
             </Text>
           )}
-          {!user.firstName || !user.lastName && (
-            <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
-          )}
+          {!user.firstName ||
+            (!user.lastName && (
+              <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
+            ))}
         </View>
         <View>
-          <Button title="Choose Photo" onPress={handleChoosePhoto} />
-          {photo && (
-            <Image
-              source={{ uri: photo.uri }}
-              style={{ width: 200, height: 200 }}
-            />
+          <Button title="Select Image" onPress={handleImageSelect} />
+          {selectedImage && (
+            <>
+              <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+              <Button title="Upload Image" onPress={handleImageUpload} />
+            </>
           )}
-          {photo && <Button title="Upload Photo" onPress={handleUpload} />}
         </View>
         {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
