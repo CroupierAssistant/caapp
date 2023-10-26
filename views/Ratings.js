@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import RatingButton from "../components/RatingButton";
 import RatingsModal from "../components/RatingsModal";
+const findUserById = require('../models/User')
 
 const Ratings = () => {
   const [selectedGame, setSelectedGame] = useState(null);
@@ -27,7 +28,7 @@ const Ratings = () => {
     "Texas Hold'em",
   ];
 
-  
+
   const handlePress = (gameName) => {
     setSelectedGame(gameName);
     setModalVisible(true);
@@ -35,7 +36,7 @@ const Ratings = () => {
     fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
+        console.log(data);
         setRatings(data); // Предполагается, что данные приходят в формате JSON
       })
       .catch((error) => {
