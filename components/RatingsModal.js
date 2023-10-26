@@ -84,7 +84,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     });
   });
 
-  console.log(aggregatedData);
+  console.log(ratings);
 
   return (
     <Modal visible={isVisible} transparent animationType="none">

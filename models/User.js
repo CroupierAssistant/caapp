@@ -14,13 +14,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema, 'users');
 
-const findUserByUsername = async (username) => {
-  try {
-    const user = await User.findOne({ username });
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
-
-module.exports = {User, findUserByUsername};
+module.exports = User;
