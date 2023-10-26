@@ -28,21 +28,15 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
 
   const findUserById = async (userId) => {
     try {
-      const response = await axios.get(`https://caapp-server.onrender.com/users/${userId}`);
+      const response = await axios.get(
+        `https://caapp-server.onrender.com/users/${userId}`
+      );
       return response.data;
     } catch (error) {
-      console.error("Ошибка при поиске пользователя:", error);
+      // console.error("Ошибка при поиске пользователя:", error);
       throw error;
     }
   };
-
-  findUserById("65334cf2a08cbc5a17fb23ad")
-  .then(user => {
-    console.log(user);
-  })
-  .catch(error => {
-    console.error(error);
-  });
 
   const groupedByAmountOfCards = {
     10: [],
@@ -51,6 +45,13 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   };
 
   ratings.forEach((item) => {
+    findUserById(item.userId)
+      .then((user) => {
+        console.log(user);
+      })
+      .catch((error) => {
+        // console.error(error);
+      });
     if (item.amountOfCards) {
       const key = item.amountOfCards.toString();
       groupedByAmountOfCards[key].push(item);
