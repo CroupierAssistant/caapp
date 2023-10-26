@@ -255,6 +255,18 @@ app.get("/emailExists", async (req, res) => {
   }
 });
 
+app.get('/users/:userId', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+    res.json(user);
+  } catch (error) {
+    console.error('Ошибка при поиске пользователя:', error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
 const PORT = 10000;
 
 app.listen(PORT, () => {
