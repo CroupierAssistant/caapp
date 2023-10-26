@@ -16,6 +16,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 import ImagePicker from "react-native-image-picker";
+import DocumentPicker from 'react-native-document-picker';
 import axios from "axios";
 
 const LoggedInUser = ({
@@ -50,13 +51,18 @@ const LoggedInUser = ({
   };
 
   const handleImageSelect = async () => {
-    const options = {
-      mediaType: "photo",
-    };
-    const result = await DocumentPicker.getDocumentAsync(options);
+    try {
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.images],
+      });
 
-    if (!result.cancelled) {
       setSelectedImage(result);
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+      } else {
+        throw err;
+      }
     }
   };
 
