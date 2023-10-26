@@ -15,7 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
 
 const LoggedInUser = ({
@@ -32,30 +32,32 @@ const LoggedInUser = ({
 
   const handleUpload = () => {
     const formData = new FormData();
-    formData.append("photo", {
-      uri: photo.uri,
-      type: "image/jpeg", // или другой подходящий MIME-тип
-      name: "photo.jpg",
+    formData.append('photo', {
+      uri: photo.path, // Путь к изображению
+      type: 'image/jpeg', // или другой подходящий MIME-тип
+      name: 'photo.jpg',
     });
 
-    axios
-      .post("https://caapp-server.onrender.com/upload", formData)
-      .then((response) => {
-        Alert.alert("Success", "Photo uploaded successfully");
+    axios.post('https://caapp-server.onrender.com/upload', formData)
+      .then(response => {
+        Alert.alert('Success', 'Photo uploaded successfully');
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
-        Alert.alert("Error", "An error occurred while uploading the photo");
+        Alert.alert('Error', 'An error occurred while uploading the photo');
       });
   };
 
   const handleChoosePhoto = () => {
-    ImagePicker.showImagePicker({ title: "Choose Photo" }, (response) => {
-      if (response.uri) {
-        setPhoto(response);
-      }
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true
+    }).then(image => {
+      setPhoto(image);
     });
   };
+
 
   return (
     <View>
