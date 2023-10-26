@@ -107,14 +107,11 @@ app.post("/saveTestResult", async (req, res) => {
     const {
       userId,
       username,
-      firstName,
-      lastName,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
-      showUserData
     } = req.body;
 
     if (!username || !game || !mode || !timeSpentTest) {
@@ -149,14 +146,11 @@ app.post("/saveTestResult", async (req, res) => {
     const newTestResult = await ModelSchema.create({
       userId,
       username,
-      firstName,
-      lastName,
       amountOfCards,
       game,
       mode,
       percentage,
       timeSpentTest,
-      showUserData,
     });
 
     return res.json({

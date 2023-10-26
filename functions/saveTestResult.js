@@ -3,14 +3,11 @@ import axios from "axios";
 const saveTestResult = async (
   userId,
   username,
-  firstName,
-  lastName,
   amountOfCards,
   game,
   mode,
   percentage,
   timeSpentTest,
-  showUserData
 ) => {
   try {
     const response = await axios.post(
@@ -18,14 +15,11 @@ const saveTestResult = async (
       {
         userId,
         username,
-        firstName,
-        lastName,
         amountOfCards,
         game,
         mode,
         percentage,
         timeSpentTest,
-        showUserData
       }
     );
 

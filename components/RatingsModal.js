@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import axios from "axios";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
+  const [aggregatedData, setAggregatedData] = useState(null); // Добавляем состояние для хранения данных
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -38,79 +39,103 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     }
   };
 
-  const groupedByAmountOfCards = {
-    10: [],
-    20: [],
-    30: [],
-  };
-
-  ratings.forEach((item) => {
-    findUserById(item.userId)
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((error) => {
-        // console.error(error);
-      });
-    if (item.amountOfCards) {
-      const key = item.amountOfCards.toString();
-      groupedByAmountOfCards[key].push(item);
-    }
-  });
-
-  const aggregatedData = {};
-
-  Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
-    const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
-      (result, item) => {
-        const key = item.username;
-        if (!result[key]) {
-          result[key] = {
-            maxPercentage: -Infinity,
-            minTimeSpentTest: Infinity,
-            amountOfCards: item.amountOfCards,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            showUserData: item.showUserData,
-          };
-        }
-
-        if (item.percentage > result[key].maxPercentage) {
-          result[key].maxPercentage = item.percentage;
-          result[key].minTimeSpentTest = item.timeSpentTest;
-        } else if (item.percentage === result[key].maxPercentage) {
-          if (item.timeSpentTest < result[key].minTimeSpentTest) {
-            result[key].minTimeSpentTest = item.timeSpentTest;
+  useEffect(() => {
+    const getRatingData = async () => {
+      const updatedRatings = await Promise.all(
+        ratings.map(async (item) => {
+          try {
+            const user = await findUserById(item.userId);
+            if (user) {
+              return {
+                ...item,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                showUserData: user.showUserData,
+              };
+            }
+          } catch (error) {
+            console.error("Ошибка при получении данных о пользователе:", error);
+            return item;
           }
+        })
+      );
+
+      const groupedByAmountOfCards = {
+        10: [],
+        20: [],
+        30: [],
+      };
+
+      updatedRatings.forEach((item) => {
+        if (item.amountOfCards) {
+          const key = item.amountOfCards.toString();
+          groupedByAmountOfCards[key].push(item);
         }
-
-        return result;
-      },
-      {}
-    );
-
-    aggregatedData[amountOfCards] = Object.keys(groupedData)
-      .map((username) => ({
-        username,
-        maxPercentage: groupedData[username].maxPercentage,
-        minTimeSpentTest: groupedData[username].minTimeSpentTest,
-        amountOfCards: groupedData[username].amountOfCards,
-        firstName: groupedData[username].firstName,
-        lastName: groupedData[username].lastName,
-        showUserData: groupedData[username].showUserData,
-      }))
-      .sort((a, b) => {
-        // Сначала сортируем по maxPercentage в убывающем порядке
-        if (a.maxPercentage !== b.maxPercentage) {
-          return b.maxPercentage - a.maxPercentage;
-        }
-
-        // Если maxPercentage совпадают, сортируем по minTimeSpentTest в возрастающем порядке
-        return a.minTimeSpentTest - b.minTimeSpentTest;
       });
-  });
 
-  // console.log(ratings);
+      const newData = {};
+
+      Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+        const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
+          (result, item) => {
+            const key = item.username;
+            if (!result[key]) {
+              result[key] = {
+                maxPercentage: -Infinity,
+                minTimeSpentTest: Infinity,
+                amountOfCards: item.amountOfCards,
+                firstName: item.firstName,
+                lastName: item.lastName,
+                showUserData: item.showUserData,
+              };
+            }
+
+            if (item.percentage > result[key].maxPercentage) {
+              result[key].maxPercentage = item.percentage;
+              result[key].minTimeSpentTest = item.timeSpentTest;
+            } else if (item.percentage === result[key].maxPercentage) {
+              if (item.timeSpentTest < result[key].minTimeSpentTest) {
+                result[key].minTimeSpentTest = item.timeSpentTest;
+              }
+            }
+
+            return result;
+          },
+          {}
+        );
+
+        newData[amountOfCards] = Object.keys(groupedData)
+          .map((username) => ({
+            username,
+            maxPercentage: groupedData[username].maxPercentage,
+            minTimeSpentTest: groupedData[username].minTimeSpentTest,
+            amountOfCards: groupedData[username].amountOfCards,
+            firstName: groupedData[username].firstName,
+            lastName: groupedData[username].lastName,
+            showUserData: groupedData[username].showUserData,
+          }))
+          .sort((a, b) => {
+            if (a.maxPercentage !== b.maxPercentage) {
+              return b.maxPercentage - a.maxPercentage;
+            }
+            return a.minTimeSpentTest - b.minTimeSpentTest;
+          });
+      });
+
+      setAggregatedData(newData);
+    };
+
+    getRatingData();
+  }, [ratings]);
+
+  // Проверяем, есть ли данные перед использованием
+  if (!aggregatedData) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <Modal visible={isVisible} transparent animationType="none">
