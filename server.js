@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const {User} = require("./models/User");
+const {User, findUserById} = require("./models/User");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -262,7 +262,7 @@ app.get('/users/:userId', async (req, res) => {
   console.log("Сервер принимает: ", userId);
 
   try {
-    const user = await User.findById(userId);
+    const user = await findUserById(userId);
     res.json(user);
   } catch (error) {
     console.error('Ошибка при поиске пользователя:', error);
