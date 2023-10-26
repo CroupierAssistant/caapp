@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import RatingButton from "../components/RatingButton";
 import RatingsModal from "../components/RatingsModal";
-const findUserById = require('../models/User')
 
 const Ratings = () => {
   const [selectedGame, setSelectedGame] = useState(null);

@@ -259,6 +259,7 @@ app.get("/emailExists", async (req, res) => {
 
 app.get('/users/:userId', async (req, res) => {
   const userId = req.params.userId;
+  console.log("Сервер принимает: ", userId);
 
   try {
     const user = await User.findById(userId);

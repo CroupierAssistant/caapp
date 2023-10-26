@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+// import findUserById from "../functions/findUserById";
+import axios from "axios";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
@@ -24,64 +26,87 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     )}.${String(ms).padStart(2, "0")}`;
   };
 
+  const findUserById = async (userId) => {
+    try {
+      const response = await axios.get(`https://caapp-server.onrender.com/users/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Ошибка при поиске пользователя:", error);
+      throw error;
+    }
+  };
+
+  findUserById("65334cf2a08cbc5a17fb23ad")
+  .then(user => {
+    console.log(user);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
   const groupedByAmountOfCards = {
     10: [],
     20: [],
-    30: []
+    30: [],
   };
-  
-  ratings.forEach(item => {
+
+  ratings.forEach((item) => {
     if (item.amountOfCards) {
       const key = item.amountOfCards.toString();
       groupedByAmountOfCards[key].push(item);
     }
   });
-  
+
   const aggregatedData = {};
-  
-  Object.keys(groupedByAmountOfCards).forEach(amountOfCards => {
-    const groupedData = groupedByAmountOfCards[amountOfCards].reduce((result, item) => {
-      const key = item.username;
-      if (!result[key]) {
-        result[key] = {
-          maxPercentage: -Infinity,
-          minTimeSpentTest: Infinity,
-          amountOfCards: item.amountOfCards,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          showUserData: item.showUserData,
-        };
-      }
-  
-      if (item.percentage > result[key].maxPercentage) {
-        result[key].maxPercentage = item.percentage;
-        result[key].minTimeSpentTest = item.timeSpentTest;
-      } else if (item.percentage === result[key].maxPercentage) {
-        if (item.timeSpentTest < result[key].minTimeSpentTest) {
-          result[key].minTimeSpentTest = item.timeSpentTest;
+
+  Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+    const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
+      (result, item) => {
+        const key = item.username;
+        if (!result[key]) {
+          result[key] = {
+            maxPercentage: -Infinity,
+            minTimeSpentTest: Infinity,
+            amountOfCards: item.amountOfCards,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            showUserData: item.showUserData,
+          };
         }
-      }
-  
-      return result;
-    }, {});
-  
-    aggregatedData[amountOfCards] = Object.keys(groupedData).map(username => ({
-      username,
-      maxPercentage: groupedData[username].maxPercentage,
-      minTimeSpentTest: groupedData[username].minTimeSpentTest,
-      amountOfCards: groupedData[username].amountOfCards,
-      firstName: groupedData[username].firstName,
-      lastName: groupedData[username].lastName,
-      showUserData: groupedData[username].showUserData,
-    })).sort((a, b) => {
-      // Сначала сортируем по maxPercentage в убывающем порядке
-      if (a.maxPercentage !== b.maxPercentage) {
-        return b.maxPercentage - a.maxPercentage;
-      }
-  
-      // Если maxPercentage совпадают, сортируем по minTimeSpentTest в возрастающем порядке
-      return a.minTimeSpentTest - b.minTimeSpentTest;
-    });
+
+        if (item.percentage > result[key].maxPercentage) {
+          result[key].maxPercentage = item.percentage;
+          result[key].minTimeSpentTest = item.timeSpentTest;
+        } else if (item.percentage === result[key].maxPercentage) {
+          if (item.timeSpentTest < result[key].minTimeSpentTest) {
+            result[key].minTimeSpentTest = item.timeSpentTest;
+          }
+        }
+
+        return result;
+      },
+      {}
+    );
+
+    aggregatedData[amountOfCards] = Object.keys(groupedData)
+      .map((username) => ({
+        username,
+        maxPercentage: groupedData[username].maxPercentage,
+        minTimeSpentTest: groupedData[username].minTimeSpentTest,
+        amountOfCards: groupedData[username].amountOfCards,
+        firstName: groupedData[username].firstName,
+        lastName: groupedData[username].lastName,
+        showUserData: groupedData[username].showUserData,
+      }))
+      .sort((a, b) => {
+        // Сначала сортируем по maxPercentage в убывающем порядке
+        if (a.maxPercentage !== b.maxPercentage) {
+          return b.maxPercentage - a.maxPercentage;
+        }
+
+        // Если maxPercentage совпадают, сортируем по minTimeSpentTest в возрастающем порядке
+        return a.minTimeSpentTest - b.minTimeSpentTest;
+      });
   });
 
   // console.log(ratings);
@@ -154,13 +179,23 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                         ...styles.text,
                         width: "50%",
                         paddingHorizontal: 3,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
                       }}
                     >
-                      <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 14, textAlign: 'center'}}>{item.username}</Text>
-                      {item.showUserData && <Text style={{fontSize: 12, textAlign: 'center'}}>{item.firstName} {item.lastName}</Text>}
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={{ fontSize: 14, textAlign: "center" }}
+                      >
+                        {item.username}
+                      </Text>
+                      {item.showUserData && (
+                        <Text style={{ fontSize: 12, textAlign: "center" }}>
+                          {item.firstName} {item.lastName}
+                        </Text>
+                      )}
                     </View>
                     <Text
                       style={{
