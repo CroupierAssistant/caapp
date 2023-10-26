@@ -32,7 +32,8 @@ const LoggedInUser = ({
   const [photo, setPhoto] = useState(null);
 
   const openImagePickerAsync = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    let permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
       Alert.alert(
@@ -43,31 +44,34 @@ const LoggedInUser = ({
     }
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
-  
-  if (pickerResult.cancelled === true) {
-    return;
-  }
-  
-  setPhoto(pickerResult.uri);
-  uploadImage(pickerResult);
+
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+
+    setPhoto(pickerResult.uri);
+    uploadImage(pickerResult);
   };
 
   const uploadImage = async (imageData) => {
+    console.log(photo);
     try {
       const formData = new FormData();
-      formData.append('photo', {
+      formData.append("photo", {
         uri: imageData.uri,
-        type: 'image/jpeg',
-        name: 'photo.jpg',
+        type: "image/jpeg",
+        name: "photo.jpg",
       });
-  
-      const response = await axios.post('https://caapp-server.onrender.com/upload', formData);
-      console.log('Upload success:', response.data);
+
+      const response = await axios.post(
+        "https://caapp-server.onrender.com/upload",
+        formData
+      );
+      console.log("Upload success:", response.data);
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error("Upload error:", error);
     }
   };
-
 
   return (
     <View>
