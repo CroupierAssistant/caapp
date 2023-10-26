@@ -11,14 +11,14 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
   
   const { user } = useContext(AuthContext);
 
-  const handleSaveTestResult = async ({nickname, firstN, lastN, cards, game, type, percent, time, showData}) => {
+  const handleSaveTestResult = async ({ userId, nickname, firstN, lastN, cards, game, type, percent, time, showData, }) => {
     try {
-      const response = await saveTestResult(nickname, firstN, lastN, cards, game, type, percent, time, showData);
+      const response = await saveTestResult(userId, nickname, firstN, lastN, cards, game, type, percent, time, showData,);
       console.log(response);
-      // Handle success
+      // Обработка успешного сохранения
     } catch (error) {
       console.error(error);
-      // Handle error
+      // Обработка ошибки
     }
   };
 
@@ -48,6 +48,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     setPercentage(calculatedPercentage);
 
     handleSaveTestResult({
+      userId: user && user._id ? user._id : null, // Предполагая, что идентификатор пользователя хранится в поле _id    
       nickname: user && user.username ? user.username : '\/guest\/',
       firstN: user && user.firstName ? user.firstName : '',
       lastN: user && user.lastName ? user.lastName : '',

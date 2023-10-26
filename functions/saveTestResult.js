@@ -1,29 +1,13 @@
 import axios from "axios";
+import mongoose from 'mongoose';
 
-const saveTestResult = async (
-  username,
-  firstName,
-  lastName,
-  amountOfCards,
-  game,
-  mode,
-  percentage,
-  timeSpentTest,
-  showUserData
-) => {
+const saveTestResult = async (userId, username, firstName, lastName, amountOfCards, game, mode, percentage, timeSpentTest, showUserData,) => {
+  console.log(userId, username, firstName, lastName, amountOfCards, game, mode, percentage, timeSpentTest, showUserData);
   try {
     const response = await axios.post(
       "https://caapp-server.onrender.com/saveTestResult",
       {
-        username,
-        firstName,
-        lastName,
-        amountOfCards,
-        game,
-        mode,
-        percentage,
-        timeSpentTest,
-        showUserData
+        userId: userId, username, firstName, lastName, amountOfCards, game, mode, percentage, timeSpentTest, showUserData,
       }
     );
 
