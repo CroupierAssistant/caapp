@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const {findUserById} = require("./models/User");
+// const {findUserById} = require("./models/User");
 const User = require("./models/User");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
