@@ -12,8 +12,6 @@ import {
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
 
-  // console.log(ratings);
-
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -85,6 +83,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       return a.minTimeSpentTest - b.minTimeSpentTest;
     });
   });
+
+  console.log(aggregatedData);
 
   return (
     <Modal visible={isVisible} transparent animationType="none">

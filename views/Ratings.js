@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import RatingButton from "../components/RatingButton";
 import RatingsModal from "../components/RatingsModal";
-import findUserById from "../functions/findUserById";
 
 const Ratings = () => {
   const [selectedGame, setSelectedGame] = useState(null);
@@ -28,22 +27,16 @@ const Ratings = () => {
     "Texas Hold'em",
   ];
 
+  
   const handlePress = (gameName) => {
     setSelectedGame(gameName);
     setModalVisible(true);
-  
-    fetch(`https://caapp-server.onrender.com/ratings/${gameName}`)
+
+    fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
       .then((response) => response.json())
       .then((data) => {
-        // Замените идентификаторы пользователей объектами пользователей
-        const updatedData = data.map(item => {
-          return {
-            ...item,
-            user: findUserById(item.user), // Реализуйте findUserById для получения объекта пользователя по его идентификатору
-          };
-        });
-        console.log(updatedData);
-        setRatings(updatedData);
+        // console.log(data);
+        setRatings(data); // Предполагается, что данные приходят в формате JSON
       })
       .catch((error) => {
         console.error("Ошибка при получении рейтингов:", error);

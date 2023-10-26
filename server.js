@@ -103,7 +103,6 @@ app.post("/login", async (req, res) => {
 app.post("/saveTestResult", async (req, res) => {
   try {
     const {
-      userId,
       username,
       firstName,
       lastName,
@@ -112,10 +111,8 @@ app.post("/saveTestResult", async (req, res) => {
       mode,
       percentage,
       timeSpentTest,
-      showUserData,
+      showUserData
     } = req.body;
-
-    console.log(req.body);
 
     if (!username || !game || !mode || !timeSpentTest) {
       return res
@@ -147,7 +144,6 @@ app.post("/saveTestResult", async (req, res) => {
         : TexasHoldemResult;
 
     const newTestResult = await ModelSchema.create({
-      user: userId,
       username,
       firstName,
       lastName,
@@ -215,15 +211,11 @@ app.get("/ratings/:gameName", async (req, res) => {
   }
 
   try {
-    const ratings = await resultModel
-      .find({
-        game: gameName,
-        mode: { $ne: "sandbox" },
-        username: { $ne: "/guest/" },
-      })
-      .select(
-        "user username percentage timeSpentTest firstName lastName amountOfCards showUserData"
-      );
+    const ratings = await resultModel.find({
+      game: gameName,
+      mode: { $ne: "sandbox" },
+      username: { $ne: "/guest/" },
+    }).select("username percentage timeSpentTest firstName lastName amountOfCards showUserData");
 
     res.json(ratings);
   } catch (error) {
@@ -231,6 +223,7 @@ app.get("/ratings/:gameName", async (req, res) => {
     res.status(500).json({ message: "Внутренняя ошибка сервера" });
   }
 });
+
 
 app.get("/userExists", async (req, res) => {
   const { username } = req.query;
@@ -259,18 +252,6 @@ app.get("/emailExists", async (req, res) => {
     res
       .status(500)
       .json({ error: "Произошла ошибка при проверке адреса почты" });
-  }
-});
-
-app.get('/users/:userId', async (req, res) => {
-  const userId = req.params.userId;
-
-  try {
-    const user = await User.findById(userId);
-    res.json(user);
-  } catch (error) {
-    console.error('Ошибка при поиске пользователя:', error);
-    res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 

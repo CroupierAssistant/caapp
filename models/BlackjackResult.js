@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const BlackjackSchema = new mongoose.Schema({
-  userID: String,
   username: String,
   lastName: String,
   firstName: String,
