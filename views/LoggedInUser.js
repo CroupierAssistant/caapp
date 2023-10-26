@@ -16,7 +16,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 import ImagePicker from "react-native-image-picker";
-import DocumentPicker from 'react-native-document-picker';
+
 import axios from "axios";
 
 const LoggedInUser = ({
@@ -29,41 +29,46 @@ const LoggedInUser = ({
   onSupport,
   logout,
 }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
-  const handleImageUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("photo", {
-        uri: selectedImage.uri,
-        name: selectedImage.fileName,
-        type: selectedImage.type,
-      });
+  const chooseImage = () => {
+    const options = {
+      title: "Select Image",
+      storageOptions: {
+        skipBackup: true,
+        path: "images",
+      },
+    };
 
-      const response = await axios.post(
-        "https://caapp-server.onrender.com/upload",
-        formData
-      );
-      console.log("File uploaded successfully:", response.data);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    }
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else {
+        const source = { uri: response.uri };
+        setPhoto(source);
+        uploadImage(response);
+      }
+    });
   };
 
-  const handleImageSelect = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.images],
-      });
+  const uploadImage = (imageData) => {
+    const formData = new FormData();
+    formData.append("photo", {
+      uri: imageData.uri,
+      type: "image/jpeg",
+      name: "photo.jpg",
+    });
 
-      setSelectedImage(result);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the picker
-      } else {
-        throw err;
-      }
-    }
+    axios
+      .post("http://localhost:3000/upload", formData)
+      .then((response) => {
+        console.log("Upload success");
+      })
+      .catch((error) => {
+        console.error("Upload error", error);
+      });
   };
 
   return (
@@ -81,14 +86,13 @@ const LoggedInUser = ({
               <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
             ))}
         </View>
-        <View>
-          <Button title="Select Image" onPress={handleImageSelect} />
-          {selectedImage && (
-            <>
-              <Image source={{ uri: selectedImage.uri }} style={styles.image} />
-              <Button title="Upload Image" onPress={handleImageUpload} />
-            </>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          {photo && (
+            <Image source={photo} style={{ width: 200, height: 200 }} />
           )}
+          <Button title="Choose Image" onPress={chooseImage} />
         </View>
         {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
