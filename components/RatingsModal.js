@@ -49,7 +49,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
           amountOfCards: item.amountOfCards,
           firstName: item.firstName,
           lastName: item.lastName,
-          showData: item.showData,
+          showUserData: item.showUserData,
         };
       }
   
@@ -72,7 +72,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       amountOfCards: groupedData[username].amountOfCards,
       firstName: groupedData[username].firstName,
       lastName: groupedData[username].lastName,
-      showData: groupedData[username].showData,
+      showUserData: groupedData[username].showUserData,
     })).sort((a, b) => {
       // Сначала сортируем по maxPercentage в убывающем порядке
       if (a.maxPercentage !== b.maxPercentage) {
@@ -149,17 +149,19 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                         {index + 1}
                       </Text>
                     </View>
-                    <Text
+                    <View
                       style={{
                         ...styles.text,
                         width: "50%",
                         paddingHorizontal: 3,
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                       }}
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
                     >
-                      {item.username}{item.showUserData && `${item.firstName} ${item.lastName}`}
-                    </Text>
+                      <Text numberOfLines={1} ellipsizeMode="tail" style={{fontSize: 14, textAlign: 'center'}}>{item.username}</Text>
+                      {item.showUserData && <Text style={{fontSize: 12, textAlign: 'center'}}>{item.firstName} {item.lastName}</Text>}
+                    </View>
                     <Text
                       style={{
                         ...styles.text,
