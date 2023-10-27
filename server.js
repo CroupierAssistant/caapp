@@ -274,7 +274,7 @@ app.post('/change-password', async (req, res) => {
       return;
     }
 
-    if (currentPassword !== user.password) {
+    if (comparePassword(currentPassword, user.password)) {
       res.json({ success: false, message: 'Incorrect current password' });
       return;
     }
