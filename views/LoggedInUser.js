@@ -16,23 +16,24 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 
-const LoggedInUser = ({
-  user,
-  logout,
-}) => {
+const LoggedInUser = ({ user, logout }) => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff"}}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ backgroundColor: "#fff" }}
+    >
       <View
         style={{
           justifyContent: "center",
           alignItems: "center",
           paddingHorizontal: 10,
-          width: '100%',
+          width: "100%",
           width: Dimensions.get("screen").width,
           height: Dimensions.get("window").height - 80,
-        }}>
+        }}
+      >
         <View style={styles.textContainer}>
           <Text style={styles.nickname}>{user.username}</Text>
           {user.firstName && user.lastName && (
@@ -47,8 +48,8 @@ const LoggedInUser = ({
         </View>
 
         <Text style={{ ...styles.timeLimitDescription }}>
-                THE PAGE IS UNDER CONSTRUCTION
-              </Text>
+          THE PAGE IS UNDER CONSTRUCTION
+        </Text>
 
         {/* <TouchableOpacity
           onPress={() => navigation.navigate("SubscriptionManagement")}
@@ -114,11 +115,10 @@ const LoggedInUser = ({
           </View>
         </TouchableOpacity> */}
 
-        <TouchableOpacity
-          onPress={logout}
-          style={{...styles.logoutButton }}
-        >
-          <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>SIGN OUT</Text>
+        <TouchableOpacity onPress={logout} style={{ ...styles.logoutButton }}>
+          <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>
+            SIGN OUT
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#29648a",
-    width: '100%',
+    width: "100%",
   },
   nickname: {
     fontSize: 22,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   button: {
     // width: Dimensions.get("screen").width,
-    width: '100%',
+    width: "100%",
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomColor: "#29648a",

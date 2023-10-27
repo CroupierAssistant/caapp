@@ -1,14 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
-const { User, findUserById } = require("./models/User");
+const { User, findUserById } = require('./models/User');
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -26,16 +24,6 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(
-  session({
-    secret: "ваш_секретный_ключ",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -72,16 +60,12 @@ app.post("/register", async (req, res) => {
 
     // Создание нового пользователя
     const newUser = await User.create({
-      username,
-      firstName,
-      lastName,
+      username, firstName, lastName,
       email,
       password: hashedPassword,
     });
 
     const token = jwt.sign({ userId: newUser._id }, "ваш_секретный_ключ");
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 2419200000 });
-    res.json({ success: "Регистрация успешна", user: newUser });
 
     return res.json({ success: "Регистрация успешна", user: newUser, token });
   } catch (error) {
@@ -109,9 +93,6 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ userId: user._id }, "ваш_секретный_ключ");
-    res.cookie("jwt", token, { httpOnly: true, maxAge: 2419200000 });
-    res.json({ success: "Авторизация успешна", user });
-
     return res.json({ success: "Авторизация успешна", user, token });
   } catch (error) {
     console.error(error);
@@ -226,15 +207,11 @@ app.get("/ratings/:gameName", async (req, res) => {
   }
 
   try {
-    const ratings = await resultModel
-      .find({
-        game: gameName,
-        mode: { $ne: "sandbox" },
-        username: { $ne: "/guest/" },
-      })
-      .select(
-        "userId username percentage timeSpentTest firstName lastName amountOfCards showUserData"
-      );
+    const ratings = await resultModel.find({
+      game: gameName,
+      mode: { $ne: "sandbox" },
+      username: { $ne: "/guest/" },
+    }).select("userId username percentage timeSpentTest firstName lastName amountOfCards showUserData");
 
     res.json(ratings);
   } catch (error) {
@@ -242,6 +219,7 @@ app.get("/ratings/:gameName", async (req, res) => {
     res.status(500).json({ message: "Внутренняя ошибка сервера" });
   }
 });
+
 
 app.get("/userExists", async (req, res) => {
   const { username } = req.query;
@@ -273,31 +251,31 @@ app.get("/emailExists", async (req, res) => {
   }
 });
 
-app.get("/users/:userId", async (req, res) => {
+app.get('/users/:userId', async (req, res) => {
   const userId = req.params.userId;
 
   try {
     const user = await findUserById(userId);
     res.json(user);
   } catch (error) {
-    console.error("Ошибка при поиске пользователя:", error);
-    res.status(500).json({ error: "Ошибка сервера" });
+    console.error('Ошибка при поиске пользователя:', error);
+    res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
-app.post("/change-password", async (req, res) => {
+app.post('/change-password', async (req, res) => {
   const { username, currentPassword, newPassword } = req.body;
 
   try {
     const user = await User.findOne({ username });
 
     if (!user) {
-      res.json({ success: false, message: "User not found" });
+      res.json({ success: false, message: 'User not found' });
       return;
     }
 
     if (!(await comparePassword(currentPassword, user.password))) {
-      res.json({ success: false, message: "Incorrect current password" });
+      res.json({ success: false, message: 'Incorrect current password' });
       return;
     }
 
@@ -309,7 +287,7 @@ app.post("/change-password", async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
