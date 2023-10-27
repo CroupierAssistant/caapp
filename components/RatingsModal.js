@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     height: 30,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "50%",
+    borderRadius: 50,
   },
   textHeader: {
     textAlign: "center",

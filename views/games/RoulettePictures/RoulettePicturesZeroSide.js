@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "rgb(173, 50, 50)",
-    borderRadius: '50%'
+    borderRadius: 50
   },
   chipBet: {
     color: "#fff",

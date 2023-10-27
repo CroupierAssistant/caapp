@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
       height: 0,
     },
     position: "absolute",
-    borderRadius: "50%",
+    borderRadius: 50,
     borderWidth: 3,
     borderColor: "rgb(131, 30, 30)",
     width: 40,
