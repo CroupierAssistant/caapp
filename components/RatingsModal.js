@@ -240,7 +240,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               />
             ) : (
               <Text style={styles.textNoData}>
-                {`¯\\_(ツ)_/¯ \n No one's here... You can be the first!`}
+                {`¯\\_(ツ)_/¯\nNo one's here... You can be the first!`}
               </Text>
             )}
           </View>
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   },
   textNoData: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     textAlign: "center",
     fontSize: 18,
     lineHeight: 30,
