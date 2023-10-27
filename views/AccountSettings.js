@@ -12,6 +12,13 @@ const AccountSettings = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Error', 'Пароли не совпадают');
+      return;
+    }
+
+    console.log(user);
+
     try {
       const response = await axios.post('https://caapp-server.onrender.com/change-password', {
         currentPassword,

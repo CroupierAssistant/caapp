@@ -279,7 +279,7 @@ app.post('/change-password', async (req, res) => {
       return;
     }
 
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;
 
     await user.save();

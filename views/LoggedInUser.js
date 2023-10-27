@@ -28,12 +28,12 @@ const LoggedInUser = ({
   const navigation = useNavigation();
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
       <View
         style={{
           justifyContent: "center",
           alignItems: "center",
-          flex: 1,
+          // flex: 1,
           height: Dimensions.get("window").height - 80,
         }}>
         <View style={styles.textContainer}>
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: "center",
-    // marginBottom: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#29648a",
     width: Dimensions.get("screen").width,
