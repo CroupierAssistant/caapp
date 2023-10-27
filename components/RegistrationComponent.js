@@ -196,6 +196,10 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
         formData
       );
       login(response.data.user);
+      
+      const token = response.data.token;
+      document.cookie = `jwt=${token}`
+      
       console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -358,7 +362,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
           onPress={handleRegister}
         >
           <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
-            Register
+            SIGN UP
           </Text>
         </TouchableOpacity>
 

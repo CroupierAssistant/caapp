@@ -18,22 +18,19 @@ import { AuthContext } from "../context/AuthContext";
 
 const LoggedInUser = ({
   user,
-  onSubscriptionStatus,
-  onAccountSettings,
-  onAchievements,
-  onWorkoutHistory,
-  onSupport,
   logout,
 }) => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff"}}>
       <View
         style={{
           justifyContent: "center",
           alignItems: "center",
-          // flex: 1,
+          paddingHorizontal: 10,
+          width: '100%',
+          width: Dimensions.get("screen").width,
           height: Dimensions.get("window").height - 80,
         }}>
         <View style={styles.textContainer}>
@@ -49,7 +46,11 @@ const LoggedInUser = ({
             ))}
         </View>
 
-        <TouchableOpacity
+        <Text style={{ ...styles.timeLimitDescription }}>
+                THE PAGE IS UNDER CONSTRUCTION
+              </Text>
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("SubscriptionManagement")}
           style={styles.button}
         >
@@ -61,8 +62,9 @@ const LoggedInUser = ({
             />
             <Text style={styles.buttonText}>Subscription</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("EditProfile")}
           style={styles.button}
         >
@@ -70,8 +72,9 @@ const LoggedInUser = ({
             <AntDesign name="profile" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Edit profile</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("AccountSettings")}
           style={styles.button}
         >
@@ -79,8 +82,9 @@ const LoggedInUser = ({
             <FontAwesome name="gear" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Account settings</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("Achievements")}
           style={styles.button}
         >
@@ -88,8 +92,9 @@ const LoggedInUser = ({
             <Ionicons name="ios-medal" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Achievements</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("TestHistory")}
           style={styles.button}
         >
@@ -97,21 +102,23 @@ const LoggedInUser = ({
             <MaterialIcons name="history" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Test history</Text>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity
           onPress={() => navigation.navigate("HelpSupport")}
-          style={{ ...styles.button, borderBottomWidth: 0 }}
+          style={{ ...styles.button }}
         >
           <View style={styles.buttonContent}>
             <Ionicons name="help-circle" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Help & support</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
         <TouchableOpacity
           onPress={logout}
-          style={{ ...styles.button, ...styles.logoutButton }}
+          style={{...styles.logoutButton }}
         >
-          <Text style={{ color: "#fff", textAlign: "center" }}>Logout</Text>
+          <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>SIGN OUT</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -128,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#29648a",
-    width: Dimensions.get("screen").width,
+    width: '100%',
   },
   nickname: {
     fontSize: 22,
@@ -147,7 +154,8 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   button: {
-    width: Dimensions.get("screen").width,
+    // width: Dimensions.get("screen").width,
+    width: '100%',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderBottomColor: "#29648a",
@@ -169,10 +177,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#a16e83",
     marginVertical: 20,
     borderWidth: 0,
-    width: Dimensions.get("screen").width * 0.6,
-    paddingVertical: 15,
     alignItems: "center",
     borderRadius: 3,
+    width: 200,
+    padding: 10,
+  },
+  timeLimitDescription: {
+    marginVertical: 30,
+    fontSize: 20,
+    textAlign: "center",
+    width: "100%",
   },
 });
 

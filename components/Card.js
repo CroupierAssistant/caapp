@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // marginVertical: 20,
-    transform: [{scale: 0.9}]
+    transform: [{scale: 0.8}]
   },
   cardContainer: {
     borderWidth: 1,

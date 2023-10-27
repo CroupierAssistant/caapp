@@ -33,14 +33,6 @@ function RouletteSeriesTest({ route }) {
   const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
   const flatListRef = useRef(null);
 
-  const openPaytableModal = () => {
-    setShowPaytableModal(true);
-  };
-
-  const closePaytableModal = () => {
-    setShowPaytableModal(false);
-  };
-
   const onTimeUpdate = (time) => {
     setTimeSpent(time);
   };
@@ -165,27 +157,6 @@ function RouletteSeriesTest({ route }) {
     <View style={{ flex: 1 }}>
       {!isDone && (
         <>
-          <Modal
-            animationType="slide"
-            presentationStyle="pageSheet"
-            visible={showPaytableModal}
-            onRequestClose={closePaytableModal}
-          >
-            <View style={styles.modal}>
-              <View
-                style={{
-                  width: "100%",
-                }}
-              >
-                <Button
-                  style={styles.modalButton}
-                  title="Close"
-                  onPress={closePaytableModal}
-                />
-              </View>
-            </View>
-          </Modal>
-
           <View
             style={{
               display: "flex",
@@ -195,16 +166,11 @@ function RouletteSeriesTest({ route }) {
             }}
           >
             <TouchableOpacity
-              onPress={openPaytableModal}
               style={{
-                padding: 5,
-                backgroundColor: "#ccc",
                 minWidth: 100,
-                justifyContent: "space-between",
-                alignItems: "center",
               }}
             >
-              <Text style={{ textAlign: "center" }}>Show info</Text>
+              <Text style={{ textAlign: "center" }}> </Text>
             </TouchableOpacity>
 
             {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}

@@ -51,8 +51,7 @@ const Ratings = () => {
     <View style={styles.container}>
       <Text style={[styles.textHeader]}>Ratings</Text>
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ width: "100%" }}
+        showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff",  width: "100%"}}
       >
         <View style={{ width: "100%" }}>
           {games.map((game) => (
@@ -79,6 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
+    backgroundColor: '#fff'
   },
   textHeader: {
     textAlign: "center",

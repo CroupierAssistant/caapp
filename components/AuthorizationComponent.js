@@ -6,12 +6,13 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
+  ScrollView,
 } from "react-native";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 
-const AuthorizationComponent = ({setIsRegistering, isRegistering}) => {
+const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
   const { login, logout, user } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -29,14 +30,13 @@ const AuthorizationComponent = ({setIsRegistering, isRegistering}) => {
   };
 
   const handleLogin = () => {
-    // Axios.post("http://192.168.31.124:3000/login", {
     Axios.post("https://caapp-server.onrender.com/login", {
       username: formData.username,
       password: formData.password,
     })
       .then((response) => {
-        console.log(response.data);
-        const { token } = response.data;
+        const token = response.data.token;
+        document.cookie = `jwt=${token}`;
         AsyncStorage.setItem("token", token);
         login(response.data.user); // Добавление в контекст после успешной авторизации
         setFormData({
@@ -47,7 +47,6 @@ const AuthorizationComponent = ({setIsRegistering, isRegistering}) => {
           agree: false,
         });
         setError(null);
-        console.log(response.data.user);
       })
       .catch((error) => {
         console.error(error);
@@ -67,52 +66,60 @@ const AuthorizationComponent = ({setIsRegistering, isRegistering}) => {
   };
 
   return (
-    <>
-      <Text style={[styles.textHeader]}>Sign in</Text>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>Username</Text>
-        <TextInput
-          style={styles.input}
-          value={formData.username}
-          onChangeText={(text) => handleInputChange("username", text)}
-        />
-      </View>
-
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          value={formData.password}
-          onChangeText={(text) => handleInputChange("password", text)}
-          secureTextEntry
-        />
-      </View>
-
-      {error && <Text style={styles.error}>{error}</Text>}
-
-      <TouchableOpacity
+    <ScrollView>
+      <View
         style={{
-          marginVertical: 15,
-          backgroundColor: "#29648a",
-          borderRadius: 3,
-          width: 200,
-          padding: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
         }}
-        onPress={handleLogin}
       >
-        <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
-          Login
-        </Text>
-      </TouchableOpacity>
+        <Text style={[styles.textHeader]}>Sign in</Text>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.username}
+            onChangeText={(text) => handleInputChange("username", text)}
+          />
+        </View>
 
-      <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
-        <Text style={styles.toggleButton}>
-          {isRegistering
-            ? "Have an account? Log in"
-            : "Don't have an account? Register"}
-        </Text>
-      </TouchableOpacity>
-    </>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.password}
+            onChangeText={(text) => handleInputChange("password", text)}
+            secureTextEntry
+          />
+        </View>
+
+        {error && <Text style={styles.error}>{error}</Text>}
+
+        <TouchableOpacity
+          style={{
+            marginVertical: 15,
+            backgroundColor: "#29648a",
+            borderRadius: 3,
+            width: 200,
+            padding: 10,
+          }}
+          onPress={handleLogin}
+        >
+          <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
+            SIGN IN
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
+          <Text style={styles.toggleButton}>
+            {isRegistering
+              ? "Have an account? Log in"
+              : "Don't have an account? Register"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -124,6 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 20,
     height: Dimensions.get("window").height - 130,
+    width: Dimensions.get("window").width,
   },
   textHeader: {
     textAlign: "center",
@@ -143,6 +151,7 @@ const styles = StyleSheet.create({
   labelContainer: {
     marginBottom: 10,
     width: "100%",
+    width: Dimensions.get("window").width - 20,
   },
   label: {
     color: "#808080",

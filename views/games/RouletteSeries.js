@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Switch,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import { AuthContext } from "../../context/AuthContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -7,6 +14,7 @@ import Switcher from "../../components/Switcher";
 
 function RouletteSeries() {
   const navigation = useNavigation();
+  const [timeLimit, setTimeLimit] = useState(90000);
 
   const handleNavigateToTest = () => {
     navigation.navigate("RouletteSeriesTest", {
@@ -14,7 +22,7 @@ function RouletteSeries() {
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
-      timeLimit: 150000,
+      timeLimit: timeLimit,
       splitCoeff: false,
       step: selectedStep,
       gameName: "Roulette series",
@@ -70,6 +78,7 @@ function RouletteSeries() {
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
+    setTimeLimit(value * 9000);
     setSelectedButton(value);
   };
 
@@ -94,7 +103,7 @@ function RouletteSeries() {
         />
         {!user && (
           <Text style={{ ...styles.timeLimitDescription, marginTop: -20 }}>
-            Only Time Limit Mode available when you are not logged in.
+            When you're not logged in, only the Time Limit mode is accessible
           </Text>
         )}
         {!isEnabled && (
@@ -103,7 +112,7 @@ function RouletteSeries() {
             <>
               {!user && (
                 <Text style={styles.timeLimitDescription}>
-                  Only one option available when you are not logged in.
+                  When you're not logged in, only one option is available
                 </Text>
               )}
               <View style={styles.radioContainer}>
@@ -184,11 +193,10 @@ function RouletteSeries() {
               </View>
 
               <Text style={styles.timeLimitDescription}>
-                You need to calculate the payout for {selectedButton} bets. The
-                time limit is 90 seconds. You need to write the maximum
-                denomination of how much the sector plays (DON'T WRITE THE
-                REST). Step is 5, maximum is 50 progressive. You need to do 100%
-                to get to the leaderboard.
+                The goal is to calculate the payout for {selectedButton} bets.
+                The time limit is {timeLimit / 1000} seconds. Specify the
+                highest denomination for the sector's payout (DO NOT WRITE THE
+                REST). The step is 5, with a maximum progressive of 50.
               </Text>
             </>
           </>
@@ -390,10 +398,12 @@ function RouletteSeries() {
                 </TouchableOpacity>
               </View>
               <Text style={styles.timeLimitDescription}>
-                There is no time limit in this mode. You need to write the
-                maximum denomination of how much the sector plays (DON'T WRITE
-                THE REST). Step is 5, maximum is {selectedMaxBet} progressive.
-                You need to do 100% to get to the leaderboard.
+                The goal is to calculate the payout for given bets. Specify the
+                highest denomination for the sector's payout (DO NOT WRITE THE
+                REST). Choose the minimum and maximum bet to calculate the
+                payouts, the step is always 5. If you choose to skip the card in
+                this mode, you will not see this card again. There is no time
+                limit, so take your time and enjoy
               </Text>
             </>
           </>
@@ -490,7 +500,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timeLimitDescription: {
-    marginVertical: 10,
+    marginVertical: 20,
     fontSize: 16,
     textAlign: "left",
     width: "100%",

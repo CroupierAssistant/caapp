@@ -8,7 +8,7 @@ function MultiplicationTable() {
   const handleNavigateToTest = () => {
     const isAnyCombinationSelected =
       selected5 || selected8 || selected11 || selected17 || selected35;
-  
+
     if (isAnyCombinationSelected) {
       navigation.navigate("MultiplicationTableTest", {
         mode: "sandbox",
@@ -16,48 +16,57 @@ function MultiplicationTable() {
         minBet: Number(selectedMinBet),
         maxBet: Number(selectedMaxBet),
         splitCoeff: false,
-        gameName: 'Multiplication',
+        gameName: "Multiplication",
         combinations: [
           {
-            name: "5", coeff: 5, selected: selected5
+            name: "5",
+            coeff: 5,
+            selected: selected5,
           },
           {
-            name: "8", coeff: 8, selected: selected8
+            name: "8",
+            coeff: 8,
+            selected: selected8,
           },
           {
-            name: "11", coeff: 11, selected: selected11
+            name: "11",
+            coeff: 11,
+            selected: selected11,
           },
           {
-            name: "17", coeff: 17, selected: selected17
+            name: "17",
+            coeff: 17,
+            selected: selected17,
           },
           {
-            name: "35", coeff: 35, selected: selected35
+            name: "35",
+            coeff: 35,
+            selected: selected35,
           },
         ],
       });
     }
   };
-  
 
   const [selected5, setSelected5] = useState(true);
   const handleSelect5 = () => {
-    setSelected5(prev => !prev);
+    setSelected5((prev) => !prev);
   };
   const [selected8, setSelected8] = useState(true);
   const handleSelect8 = () => {
-    setSelected8(prev => !prev);
+    setSelected8((prev) => !prev);
   };
   const [selected11, setSelected11] = useState(true);
   const handleSelect11 = () => {
-    setSelected11(prev => !prev);
+    setSelected11((prev) => !prev);
   };
   const [selected17, setSelected17] = useState(true);
   const handleSelect17 = () => {
-    setSelected17(prev => !prev);
+    setSelected17((prev) => !prev);
   };
   const [selected35, setSelected35] = useState(true);
   const handleSelect35 = () => {
-    setSelected35(prev => !prev);
+    setSelected35((prev) => !prev);
   };
 
   const [selectedMaxBet, setSelectedMaxBet] = useState("50");
@@ -71,57 +80,207 @@ function MultiplicationTable() {
 
   return (
     <View style={styles.container}>
+      <>
         <>
-          <>
-            <Text style={styles.radioLegend}>Select number:</Text>
-            <View style={styles.radioContainer}>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonFirst, selected5 && styles.selectedButton]} onPress={() => handleSelect5()}>
-                <Text style={[styles.radioButtonText, selected5 && styles.selectedRadioButtonText]}>5</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, selected8 && styles.selectedButton]} onPress={() => handleSelect8()}>
-                <Text style={[styles.radioButtonText, selected8 && styles.selectedRadioButtonText]}>8</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, selected11 && styles.selectedButton]} onPress={() => handleSelect11()}>
-                <Text style={[styles.radioButtonText, selected11 && styles.selectedRadioButtonText]}>11</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, selected17 && styles.selectedButton]} onPress={() => handleSelect17()}>
-                <Text style={[styles.radioButtonText, selected17 && styles.selectedRadioButtonText]}>17</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonLast, selected35 && styles.selectedButton]} onPress={() => handleSelect35()}>
-                <Text style={[styles.radioButtonText, selected35 && styles.selectedRadioButtonText]}>35</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-          <>
-            <Text style={styles.radioLegend}>Select min/step:</Text>
-            <View style={styles.radioContainer}>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonFirst, selectedMinBet === "1" && styles.selectedButton]} onPress={() => handleMinBetSelect("1")}>
-                <Text style={[styles.radioButtonText, selectedMinBet === "1" && styles.selectedRadioButtonText]}>1</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, selectedMinBet === "5" && styles.selectedButton]} onPress={() => handleMinBetSelect("5")}>
-                <Text style={[styles.radioButtonText, selectedMinBet === "5" && styles.selectedRadioButtonText]}>5</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonLast, selectedMinBet === "25" && styles.selectedButton]} onPress={() => handleMinBetSelect("25")}>
-                <Text style={[styles.radioButtonText, selectedMinBet === "25" && styles.selectedRadioButtonText]}>25</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-          <>
-            <Text style={styles.radioLegend}>Select max:</Text>
-            <View style={styles.radioContainer}>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonFirst, selectedMaxBet === "50" && styles.selectedButton]} onPress={() => handleMaxBetSelect("50")}>
-                <Text style={[styles.radioButtonText, selectedMaxBet === "50" && styles.selectedRadioButtonText]}>50</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, selectedMaxBet === "200" && styles.selectedButton]} onPress={() => handleMaxBetSelect("200")}>
-                <Text style={[styles.radioButtonText, selectedMaxBet === "200" && styles.selectedRadioButtonText]}>200</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.radioButton, styles.radioButtonLast, selectedMaxBet === "500" && styles.selectedButton]} onPress={() => handleMaxBetSelect("500")}>
-                <Text style={[styles.radioButtonText, selectedMaxBet === "500" && styles.selectedRadioButtonText]}>500</Text>
-              </TouchableOpacity>
-            </View>
-          </>
+          <Text style={styles.radioLegend}>Select number:</Text>
+          <View style={styles.radioContainer}>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonFirst,
+                selected5 && styles.selectedButton,
+              ]}
+              onPress={() => handleSelect5()}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selected5 && styles.selectedRadioButtonText,
+                ]}
+              >
+                5
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, selected8 && styles.selectedButton]}
+              onPress={() => handleSelect8()}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selected8 && styles.selectedRadioButtonText,
+                ]}
+              >
+                8
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, selected11 && styles.selectedButton]}
+              onPress={() => handleSelect11()}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selected11 && styles.selectedRadioButtonText,
+                ]}
+              >
+                11
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.radioButton, selected17 && styles.selectedButton]}
+              onPress={() => handleSelect17()}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selected17 && styles.selectedRadioButtonText,
+                ]}
+              >
+                17
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonLast,
+                selected35 && styles.selectedButton,
+              ]}
+              onPress={() => handleSelect35()}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selected35 && styles.selectedRadioButtonText,
+                ]}
+              >
+                35
+              </Text>
+            </TouchableOpacity>
+          </View>
         </>
-      <TouchableOpacity style={[styles.startButton]} onPress={handleNavigateToTest}>
+        <>
+          <Text style={styles.radioLegend}>Select min/step:</Text>
+          <View style={styles.radioContainer}>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonFirst,
+                selectedMinBet === "1" && styles.selectedButton,
+              ]}
+              onPress={() => handleMinBetSelect("1")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMinBet === "1" && styles.selectedRadioButtonText,
+                ]}
+              >
+                1
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                selectedMinBet === "5" && styles.selectedButton,
+              ]}
+              onPress={() => handleMinBetSelect("5")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMinBet === "5" && styles.selectedRadioButtonText,
+                ]}
+              >
+                5
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonLast,
+                selectedMinBet === "25" && styles.selectedButton,
+              ]}
+              onPress={() => handleMinBetSelect("25")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMinBet === "25" && styles.selectedRadioButtonText,
+                ]}
+              >
+                25
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+        <>
+          <Text style={styles.radioLegend}>Select max:</Text>
+          <View style={styles.radioContainer}>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonFirst,
+                selectedMaxBet === "50" && styles.selectedButton,
+              ]}
+              onPress={() => handleMaxBetSelect("50")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMaxBet === "50" && styles.selectedRadioButtonText,
+                ]}
+              >
+                50
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                selectedMaxBet === "200" && styles.selectedButton,
+              ]}
+              onPress={() => handleMaxBetSelect("200")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMaxBet === "200" && styles.selectedRadioButtonText,
+                ]}
+              >
+                200
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.radioButton,
+                styles.radioButtonLast,
+                selectedMaxBet === "500" && styles.selectedButton,
+              ]}
+              onPress={() => handleMaxBetSelect("500")}
+            >
+              <Text
+                style={[
+                  styles.radioButtonText,
+                  selectedMaxBet === "500" && styles.selectedRadioButtonText,
+                ]}
+              >
+                500
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.timeLimitDescription}>
+            This mode is simply a multiplication table. Choose the minimum and
+            maximum number, as well as the multiplicity to calculate the
+            payouts. If you choose to skip the card in this mode, you will not
+            see this card again. There is no time limit, so take your time and
+            enjoy
+          </Text>
+        </>
+      </>
+      <TouchableOpacity
+        style={[styles.startButton]}
+        onPress={handleNavigateToTest}
+      >
         <Text style={[styles.startButtonText]}>Start</Text>
       </TouchableOpacity>
     </View>
@@ -193,9 +352,9 @@ const styles = StyleSheet.create({
   },
   selectedButton: {
     backgroundColor: "#29648a",
-    borderColor: '#fff',
+    borderColor: "#fff",
     borderTopColor: "#29648a",
-    borderBottomColor: "#29648a"
+    borderBottomColor: "#29648a",
   },
   radioButtonText: {
     textAlign: "center",
@@ -213,7 +372,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timeLimitDescription: {
-    marginVertical: 10,
+    marginVertical: 20,
     fontSize: 16,
     textAlign: "left",
     width: "100%",
@@ -224,6 +383,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
     marginBottom: -5,
+  },
+  timeLimitDescription: {
+    marginVertical: 20,
+    fontSize: 16,
+    textAlign: "left",
+    width: "100%",
   },
 });
 

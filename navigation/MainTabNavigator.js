@@ -58,7 +58,7 @@ function MainTabNavigator() {
             )
           ),
           tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}> TESTS</Text>
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>TESTS</Text>
           ),
           headerShown: false,
         }}
@@ -79,7 +79,7 @@ function MainTabNavigator() {
             )
           ),
           tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}> RATINGS</Text>
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>RATINGS</Text>
           ),
           headerShown: false,
           detachPreviousScreen: true,

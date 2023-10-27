@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 
-function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
+function CardNeighbour({ number, index, onSubmit, otherNumbers, onSkip, mode }) {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [shuffledFinalOptions, setShuffledFinalOptions] = useState([]);
 
@@ -16,7 +16,7 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
   };
 
   useEffect(() => {
-    setSelectedOptions([])
+    setSelectedOptions([]);
 
     const shuffledOtherNumbers = [...otherNumbers].sort(
       () => Math.random() - 0.5
@@ -59,7 +59,9 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
   return (
     <View style={styles.container}>
       <View style={styles.cardContainer}>
-        <Text style={{ textAlign: "center", fontSize: 14, color: "#fff" }}> </Text>
+        <Text style={{ textAlign: "center", fontSize: 14, color: "#fff" }}>
+          {" "}
+        </Text>
         <Text
           style={{
             textAlign: "center",
@@ -79,10 +81,19 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers }) {
       <View style={styles.keyboardContainer}>
         <View style={styles.keyboardContainerRow}>{renderOptions}</View>
         <TouchableOpacity
-          onPress={() => onSubmit(selectedOptions)}
-          style={{ ...styles.optionKeySubmit }}
+          onPress={() =>
+            mode === "timelimit" && selectedOptions.length || mode === "sandbox"
+              ? onSubmit(selectedOptions)
+              : onSkip()
+          }
+          style={{
+            ...styles.optionKeySubmit,
+            backgroundColor: selectedOptions.length ? "#479761" : "#a16e83",
+          }}
         >
-          <Text style={{ ...styles.optionKeyText, color: "#fff" }}>CONFIRM</Text>
+          <Text style={{ ...styles.optionKeyText, color: "#fff" }}>
+            {selectedOptions.length ? "CONFIRM" : "SKIP"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     // height: "100%",
-    flex: 1
+    flex: 1,
   },
   keyboardContainer: {
     display: "flex",
@@ -117,7 +128,7 @@ const styles = StyleSheet.create({
     gap: 10,
     height: 50,
     flexWrap: "wrap",
-    height: 170
+    height: 170,
   },
   optionKey: {
     height: 50,
@@ -126,17 +137,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ccc",
-    borderRadius: 3
+    borderRadius: 3,
   },
   optionKeySubmit: {
     height: 50,
-    width: '60%',
+    width: "60%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#479761",
     marginBottom: 10,
-    borderRadius: 3
+    borderRadius: 3,
   },
   optionKeyText: {
     fontSize: 20,

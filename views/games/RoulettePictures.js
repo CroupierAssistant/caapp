@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timeLimitDescription: {
-    marginVertical: 10,
+    marginVertical: 20,
     fontSize: 16,
     textAlign: "left",
     width: "100%",

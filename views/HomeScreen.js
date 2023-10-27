@@ -19,7 +19,7 @@ function HomeScreen({ route }) {
       {/* <Text style={[styles.textHeader]}>Select a test</Text> */}
 
       <ScrollView
-        style={{ flex: 1, width: "100%" }}
+        style={{ flex: 1, width: "100%", backgroundColor: '#fff' }}
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity
@@ -46,13 +46,13 @@ function HomeScreen({ route }) {
           <Image source={require('../assets/icons/roulette.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("RoulettePictures")}
         >
           <Text style={styles.buttonText}>Roulette Pictures</Text>
           <Image source={require('../assets/icons/roulette-pictures.png')} style={styles.buttonIcon}/>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={styles.button}
@@ -150,6 +150,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
+    backgroundColor: '#fff'
   },
   break: {
     height: 2,

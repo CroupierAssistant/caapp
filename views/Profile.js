@@ -30,7 +30,7 @@ const Profile = (props) => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff"}}>
       <View style={styles.container}>
         {!user ? (
           <View
@@ -70,9 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingVertical: 20,
     height: Dimensions.get("window").height - 80,
+    backgroundColor: '#fff'
   },
 });
 

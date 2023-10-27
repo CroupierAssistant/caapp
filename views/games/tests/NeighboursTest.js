@@ -8,6 +8,7 @@ import {
   StyleSheet,
   FlatList,
   Dimensions,
+  Image,
 } from "react-native";
 import CardNeighbour from "../../../components/CardNeighbour";
 import CardResultsNeigbours from "../../../components/CardResultsNeigbours";
@@ -105,6 +106,29 @@ function NeighboursTest({ route }) {
     setInputValue("");
   };
 
+  const handleSkip = () => {
+    // Перенести активнуб карту в конец очереди
+    // if (activeCardIndex < cardList.length - 1) {
+    //   const skippedCard = cardList[activeCardIndex];
+    //   const updatedCardList = [
+    //     ...cardList.slice(0, activeCardIndex),
+    //     ...cardList.slice(activeCardIndex + 1),
+    //     skippedCard,
+    //   ];
+    //   setCardList(updatedCardList);
+    //   setActiveCardIndex(activeCardIndex + 1);
+    // } else {
+    //   // Если это последняя карта, то ничего не делаем или выполняем необходимую логику
+    // }
+
+    setCardList(prevList => {
+      const newList = [...prevList];
+      const skippedCard = newList.splice(activeCardIndex, 1)[0];
+      newList.push(skippedCard);
+      return newList;
+    });
+  };
+
   const handleStopTest = () => {
     setIsDone(true);
   };
@@ -124,6 +148,8 @@ function NeighboursTest({ route }) {
             index={cardList[activeCardIndex].index}
             otherNumbers={cardList[activeCardIndex].otherNumbers}
             onSubmit={handleSubmit}
+            onSkip={handleSkip}
+            mode={mode}
           />
         )}
       </View>
@@ -153,8 +179,11 @@ function NeighboursTest({ route }) {
               <View
                 style={{
                   width: "100%",
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
+                <Image source={require('../../../assets/icons/wheel.png')} style={{marginBottom: 50, width: Dimensions.get('window').width * 0.8, height: Dimensions.get('window').width * 0.8}}/>
                 <Button
                   style={styles.modalButton}
                   title="Close"
@@ -176,13 +205,13 @@ function NeighboursTest({ route }) {
               onPress={openPaytableModal}
               style={{
                 padding: 5,
-                backgroundColor: "#ccc",
+                backgroundColor: mode == 'sandbox' ? "#ccc" : '',
                 minWidth: 100,
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
-              <Text style={{ textAlign: "center" }}>Show info</Text>
+              <Text style={{ textAlign: "center" }}>{mode == 'sandbox' ? 'Show info' : ''}</Text>
             </TouchableOpacity>
 
             {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}

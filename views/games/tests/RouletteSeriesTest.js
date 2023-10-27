@@ -91,9 +91,22 @@ function RouletteSeriesTest({ route }) {
     setInputValue("");
   };
 
+  const handleSkipCard = () => {
+    setCardList(prevList => {
+      const newList = [...prevList];
+      const skippedCard = newList.splice(activeCardIndex, 1)[0];
+      newList.push(skippedCard);
+      return newList;
+    });
+  };
+
   const handleKeyboardPress = (key) => {
     if (key === "submit") {
       handleSubmit();
+    } else if (key === "skip") {
+      // напиши логику
+      // нужно переносить активную карту в конец очереди
+      handleSkipCard();
     }
   };
 
@@ -255,11 +268,10 @@ function RouletteSeriesTest({ route }) {
               <View style={{ width: "100%" }}>
                 {mode === "timelimit" && (
                   <Text style={styles.modalInfo}>
-                    You need to calculate the payout for {amountOfCards} bets.
-                    The time limit is {timeLimit / 1000} seconds. You need to
-                    write the maximum denomination of how much the sector plays.
-                    Step is 5, maximum is {maxBet} progressive (DON'T WRITE THE
-                    REST). You need to do 100% to get to the leaderboard.
+                The goal is to calculate the payout for {amountOfCards} bets.
+                The time limit is {timeLimit / 1000} seconds. Specify the
+                highest denomination for the sector's payout (DO NOT WRITE THE
+                REST). The step is 5, with a maximum progressive of 50.
                   </Text>
                 )}
                 {mode === "sandbox" && (
@@ -282,6 +294,7 @@ function RouletteSeriesTest({ route }) {
           <Keyboard
             onKeyboardPress={handleKeyboardPress}
             handleInputChange={handleInputChange}
+            mode={mode}
           />
         </>
       )}

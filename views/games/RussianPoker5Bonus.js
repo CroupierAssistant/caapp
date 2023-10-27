@@ -15,6 +15,7 @@ import Paytable from "../../components/Paytable";
 
 function RussianPoker5Bonus() {
   const navigation = useNavigation();
+  const [timeLimit, setTimeLimit] = useState(90000);
 
   const handleNavigateToTest = () => {
     navigation.navigate("CardTest", {
@@ -23,9 +24,9 @@ function RussianPoker5Bonus() {
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
       step: Number(selectedStep),
-      timeLimit: 90000,
+      timeLimit: timeLimit,
       splitCoeff: false,
-      gameName: 'Russian Poker 5-bonus',
+      gameName: "Russian Poker 5-bonus",
       combinations: combinations,
     });
   };
@@ -77,6 +78,7 @@ function RussianPoker5Bonus() {
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
+    setTimeLimit(value * 9000);
     setSelectedButton(value);
   };
 
@@ -96,7 +98,7 @@ function RussianPoker5Bonus() {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}> 
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <Switcher
           isEnabled={isEnabled}
@@ -105,7 +107,7 @@ function RussianPoker5Bonus() {
         />
         {!user && (
           <Text style={{ ...styles.timeLimitDescription, marginTop: -20 }}>
-            Only Time Limit Mode available when you are not logged in.
+            When you're not logged in, only the Time Limit mode is accessible
           </Text>
         )}
         {!isEnabled && (
@@ -114,7 +116,7 @@ function RussianPoker5Bonus() {
             <>
               {!user && (
                 <Text style={styles.timeLimitDescription}>
-                  Only one option available when you are not logged in.
+                  When you're not logged in, only one option is available
                 </Text>
               )}
               <View style={styles.radioContainer}>
@@ -195,8 +197,9 @@ function RussianPoker5Bonus() {
               </View>
 
               <Text style={styles.timeLimitDescription}>
-                The goal is calculate payouts for {selectedButton} bets in 90
-                seconds
+                The goal is to calculate payouts for {selectedButton} bets
+                within {timeLimit / 1000} seconds. You have the option to skip a
+                card and return to it later
               </Text>
             </>
           </>
@@ -208,8 +211,8 @@ function RussianPoker5Bonus() {
             </Text>
             {!isPremium && (
               <Text style={{ ...styles.timeLimitDescription }}>
-                Only one option of each selecion is available when you are not
-                Premium.
+                At the free subscription plan, only one option from each
+                selection is available
               </Text>
             )}
             <>
@@ -447,10 +450,16 @@ function RussianPoker5Bonus() {
                   )}
                 </TouchableOpacity>
               </View>
+              <Text style={styles.timeLimitDescription}>
+                Choose the minimum and maximum number, as well as the
+                multiplicity to calculate the payouts. If you choose to skip the
+                card in this mode, you will not see this card again. There is no
+                time limit, so take your time and enjoy
+              </Text>
             </>
           </>
         )}
-        
+
         <Paytable combinations={combinations} splitCoeff={false} />
 
         <TouchableOpacity
@@ -544,7 +553,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   timeLimitDescription: {
-    marginVertical: 10,
+    marginVertical: 20,
     fontSize: 16,
     textAlign: "left",
     width: "100%",

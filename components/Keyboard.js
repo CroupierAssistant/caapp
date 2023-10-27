@@ -7,8 +7,9 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
+import { Ionicons } from '@expo/vector-icons';
 
-const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
+const Keyboard = ({ onKeyboardPress, handleInputChange, mode }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyPress = (value) => {
@@ -17,10 +18,11 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
     } else if (value === ".") {
       setInputValue((prev) => (prev.includes(".") ? prev : prev + value));
     } else if (value === "OK") {
-      // Ваша логика для обработки нажатия "Ok"
       handleInputChange(inputValue);
       onKeyboardPress("submit");
       setInputValue("");
+    } else if (value === "SKIP") {
+      onKeyboardPress("skip");
     } else {
       setInputValue((prev) => prev + value);
     }
@@ -41,7 +43,7 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
           style={styles.delButton}
           onPress={() => handleKeyPress("DEL")}
         >
-          <Text style={styles.buttonText}>DEL</Text>
+          <Ionicons name="backspace-outline" size={30} color="white" />
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
@@ -118,10 +120,10 @@ const Keyboard = ({ onKeyboardPress, handleInputChange }) => {
           <Text style={styles.buttonText}>0</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.okButton}
-          onPress={() => handleKeyPress("OK")}
+          style={{...styles.okButton, backgroundColor: inputValue ? "#479761" : "#a16e83",}}
+          onPress={() => handleKeyPress((mode === 'timelimit' && inputValue) ? "OK" : (mode === 'sandbox' ? "OK" : "SKIP"))}
         >
-          <Text style={styles.buttonText}>OK</Text>
+          <Text style={styles.buttonText}>{inputValue ? 'OK' : 'SKIP'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     rowGap: 2,
     height: 250,
-    maxHeight: (Dimensions.get('screen').height) * 0.3
+    maxHeight: (Dimensions.get('screen').height) * 0.35
   },
   inputContainer: {
     flex: 1,
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
     // height: 49,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#a16e83",
+    backgroundColor: "#999",
     // margin: 5,
     borderRadius: 2,
   },
@@ -177,7 +179,6 @@ const styles = StyleSheet.create({
     // height: 49,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#479761",
     // margin: 5,
     borderRadius: 2,
   },
@@ -196,3 +197,4 @@ const styles = StyleSheet.create({
 });
 
 export default Keyboard;
+

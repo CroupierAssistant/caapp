@@ -86,9 +86,22 @@ function CardTest({ route }) {
     setInputValue("");
   };
 
+  const handleSkipCard = () => {
+    setCardList(prevList => {
+      const newList = [...prevList];
+      const skippedCard = newList.splice(activeCardIndex, 1)[0];
+      newList.push(skippedCard);
+      return newList;
+    });
+  };
+
   const handleKeyboardPress = (key) => {
     if (key === "submit") {
       handleSubmit();
+    } else if (key === "skip") {
+      // напиши логику
+      // нужно переносить активную карту в конец очереди
+      handleSkipCard();
     }
   };
 
@@ -250,6 +263,7 @@ function CardTest({ route }) {
           <Keyboard
             onKeyboardPress={handleKeyboardPress}
             handleInputChange={handleInputChange}
+            mode={mode}
           />
         </>
       )}
