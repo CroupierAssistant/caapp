@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
@@ -15,7 +16,7 @@ function HomeScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.textHeader]}>Select a test</Text>
+      {/* <Text style={[styles.textHeader]}>Select a test</Text> */}
 
       <ScrollView
         style={{ flex: 1, width: "100%" }}
@@ -26,6 +27,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("Blackjack")}
         >
           <Text style={styles.buttonText}>Blackjack</Text>
+          <Image source={require('../assets/icons/blackjack.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -33,6 +35,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("MultiplicationTable")}
         >
           <Text style={styles.buttonText}>Multiplication Table</Text>
+          <Image source={require('../assets/icons/multiplication-table.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -40,6 +43,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RouletteSeries")}
         >
           <Text style={styles.buttonText}>Roulette Series</Text>
+          <Image source={require('../assets/icons/roulette.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -47,6 +51,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RoulettePictures")}
         >
           <Text style={styles.buttonText}>Roulette Pictures</Text>
+          <Image source={require('../assets/icons/roulette-pictures.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -54,6 +59,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("Neighbours")}
         >
           <Text style={styles.buttonText}>Neighbours</Text>
+          <Image source={require('../assets/icons/neighbours.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -81,6 +87,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPokerAnte")}
         >
           <Text style={styles.buttonText}>Russian poker Ante</Text>
+          <Image source={require('../assets/icons/card3.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -88,6 +95,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPoker5Bonus")}
         >
           <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
+          <Image source={require('../assets/icons/card6.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -95,6 +103,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPokerBonus")}
         >
           <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
+          <Image source={require('../assets/icons/card2.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -102,6 +111,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHBlindBets")}
         >
           <Text style={styles.buttonText}>UTH Blind Bets</Text>
+          <Image source={require('../assets/icons/card5.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -109,6 +119,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHTripsBets")}
         >
           <Text style={styles.buttonText}>UTH Trips Bets</Text>
+          <Image source={require('../assets/icons/card4.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -116,6 +127,7 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("TexasHoldEm")}
         >
           <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
+          <Image source={require('../assets/icons/card1.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         {/* <View style={styles.break} />
@@ -138,8 +150,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    borderTopWidth: 2,
-    borderTopColor: "#29648a",
   },
   break: {
     height: 2,
@@ -150,14 +160,27 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     backgroundColor: "#29648a",
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingHorizontal: 15,
     marginVertical: 3,
     borderRadius: 3,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 54
+  },
+  buttonIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'contain',
+    position: 'absolute',
+    top: 8,
+    right: 15
   },
   buttonText: {
     color: "#fff",
     fontSize: 20,
+    textTransform: 'uppercase',
+    fontWeight: '300'
   },
   textHeader: {
     textAlign: "center",

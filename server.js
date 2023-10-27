@@ -5,12 +5,7 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const path = require('path');
 
-const multer  = require('multer');
-
-// const {findUserById} = require("./models/User");
-// const User = require("./models/User");
 const { User, findUserById } = require('./models/User');
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
@@ -29,25 +24,6 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-
-const storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, './images');
-  },
-  filename(req, file, callback) {
-    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
-
-app.post('/api/upload', upload.array('photo', 3), (req, res) => {
-  console.log('file', req.files);
-  console.log('body', req.body);
-  res.status(200).json({
-    message: 'success!',
-  });
-});
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -285,6 +261,34 @@ app.get('/users/:userId', async (req, res) => {
   } catch (error) {
     console.error('Ошибка при поиске пользователя:', error);
     res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+app.post('/change-password', async (req, res) => {
+  const { username, currentPassword, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      res.json({ success: false, message: 'User not found' });
+      return;
+    }
+
+    if (currentPassword !== user.password) {
+      res.json({ success: false, message: 'Incorrect current password' });
+      return;
+    }
+
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
+    
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 

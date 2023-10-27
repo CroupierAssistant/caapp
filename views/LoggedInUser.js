@@ -5,20 +5,16 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
-  Image,
-  Alert,
-  Platform,
+  ScrollView,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-
-import { launchImageLibrary } from "react-native-image-picker";
-
-import axios from "axios";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
 
 const LoggedInUser = ({
   user,
@@ -26,55 +22,20 @@ const LoggedInUser = ({
   onAccountSettings,
   onAchievements,
   onWorkoutHistory,
-  onNotifications,
   onSupport,
   logout,
 }) => {
-  const [photo, setPhoto] = useState(null);
-  const SERVER_URL = "https://caapp-server.onrender.com";
-
-  const createFormData = (photo, body = {}) => {
-    const data = new FormData();
-
-    data.append("photo", {
-      name: photo.fileName,
-      type: photo.type,
-      uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
-    });
-
-    Object.keys(body).forEach((key) => {
-      data.append(key, body[key]);
-    });
-
-    return data;
-  };
-
-  const handleChoosePhoto = () => {
-    launchImageLibrary({ noData: true }, (response) => {
-      // console.log(response);
-      if (response) {
-        setPhoto(response);
-      }
-    });
-  };
-
-  const handleUploadPhoto = () => {
-    fetch(`${SERVER_URL}/api/upload`, {
-      method: "POST",
-      body: createFormData(photo, { userId: "123" }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("response", response);
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
+  const navigation = useNavigation();
 
   return (
-    <View>
-      <View style={styles.profileContainer}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          height: Dimensions.get("window").height - 80,
+        }}>
         <View style={styles.textContainer}>
           <Text style={styles.nickname}>{user.username}</Text>
           {user.firstName && user.lastName && (
@@ -88,22 +49,10 @@ const LoggedInUser = ({
             ))}
         </View>
 
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        <TouchableOpacity
+          onPress={() => navigation.navigate("SubscriptionManagement")}
+          style={styles.button}
         >
-          {photo && (
-            <>
-              <Image
-                source={{ uri: photo.uri }}
-                style={{ width: 300, height: 300 }}
-              />
-              <Button title="Upload Photo" onPress={handleUploadPhoto} />
-            </>
-          )}
-          <Button title="Choose Photo" onPress={handleChoosePhoto} />
-        </View>
-
-        {/* <TouchableOpacity onPress={onSubscriptionStatus} style={styles.button}>
           <View style={styles.buttonContent}>
             <MaterialCommunityIcons
               name="crown-circle"
@@ -112,38 +61,50 @@ const LoggedInUser = ({
             />
             <Text style={styles.buttonText}>Subscription</Text>
           </View>
-        </TouchableOpacity> */}
-        <TouchableOpacity onPress={onAccountSettings} style={styles.button}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("EditProfile")}
+          style={styles.button}
+        >
+          <View style={styles.buttonContent}>
+            <AntDesign name="profile" size={24} color="#29648a" />
+            <Text style={styles.buttonText}>Edit profile</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("AccountSettings")}
+          style={styles.button}
+        >
           <View style={styles.buttonContent}>
             <FontAwesome name="gear" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Account settings</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onAchievements} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Achievements")}
+          style={styles.button}
+        >
           <View style={styles.buttonContent}>
             <Ionicons name="ios-medal" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Achievements</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={onWorkoutHistory} style={styles.button}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("TestHistory")}
+          style={styles.button}
+        >
           <View style={styles.buttonContent}>
             <MaterialIcons name="history" size={24} color="#29648a" />
             <Text style={styles.buttonText}>Test history</Text>
           </View>
         </TouchableOpacity>
-        {/* <TouchableOpacity onPress={onNotifications} style={styles.button}>
-          <View style={styles.buttonContent}>
-            <Ionicons name="notifications" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Notification settings</Text>
-          </View>
-        </TouchableOpacity> */}
         <TouchableOpacity
-          onPress={onSupport}
+          onPress={() => navigation.navigate("HelpSupport")}
           style={{ ...styles.button, borderBottomWidth: 0 }}
         >
           <View style={styles.buttonContent}>
             <Ionicons name="help-circle" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Help and support</Text>
+            <Text style={styles.buttonText}>Help & support</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
@@ -153,7 +114,7 @@ const LoggedInUser = ({
           <Text style={{ color: "#fff", textAlign: "center" }}>Logout</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -79,8 +79,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    borderTopWidth: 2,
-    borderTopColor: "#29648a",
   },
   textHeader: {
     textAlign: "center",

@@ -11,7 +11,7 @@ import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 
-const AuthorizationComponent = () => {
+const AuthorizationComponent = ({setIsRegistering, isRegistering}) => {
   const { login, logout, user } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -68,7 +68,7 @@ const AuthorizationComponent = () => {
 
   return (
     <>
-    <Text style={[styles.textHeader]}>Sign in</Text>
+      <Text style={[styles.textHeader]}>Sign in</Text>
       <View style={styles.labelContainer}>
         <Text style={styles.label}>Username</Text>
         <TextInput
@@ -88,9 +88,7 @@ const AuthorizationComponent = () => {
         />
       </View>
 
-      {error && (
-        <Text style={styles.error}>{error}</Text>
-      )}
+      {error && <Text style={styles.error}>{error}</Text>}
 
       <TouchableOpacity
         style={{
@@ -106,6 +104,14 @@ const AuthorizationComponent = () => {
           Login
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
+        <Text style={styles.toggleButton}>
+          {isRegistering
+            ? "Have an account? Log in"
+            : "Don't have an account? Register"}
+        </Text>
+      </TouchableOpacity>
     </>
   );
 };
@@ -117,8 +123,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    borderTopWidth: 2,
-    borderTopColor: "#29648a",
     height: Dimensions.get("window").height - 130,
   },
   textHeader: {
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
     color: "#29648a",
     fontWeight: "bold",
     marginBottom: 20,
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
   mainContainer: {
     backgroundColor: "#29648a",
@@ -162,6 +166,12 @@ const styles = StyleSheet.create({
     color: "#a16e83",
     fontSize: 16,
     textAlign: "center",
+  },
+  toggleButton: {
+    color: "#808080",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 

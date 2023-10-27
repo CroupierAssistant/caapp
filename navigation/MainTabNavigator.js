@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../views/Profile";
 import HomeStackNavigator from "./TestsStackNavigator";
@@ -9,6 +9,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import TestsStackNavigator from "./TestsStackNavigator";
 import Ratings from "../views/Ratings";
+import ProfileStackNavigator from "./ProfileStackNavigator";
 
 // Создаем нижнюю навигацию
 const Tab = createBottomTabNavigator();
@@ -22,14 +23,18 @@ function MainTabNavigator() {
     >
       <Tab.Screen
         name="Main"
-        component={Profile}
+        component={ProfileStackNavigator}
         options={{
-          // tabBarLabel: "Main",
           tabBarShowLabel: true,
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign name="home" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            // <AntDesign name="home" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            focused ? (
+              <Image source={require('../assets/icons/home-active.png')} style={{ width: 24, height: 24}}/>
+            ) : (
+              <Image source={require('../assets/icons/home-inactive.png')} style={{ width: 24, height: 24}}/>
+            )
           ),
           tabBarLabel: ({ focused, color, size }) => (
             <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>MAIN</Text>
@@ -41,16 +46,19 @@ function MainTabNavigator() {
         name="Tests"
         component={TestsStackNavigator}
         options={{
-          
-          // tabBarLabel: "Tests",
           tabBarShowLabel: true,
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialCommunityIcons name="poker-chip" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            // <MaterialCommunityIcons name="poker-chip" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            focused ? (
+              <Image source={require('../assets/icons/test-active.png')} style={{ width: 24, height: 24}}/>
+            ) : (
+              <Image source={require('../assets/icons/test-inactive.png')} style={{ width: 24, height: 24}}/>
+            )
           ),
           tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>TESTS</Text>
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}> TESTS</Text>
           ),
           headerShown: false,
         }}
@@ -59,15 +67,19 @@ function MainTabNavigator() {
         name="Ratings"
         component={Ratings}
         options={{
-          // tabBarLabel: "Ratings",
           tabBarShowLabel: true,
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            <MaterialIcons name="leaderboard" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            // <MaterialIcons name="leaderboard" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
+            focused ? (
+              <Image source={require('../assets/icons/ratings-active.png')} style={{ width: 24, height: 24}}/>
+            ) : (
+              <Image source={require('../assets/icons/ratings-inactive.png')} style={{ width: 24, height: 24}}/>
+            )
           ),
           tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>RATINGS</Text>
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}> RATINGS</Text>
           ),
           headerShown: false,
           detachPreviousScreen: true,

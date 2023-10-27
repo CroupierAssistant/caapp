@@ -41,18 +41,10 @@ const Profile = (props) => {
             }}
           >
             {isRegistering ? (
-              <RegistrationComponent />
+              <RegistrationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering}/>
             ) : (
-              <AuthorizationComponent />
+              <AuthorizationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering}/>
             )}
-
-            <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
-              <Text style={styles.toggleButton}>
-                {isRegistering
-                  ? "Have an account? Log in"
-                  : "Don't have an account? Register"}
-              </Text>
-            </TouchableOpacity>
           </View>
         ) : (
           <>
@@ -80,15 +72,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    borderTopWidth: 2,
-    borderTopColor: "#29648a",
-    height: Dimensions.get("window").height - 130,
-  },
-  toggleButton: {
-    color: "#808080",
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 10,
+    height: Dimensions.get("window").height - 80,
   },
 });
 

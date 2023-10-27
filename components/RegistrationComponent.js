@@ -6,12 +6,13 @@ import {
   Dimensions,
   TouchableOpacity,
   Text,
+  ScrollView,
 } from "react-native";
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 
-const RegistrationComponent = () => {
+const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
   const { login, logout, user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
@@ -50,7 +51,12 @@ const RegistrationComponent = () => {
 
   const handleInputChange = async (field, value) => {
     if (field === "username") {
-      setErrors({ ...errors, userExists: "", usernameLong: "", isUsernameValid: "" });
+      setErrors({
+        ...errors,
+        userExists: "",
+        usernameLong: "",
+        isUsernameValid: "",
+      });
     }
     if (field === "firstName") {
       setErrors({ ...errors, isFirstnameValid: "" });
@@ -103,7 +109,7 @@ const RegistrationComponent = () => {
     const isUsernameValid = await isLatinAndDigits.test(formData.username);
     const isFirstnameValid = await isLatinAndDigits.test(formData.firstName);
     const isLastnameValid = await isLatinAndDigits.test(formData.lastName);
-    
+
     const emailTaken = await checkIfEmailExists(formData.email);
     const username = await formData.username;
     const email = await formData.email;
@@ -197,152 +203,174 @@ const RegistrationComponent = () => {
   };
 
   return (
-    <>
-      <Text style={[styles.textHeader]}>Registration</Text>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>
-          Username <Text style={styles.asterix}>*</Text>
-        </Text>
-        <TextInput
-          style={{
-            ...styles.input,
-            borderColor: errors && errors.userExists ? "red" : "#29648a",
-          }}
-          value={formData.username}
-          onChangeText={(text) => handleInputChange("username", text)}
-        />
-        {errors && errors.userExists ? (
-          <Text style={styles.error}>
-            Пользователь с таким именем уже существует
-          </Text>
-        ) : null}
-        {errors && errors.usernameLong ? (
-          <Text style={styles.error}>Минимум 3 символа</Text>
-        ) : null}
-        {errors && errors.isUsernameValid ? (
-          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
-        ) : null}
-      </View>
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>First Name</Text>
-        <TextInput
-          style={styles.input}
-          value={formData.firstName}
-          onChangeText={(text) => handleInputChange("firstName", text)}
-        />
-        {errors && errors.isFirstnameValid ? (
-          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>Last Name</Text>
-        <TextInput
-          style={styles.input}
-          value={formData.lastName}
-          onChangeText={(text) => handleInputChange("lastName", text)}
-        />
-        {errors && errors.isLastnameValid ? (
-          <Text style={styles.error}>Разрешены только буквы латинского алфавита и цифры</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>
-          E-mail <Text style={styles.asterix}>*</Text>
-        </Text>
-        <TextInput
-          style={{
-            ...styles.input,
-            borderColor:
-              (errors && errors.emailTaken) || errors.invalidEmail
-                ? "red"
-                : "#29648a",
-          }}
-          value={formData.email}
-          textContentType="emailAddress"
-          onChangeText={(text) => handleInputChange("email", text)}
-        />
-        {errors && errors.emailTaken ? (
-          <Text style={styles.error}>Электронная почта уже занята</Text>
-        ) : null}
-        {errors && errors.invalidEmail ? (
-          <Text style={styles.error}>Неверный формат электронной почты</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>
-          Password <Text style={styles.asterix}>*</Text>
-        </Text>
-        <TextInput
-          style={{
-            ...styles.input,
-            borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
-          }}
-          value={formData.password}
-          onChangeText={(text) => handleInputChange("password", text)}
-          secureTextEntry
-        />
-        {errors && errors.passwordLong ? (
-          <Text style={styles.error}>Минимум 8 символов</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.labelContainer}>
-        <Text style={styles.label}>
-          Repeat password <Text style={styles.asterix}>*</Text>
-        </Text>
-        <TextInput
-          style={{
-            ...styles.input,
-            borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
-          }}
-          value={formData.confirmPassword}
-          onChangeText={(text) => handleInputChange("confirmPassword", text)}
-          secureTextEntry
-        />
-        {errors && errors.passwordMatch ? (
-          <Text style={styles.error}>Пароли не совпадают</Text>
-        ) : null}
-      </View>
-
-      <View style={styles.checkboxContainer}>
-        <TouchableOpacity
-          onPress={() => handleInputChange("agree", !formData.agree)}
-        >
-          <View style={styles.checkbox}>
-            {formData.agree && <View style={styles.checkboxInner} />}
-          </View>
-        </TouchableOpacity>
-        <Text
-          onPress={() => handleInputChange("agree", !formData.agree)}
-          style={styles.checkboxLabel}
-        >
-          I agree with the processing of personal data{" "}
-          <Text style={styles.asterix}>*</Text>
-        </Text>
-      </View>
-
-      {errors && errors.isFormFilled ? (
-        <Text style={styles.error}>Заполните все необходимые поля</Text>
-      ) : null}
-
-      <TouchableOpacity
+    <ScrollView>
+      <View
         style={{
-          marginVertical: 15,
-          backgroundColor: "#29648a",
-          borderRadius: 3,
-          width: 200,
-          padding: 10,
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
         }}
-        onPress={handleRegister}
       >
-        <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
-          Register
-        </Text>
-      </TouchableOpacity>
-    </>
+        <Text style={[styles.textHeader]}>Registration</Text>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>
+            Username <Text style={styles.asterix}>*</Text>
+          </Text>
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor: errors && errors.userExists ? "red" : "#29648a",
+            }}
+            value={formData.username}
+            onChangeText={(text) => handleInputChange("username", text)}
+          />
+          {errors && errors.userExists ? (
+            <Text style={styles.error}>
+              Пользователь с таким именем уже существует
+            </Text>
+          ) : null}
+          {errors && errors.usernameLong ? (
+            <Text style={styles.error}>Минимум 3 символа</Text>
+          ) : null}
+          {errors && errors.isUsernameValid ? (
+            <Text style={styles.error}>
+              Разрешены только буквы латинского алфавита и цифры
+            </Text>
+          ) : null}
+        </View>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>First Name</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.firstName}
+            onChangeText={(text) => handleInputChange("firstName", text)}
+          />
+          {errors && errors.isFirstnameValid ? (
+            <Text style={styles.error}>
+              Разрешены только буквы латинского алфавита и цифры
+            </Text>
+          ) : null}
+        </View>
+
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Last Name</Text>
+          <TextInput
+            style={styles.input}
+            value={formData.lastName}
+            onChangeText={(text) => handleInputChange("lastName", text)}
+          />
+          {errors && errors.isLastnameValid ? (
+            <Text style={styles.error}>
+              Разрешены только буквы латинского алфавита и цифры
+            </Text>
+          ) : null}
+        </View>
+
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>
+            E-mail <Text style={styles.asterix}>*</Text>
+          </Text>
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor:
+                (errors && errors.emailTaken) || errors.invalidEmail
+                  ? "red"
+                  : "#29648a",
+            }}
+            value={formData.email}
+            textContentType="emailAddress"
+            onChangeText={(text) => handleInputChange("email", text)}
+          />
+          {errors && errors.emailTaken ? (
+            <Text style={styles.error}>Электронная почта уже занята</Text>
+          ) : null}
+          {errors && errors.invalidEmail ? (
+            <Text style={styles.error}>Неверный формат электронной почты</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>
+            Password <Text style={styles.asterix}>*</Text>
+          </Text>
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
+            }}
+            value={formData.password}
+            onChangeText={(text) => handleInputChange("password", text)}
+            secureTextEntry
+          />
+          {errors && errors.passwordLong ? (
+            <Text style={styles.error}>Минимум 8 символов</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>
+            Repeat password <Text style={styles.asterix}>*</Text>
+          </Text>
+          <TextInput
+            style={{
+              ...styles.input,
+              borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
+            }}
+            value={formData.confirmPassword}
+            onChangeText={(text) => handleInputChange("confirmPassword", text)}
+            secureTextEntry
+          />
+          {errors && errors.passwordMatch ? (
+            <Text style={styles.error}>Пароли не совпадают</Text>
+          ) : null}
+        </View>
+
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            onPress={() => handleInputChange("agree", !formData.agree)}
+          >
+            <View style={styles.checkbox}>
+              {formData.agree && <View style={styles.checkboxInner} />}
+            </View>
+          </TouchableOpacity>
+          <Text
+            onPress={() => handleInputChange("agree", !formData.agree)}
+            style={styles.checkboxLabel}
+          >
+            I agree with the processing of personal data{" "}
+            <Text style={styles.asterix}>*</Text>
+          </Text>
+        </View>
+
+        {errors && errors.isFormFilled ? (
+          <Text style={styles.error}>Заполните все необходимые поля</Text>
+        ) : null}
+
+        <TouchableOpacity
+          style={{
+            marginVertical: 15,
+            backgroundColor: "#29648a",
+            borderRadius: 3,
+            width: 200,
+            padding: 10,
+          }}
+          onPress={handleRegister}
+        >
+          <Text style={{ color: "#fff", fontSize: 20, textAlign: "center" }}>
+            Register
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
+          <Text style={styles.toggleButton}>
+            {isRegistering
+              ? "Have an account? Log in"
+              : "Don't have an account? Register"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -353,9 +381,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    borderTopWidth: 2,
-    borderTopColor: "#29648a",
-    height: Dimensions.get("window").height - 130,
+    // height: Dimensions.get("window").height - 130,
   },
   textHeader: {
     textAlign: "center",
@@ -433,6 +459,12 @@ const styles = StyleSheet.create({
   asterix: {
     color: "red",
     fontSize: 18,
+  },
+  toggleButton: {
+    color: "#808080",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 
