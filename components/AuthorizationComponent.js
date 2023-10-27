@@ -34,10 +34,9 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
       username: formData.username,
       password: formData.password,
     })
-      .then((response) => {
+      .then(async (response) => {
         const token = response.data.token;
-        document.cookie = `jwt=${token}`;
-        AsyncStorage.setItem("token", token);
+        await AsyncStorage.setItem("token", token); // Сохранение токена в AsyncStorage
         login(response.data.user); // Добавление в контекст после успешной авторизации
         setFormData({
           username: "",
