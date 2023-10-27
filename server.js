@@ -253,7 +253,6 @@ app.get("/emailExists", async (req, res) => {
 
 app.get('/users/:userId', async (req, res) => {
   const userId = req.params.userId;
-  console.log("Сервер принимает: ", userId);
 
   try {
     const user = await findUserById(userId);
@@ -282,7 +281,7 @@ app.post('/change-password', async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
     user.password = hashedPassword;
-    
+
     await user.save();
 
     res.json({ success: true });
