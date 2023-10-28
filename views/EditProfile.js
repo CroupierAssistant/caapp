@@ -1,61 +1,86 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
-import ImagePicker from "react-native-image-picker";
+import { View, Text, StyleSheet, Button, Image } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import axios from 'axios';
 
 const EditProfile = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const openImagePicker = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Permission to access media library is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setSelectedImage(result.assets[0].uri);
+      uploadImage(result.assets[0].uri); // Отправляем фото на сервер
+    }
+  };
+
+  const handleCameraLaunch = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Permission to access camera is required!");
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setSelectedImage(result.uri);
+      uploadImage(result.uri); // Отправляем фото на сервер
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    const formData = new FormData();
+    formData.append("file", {
+      uri,
+      type: "image/jpeg", // или другой MIME-тип вашего изображения
+      name: "myImage.jpg",
+    });
+
+    try {
+      const response = await axios.post(
+        "https://caapp-server.onrender.com/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Image uploaded:", response.data);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={[styles.textHeader]}>Edit Profile</Text>
-      <TouchableHighlight
-        onPress={() => {
-          var options = {
-            title: "Select Image",
-            storageOptions: {
-              skipBackup: true,
-              path: "images",
-            },
-          };
-          ImagePicker.showImagePicker(options, (response) => {
-            console.log("Response = ", response);
-            if (response.didCancel) {
-              console.log("User cancelled image picker");
-            } else if (response.error) {
-              console.log("ImagePicker Error: ", response.error);
-            } else if (response.customButton) {
-              console.log("User tapped custom button: ", response.customButton);
-            } else {
-              console.log(
-                "User selected a file from camera or gallery",
-                response
-              );
-              const data = new FormData();
-              data.append("name", "avatar");
-              data.append("fileData", {
-                uri: response.uri,
-                type: response.type,
-                name: response.fileName,
-              });
-              const config = {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "multipart/form-data",
-                },
-                body: data,
-              };
-              fetch("http://localhost:3000/" + "upload", config)
-                .then((checkStatusAndGetJSONResponse) => {
-                  console.log(checkStatusAndGetJSONResponse);
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
-            }
-          });
-        }}
-      >
-        CHOOSE PHOTO
-      </TouchableHighlight>
+      <Image
+        source={{ uri: selectedImage }}
+        style={{ width: 200, height: 200, resizeMode: "cover" }}
+      />
+      <Button title="Choose from Device" onPress={openImagePicker} />
+      <Button title="Open Camera" onPress={handleCameraLaunch} />
     </View>
   );
 };

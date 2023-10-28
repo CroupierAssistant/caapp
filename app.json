@@ -11,18 +11,25 @@
       "resizeMode": "contain",
       "backgroundColor": "#ccc"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.g0rdonshumway.caapp"
+      "bundleIdentifier": "com.g0rdonshumway.caapp",
+      "infoPlist": {
+        "NSCameraUsageDescription": "We need access to your camera",
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-1.png",
         "backgroundColor": "#ccc"
       },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
       "package": "com.g0rdonshumway.caapp"
     },
     "web": {
