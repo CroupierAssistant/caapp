@@ -50,10 +50,10 @@ const EditProfile = () => {
 
   const uploadImage = async (uri) => {
     const formData = new FormData();
-    formData.append("file", {
+    formData.append('fileData', {
       uri,
-      type: "image/jpeg", // или другой MIME-тип вашего изображения
-      name: "myImage.jpg",
+      type: 'image/jpeg', 
+      name: 'myImage.jpg'
     });
 
     try {
