@@ -46,7 +46,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/uploads',express.static('uploads'));
+// app.use('/uploads',express.static('uploads'));
 
 app.post('/upload', uploadPhoto.single('photo'), (req, res) => {
 	var _uid = req.body.uid;

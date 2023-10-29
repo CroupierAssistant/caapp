@@ -14,7 +14,7 @@ const EditProfile = () => {
       Alert.alert("Error", "Permissions not granted");
       return false;
     }
-    console.log('Permission: ', permission);
+    console.log("Permission: ", permission);
     return true;
   }
 
@@ -27,37 +27,34 @@ const EditProfile = () => {
       allowsEditing: false,
       aspect: [1, 1],
     });
-    console.log('Image: ', img);
-    setImage(img.uri)
-    uploadFile(img.uri)
+    console.log("Image: ", img);
+    setImage(img.uri);
+    uploadImageAsync(img.uri);
   };
 
   async function uploadImageAsync(uri) {
-    let apiUrl = 'https://caapp-server.onrender.com/upload';
-    
-    let uriParts = uri.split('.');
-    let fileType = uriParts[uriParts.length - 1];
+    let apiUrl = "https://caapp-server.onrender.com/upload";
   
     let formData = new FormData();
-    formData.append('photo', {
+    formData.append("photo", {
       uri,
-      name: `photo`,
+      name: `photo.jpg`,
       type: `image/jpeg`,
-      
     });
   
-    let options = {
-      method: 'POST',
-      body: formData,
-          headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },
-    };
+    try {
+      let response = await axios.post(apiUrl, formData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+      });
   
-    return fetch(apiUrl, options);
+      console.log("Upload successful!", response.data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   }
-
   return (
     <View style={styles.container}>
       {image && <Image source={{ uri: image }} style={styles.image} />}
@@ -86,7 +83,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     marginBottom: 20,
-    resizeMode: "contain"
+    resizeMode: "contain",
   },
 });
 
