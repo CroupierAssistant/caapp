@@ -5,8 +5,9 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-var multer = require("multer");
-var upload = multer({ dest: "uploads/" }); //setting the default folder for multer
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 const { User, findUserById } = require("./models/User");
 
@@ -298,23 +299,11 @@ app.post("/change-password", async (req, res) => {
   }
 });
 
-app.post("/upload", upload.single("fileData"), (req, res, next) => {
-  try {
-    console.log(req.file);
-    console.log(req.body);
-    fs.readFile(req.file.path, (err, contents) => {
-      if (err) {
-        console.log("Error: ", err);
-        res.status(500).send("Internal Server Error");
-      } else {
-        console.log("File contents ", contents);
-        res.send("File Uploaded Successfully");
-      }
-    });
-  } catch (error) {
-    console.error("Error: ", error);
-    res.status(500).send("Internal Server Error");
-  }
+// This method will save a "photo" field from the request as a file.
+app.patch('/upload', upload.single('file'), (req, res) => {
+  // You can access other HTTP parameters. They are located in the body object.
+  console.log(req.body);
+  res.end('OK');
 });
 
 const PORT = 10000;
