@@ -6,9 +6,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
 const { User, findUserById } = require("./models/User");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
@@ -23,10 +20,49 @@ const TexasHoldemResult = require("./models/TexasHoldemResult"); // Import the T
 const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestResult model
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
 
+const sharp = require('sharp');
+const multer = require('multer');
+
+var storagePhotos = multer.diskStorage({
+  filename: (req, file, cb) => {
+    console.log(file);
+    var filetype = '';
+    if(file.mimetype === 'image/gif') {
+      filetype = 'gif';
+    }
+    if(file.mimetype === 'image/png') {
+      filetype = 'png';
+    }
+    if(file.mimetype === 'image/jpeg') {
+      filetype = 'jpg';
+    }
+    cb(null, 'profile-' + new Date().toISOString() + '.' + filetype);
+  }
+});
+
+var uploadPhoto = multer({storage: storagePhotos})
+
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads',express.static('uploads'));
+
+app.post('/upload', uploadPhoto.single('photo'), (req, res) => {
+	var _uid = req.body.uid;
+	var file = req.file;
+    if(file) {
+			sharp(file.path).resize(300,300).toFile('./uploads/'+'300x300-'+file.filename,function(err){
+				if(err){
+					console.log('sharp>>>',err);
+				}
+				else{
+					console.log('resize ok !');
+				}
+			})
+    }
+    else throw 'error';
+});
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -297,13 +333,6 @@ app.post("/change-password", async (req, res) => {
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
-});
-
-// This method will save a "photo" field from the request as a file.
-app.patch('/upload', upload.single('file'), (req, res) => {
-  // You can access other HTTP parameters. They are located in the body object.
-  console.log(req.body);
-  res.end('OK');
 });
 
 const PORT = 10000;

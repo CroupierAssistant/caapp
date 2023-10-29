@@ -1,43 +1,62 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Button, Image, Alert } from "react-native";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import * as ImagePicker from "expo-image-picker";
+import { Camera, CameraType } from "expo-camera";
 import axios from "axios";
 
 const EditProfile = () => {
   const [image, setImage] = useState(null);
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+
+  async function askForPermissions() {
+    if (!permission) {
+      Alert.alert("Error", "Permissions not granted");
+      return false;
+    }
+    console.log('Permission: ', permission);
+    return true;
+  }
 
   const takePhoto = async () => {
-    const result = await launchImageLibrary({
-      mediaType: "photo",
-      selectionLimit: 1,
+    const hasPermissiont = await askForPermissions();
+    if (!hasPermissiont) return;
+
+    const img = await ImagePicker.launchCameraAsync({
+      quality: 0.7,
+      allowsEditing: false,
+      aspect: [1, 1],
     });
-
-    if (result.assets) {
-      setImage(result.assets.uri);
-      try {
-        const formData = new FormData();
-        const sendFileData = result.assets.map((item) => ({
-          type: item.type,
-          name: item.fileName,
-          uri: item.uri,
-        }));
-
-        formData.append("file", sendFileData);
-
-        const response = await axios.post('https://caapp-server.onrender.com/upload', formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        console.log("Файл успешно загружен:", response.data);
-      } catch (error) {
-        console.error("Ошибка загрузки файла:", error);
-      }
-    }
+    console.log('Image: ', img);
+    setImage(img.uri)
+    uploadFile(img.uri)
   };
 
-  //   const apiUrl = 'http://localhost:19006/upload'; // Замените на URL вашего сервера
+  async function uploadImageAsync(uri) {
+    let apiUrl = 'https://caapp-server.onrender.com/upload';
+    
+    let uriParts = uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
+  
+    let formData = new FormData();
+    formData.append('photo', {
+      uri,
+      name: `photo`,
+      type: `image/jpeg`,
+      
+    });
+  
+    let options = {
+      method: 'POST',
+      body: formData,
+          headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+  
+    return fetch(apiUrl, options);
+  }
 
   return (
     <View style={styles.container}>
@@ -67,7 +86,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     marginBottom: 20,
-    resizeMode: "contain",
+    resizeMode: "contain"
   },
 });
 
