@@ -5,6 +5,7 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const multer  = require('multer');
 
 const { User, findUserById } = require("./models/User");
 
@@ -20,49 +21,28 @@ const TexasHoldemResult = require("./models/TexasHoldemResult"); // Import the T
 const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestResult model
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
 
-const sharp = require('sharp');
-const multer = require('multer');
 
-var storagePhotos = multer.diskStorage({
-  filename: (req, file, cb) => {
-    console.log(file);
-    var filetype = '';
-    if(file.mimetype === 'image/gif') {
-      filetype = 'gif';
-    }
-    if(file.mimetype === 'image/png') {
-      filetype = 'png';
-    }
-    if(file.mimetype === 'image/jpeg') {
-      filetype = 'jpg';
-    }
-    cb(null, 'profile-' + new Date().toISOString() + '.' + filetype);
-  }
-});
-
-var uploadPhoto = multer({storage: storagePhotos})
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-// app.use('/uploads',express.static('uploads'));
 
-app.post('/upload', uploadPhoto.single('photo'), (req, res) => {
-	var _uid = req.body.uid;
-	var file = req.file;
-    if(file) {
-			sharp(file.path).resize(300,300).toFile('./uploads/'+'300x300-'+file.filename,function(err){
-				if(err){
-					console.log('sharp>>>',err);
-				}
-				else{
-					console.log('resize ok !');
-				}
-			})
-    }
-    else throw 'error';
+const upload = multer({ dest: 'uploads/' });
+
+// POST-обработчик для загрузки файлов
+app.post('/api/file-upload', upload.single('photo'), (req, res) => {
+    // Путь к загруженному файлу
+    const filePath = req.file.path;
+
+    // Вернуть информацию о загруженном файле
+    res.json({
+        photo: {
+            photo: filePath,
+        }
+    });
 });
+
 
 async function hashPassword(password) {
   const saltRounds = 10;
