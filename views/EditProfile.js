@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
@@ -9,27 +9,27 @@ const EditProfile = () => {
     const [photo, setPhoto] = React.useState(null);
 
     const changeProfilePicture = async () => {
-      const image = await ImagePicker.launchImageLibraryAsync();
-    
-      try {
-        const response = await axios.put(
-          "https://caapp-server.onrender.com/change-profile-picture",
-          {
-            username: user.username,
-            profilePicture: image,
-          }
-        );
-          setPhoto(image)          
-    
-        if (response.data.success) {
-          updateUser({ ...user, profilePicture: image });
-          Alert.alert("Success", "Profile picture changed successfully");
-        } else {
-          Alert.alert("Error", response.data.message);
+        const image = await ImagePicker.launchImageLibraryAsync();
+
+        try {
+            const response = await axios.put(
+                "https://caapp-server.onrender.com/change-profile-picture",
+                {
+                    username: user.username,
+                    profilePicture: image,
+                }
+            );
+            setPhoto(image)
+
+            if (response.data.success) {
+                updateUser({ ...user, profilePicture: image });
+                Alert.alert("Success", "Profile picture changed successfully");
+            } else {
+                Alert.alert("Error", response.data.message);
+            }
+        } catch (error) {
+            Alert.alert("Error", "An error occurred while changing profile picture");
         }
-      } catch (error) {
-        Alert.alert("Error", "An error occurred while changing profile picture");
-      }
     };
 
     return (
@@ -38,14 +38,13 @@ const EditProfile = () => {
                 <Text style={styles.title}>React Native Image Upload Axios</Text>
             </View>
 
-            {photoShow &&
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{ uri: photoShow }}
-                        style={{ width: '100%', height: 350 }}
-                    />
-                </View>
-            }
+            <View style={styles.imageContainer}>
+                <Image
+                    source={{ uri: photo }}
+                    style={{ width: '100%', height: 350 }}
+                />
+            </View>
+
 
             <TouchableOpacity
                 style={styles.buttonStyle}
@@ -90,23 +89,23 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     imageContainer: {
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        borderWidth:1,
-        borderColor:'#d9d6d6',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#d9d6d6',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,
-        shadowRadius: 2,  
+        shadowRadius: 2,
         elevation: 5,
     },
     titleContainer: {
-        alignItems:'center',
-        marginBottom:30,
+        alignItems: 'center',
+        marginBottom: 30,
     },
     title: {
-        fontSize:23,
-        fontWeight:'bold',
+        fontSize: 23,
+        fontWeight: 'bold',
     },
 });
 

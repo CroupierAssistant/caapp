@@ -69,6 +69,14 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
+    // Проверка значения поля profilePicture
+    if (newUser.profilePicture === require("@expo/vector-icons/assets/svg/ios-person.svg").buffer) {
+      // Если значение по умолчанию, заменить его на изображение, выбранное пользователем
+      const image = await ImagePicker.launchImageLibraryAsync();
+      newUser.profilePicture = image;
+      await newUser.save();
+    }
+
     const token = jwt.sign({ userId: newUser._id }, "ваш_секретный_ключ");
 
     return res.json({ success: "Регистрация успешна", user: newUser, token });
