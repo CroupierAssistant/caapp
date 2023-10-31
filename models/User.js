@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   profilePicture: {
     type: Buffer,    
-    default: fs.readFileSync('../assets/icons/no-user.png'),
+    default: fs.readFile('../assets/icons/no-user.png'),
   },
   showUserData: {
     type: Boolean,
