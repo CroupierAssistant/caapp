@@ -1,12 +1,22 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { AuthContext } from "../context/AuthContext";
+import { Buffer } from 'buffer';
 
 const EditProfile = () => {
     const { user, updateUser } = useContext(AuthContext);
-    const [photo, setPhoto] = React.useState(user.profilePicture && user.profilePicture);
+    const [photo, setPhoto] = useState(null);
+
+    useEffect(() => {
+        const binData = user.profilePicture && user.profilePicture;
+
+        const buffer = Buffer.from(binData);
+
+        setPhoto(buffer)
+
+    }, [])
 
     const changeProfilePicture = async () => {
         const image = await ImagePicker.launchImageLibraryAsync();
@@ -40,7 +50,7 @@ const EditProfile = () => {
 
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: `data:image/png;base64,${photo.toString("base64")}` }}
+                    source={{ uri: photo }}
                     style={{ width: '100%', height: 350 }}
                 />
             </View>
