@@ -1,46 +1,36 @@
-import React from 'react';
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
 
 const EditProfile = () => {
+    const { user, updateUser } = useContext(AuthContext);
     const [photo, setPhoto] = React.useState(null);
     const [photoShow, setPhotoShow] = React.useState(null);
 
-    const takePhotoAndUpload = async () => {
-
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: false,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (result.cancelled) {
-            return;
+    const changeProfilePicture = async () => {
+      const image = await ImagePicker.launchImageLibraryAsync();
+    
+      try {
+        const response = await axios.put(
+          "https://caapp-server.onrender.com/change-profile-picture",
+          {
+            username: user.username,
+            profilePicture: image,
+          }
+        );
+    
+        if (response.data.success) {
+          updateUser({ ...user, profilePicture: image });
+          Alert.alert("Success", "Profile picture changed successfully");
+        } else {
+          Alert.alert("Error", response.data.message);
         }
-
-        let localUri = result.uri;
-        setPhotoShow(localUri);
-        let filename = localUri.split('/').pop();
-
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-
-        let formData = new FormData();
-        formData.append('photo', { uri: localUri, name: filename, type });
-
-        await axios.post('http://localhost/api/file-upload', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
-        }).then(res => {
-            setPhoto(res.data.photo.photo);
-        }).catch(err => {
-            console.log(err.response);
-        });
-    }
-
-    const dicardImage = () => {
-        setPhotoShow(null);
-    }
+      } catch (error) {
+        Alert.alert("Error", "An error occurred while changing profile picture");
+      }
+    };
 
     return (
         <View style={styles.mainBody}>
