@@ -70,7 +70,7 @@ app.post("/register", async (req, res) => {
     });
 
     // Проверка значения поля profilePicture
-    if (newUser.profilePicture === require("@expo/vector-icons/assets/svg/ios-person.svg").buffer) {
+    if (newUser.profilePicture === require("./assets/icons/no-user.png").buffer) {
       // Если значение по умолчанию, заменить его на изображение, выбранное пользователем
       const image = await ImagePicker.launchImageLibraryAsync();
       newUser.profilePicture = image;

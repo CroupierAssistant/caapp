@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   profilePicture: {
     type: Buffer,
-    default: require("assets/icons/no-user.png").buffer,
+    default: require("../assets/icons/no-user.png").buffer,
   },
   showUserData: {
     type: Boolean,
