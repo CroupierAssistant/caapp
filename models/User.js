@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   profilePicture: {
     type: Buffer,
-    default: require("@expo/vector-icons/assets/svg/ios-person.svg").buffer,
+    default: require("../assets/icons/no-user.png").buffer,
   },
   showUserData: {
     type: Boolean,

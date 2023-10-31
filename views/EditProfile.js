@@ -40,7 +40,7 @@ const EditProfile = () => {
 
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: photo }}
+                    source={{ uri: user && user.profilePicture ? user.profilePicture : '' }}
                     style={{ width: '100%', height: 350 }}
                 />
             </View>
