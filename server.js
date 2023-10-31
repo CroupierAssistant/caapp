@@ -5,6 +5,7 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
+const multer = require('multer');
 
 const { User, findUserById } = require("./models/User");
 
@@ -25,7 +26,36 @@ const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestRes
 const app = express();
 
 app.use(cors());
+
+// Настройка Multer
+const storage = multer.diskStorage({
+  destination: './uploads',
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
 app.use(bodyParser.json());
+
+// Создание маршрута для загрузки файлов
+app.post('/upload', upload.single('image'), (req, res) => {
+  // Получить данные файла
+  const image = req.file;
+
+  // Сохранить файл
+  image.mv('./uploads/' + image.filename, (err) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send({
+        success: true,
+        message: 'Файл успешно загружен',
+      });
+    }
+  });
+});
 
 async function hashPassword(password) {
   const saltRounds = 10;
