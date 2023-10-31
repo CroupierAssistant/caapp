@@ -15,7 +15,7 @@ const EditProfile = () => {
         data: image,
       });
   
-      fetch('http://localhost:3000/upload', {
+      fetch('https://caapp-server.onrender.com/upload', {
         method: 'POST',
         body: formData,
       })

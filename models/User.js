@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema({
   password: String,
   profilePicture: {
     type: Buffer,    
-    default: require('../assets/icons/no-user.png'),
   },
   showUserData: {
     type: Boolean,
