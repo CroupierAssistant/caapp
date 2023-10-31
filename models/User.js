@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-import fs from 'fs';
+const fs = require('fs')
 
 const userSchema = new mongoose.Schema({
   username: String,
