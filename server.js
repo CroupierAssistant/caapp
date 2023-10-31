@@ -5,7 +5,6 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const multer  = require('multer');
 
 const { User, findUserById } = require("./models/User");
 
@@ -27,22 +26,6 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
-
-const upload = multer({ dest: 'uploads/' });
-
-// POST-обработчик для загрузки файлов
-app.post('/api/file-upload', upload.single('photo'), (req, res) => {
-    // Путь к загруженному файлу
-    const filePath = req.file.path;
-
-    // Вернуть информацию о загруженном файле
-    res.json({
-        photo: {
-            photo: filePath,
-        }
-    });
-});
-
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -305,6 +288,28 @@ app.post("/change-password", async (req, res) => {
 
     const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;
+
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+app.put("/change-profile-picture", async (req, res) => {
+  const { username, profilePicture } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      res.json({ success: false, message: "User not found" });
+      return;
+    }
+
+    user.profilePicture = profilePicture;
 
     await user.save();
 
