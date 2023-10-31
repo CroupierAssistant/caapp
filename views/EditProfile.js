@@ -7,7 +7,6 @@ import { AuthContext } from "../context/AuthContext";
 const EditProfile = () => {
     const { user, updateUser } = useContext(AuthContext);
     const [photo, setPhoto] = React.useState(null);
-    const [photoShow, setPhotoShow] = React.useState(null);
 
     const changeProfilePicture = async () => {
       const image = await ImagePicker.launchImageLibraryAsync();
@@ -20,6 +19,7 @@ const EditProfile = () => {
             profilePicture: image,
           }
         );
+          setPhoto(image)          
     
         if (response.data.success) {
           updateUser({ ...user, profilePicture: image });
@@ -50,16 +50,9 @@ const EditProfile = () => {
             <TouchableOpacity
                 style={styles.buttonStyle}
                 activeOpacity={0.5}
-                onPress={takePhotoAndUpload}
+                onPress={changeProfilePicture}
             >
                 <Text style={styles.buttonTextStyle}>Upload Image</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.buttonStyle}
-                activeOpacity={0.5}
-                onPress={dicardImage}
-            >
-                <Text style={styles.buttonTextStyle}>Discard Image</Text>
             </TouchableOpacity>
         </View>
     );
