@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+import fs from 'fs';
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -8,7 +9,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   profilePicture: {
     type: Buffer,    
-    default: require("react-native-vector-icons/Ionicons").Ionicons.MdPerson,
+    default: fs.readFileSync('../assets/icons/no-user.png'),
   },
   showUserData: {
     type: Boolean,
