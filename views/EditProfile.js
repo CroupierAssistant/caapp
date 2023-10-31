@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const EditProfile = () => {
     const { user, updateUser } = useContext(AuthContext);
-    const [photo, setPhoto] = React.useState(null);
+    const [photo, setPhoto] = React.useState(user.profilePicture && user.profilePicture);
 
     const changeProfilePicture = async () => {
         const image = await ImagePicker.launchImageLibraryAsync();
@@ -40,7 +40,7 @@ const EditProfile = () => {
 
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: user && user.profilePicture ? user.profilePicture : '' }}
+                    source={{ uri: `data:image/png;base64,${photo.toString("base64")}` }}
                     style={{ width: '100%', height: 350 }}
                 />
             </View>
