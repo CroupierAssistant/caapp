@@ -6,10 +6,13 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
+  profilePicture: {
+    type: Buffer,
+  },
   showUserData: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 const User = mongoose.model('User', userSchema, 'users');
