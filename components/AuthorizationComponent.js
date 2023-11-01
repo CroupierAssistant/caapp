@@ -30,7 +30,6 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
   };
 
   const handleLogin = () => {
-    // Axios.post("http://192.168.31.124:3000/login", {
     Axios.post("https://caapp-server.onrender.com/login", {
       username: formData.username,
       password: formData.password,
@@ -38,7 +37,8 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
-        AsyncStorage.setItem("authToken", token);
+        AsyncStorage.setItem('authToken', token);
+        AsyncStorage.setItem('user', JSON.stringify(response.data.user));
         login(response.data.user); // Добавление в контекст после успешной авторизации
         setFormData({
           username: "",

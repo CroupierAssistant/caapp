@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
+  ActivityIndicator,
   StyleSheet,
   ScrollView,
   Dimensions,
@@ -12,55 +11,47 @@ import LoggedInUser from "./LoggedInUser";
 import RegistrationComponent from "../components/RegistrationComponent";
 import AuthorizationComponent from "../components/AuthorizationComponent";
 
-const Profile = (props) => {
-  const {
-    onAccountSettings,
-    onAchievements,
-    onWorkoutHistory,
-    onNotifications,
-    onSupport,
-    onSubscriptionStatus,
-  } = props;
-
-  const { login, logout, user, authenticated } = useContext(AuthContext);
+const Profile = () => {
+  const { logout, user, authenticated } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   useEffect(() => {
     setIsRegistering(false);
+    setTimeout(() => {
+      setIsFirstLoad(false);
+    }, 300); // Время паузы в миллисекундах (в данном примере, 3000 мс = 3 секунды)
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff"}}>
-      <View style={styles.container}>
-        {!authenticated ? (
-          <View
-            style={{
-              width: "100%",
-              alignItems: "center",
-              // justifyContent: "center",
-            }}
-          >
-            {isRegistering ? (
-              <RegistrationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering}/>
-            ) : (
-              <AuthorizationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering}/>
-            )}
-          </View>
-        ) : (
+    <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: "#fff" }}>
+
+      {isFirstLoad ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <View style={styles.container}>
           <>
-            <LoggedInUser
-              user={user}
-              onSubscriptionStatus={onSubscriptionStatus}
-              onAccountSettings={onAccountSettings}
-              onAchievements={onAchievements}
-              onWorkoutHistory={onWorkoutHistory}
-              onNotifications={onNotifications}
-              onSupport={onSupport}
-              logout={logout}
-            />
+            {!authenticated && !user ? (
+              <View
+                style={{
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                {isRegistering ? (
+                  <RegistrationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering} />
+                ) : (
+                  <AuthorizationComponent isRegistering={isRegistering} setIsRegistering={setIsRegistering} />
+                )}
+              </View>
+            ) : (
+              <LoggedInUser user={user} logout={logout} />
+            )}
           </>
-        )}
-      </View>
+        </View>
+      )}
     </ScrollView>
   );
 };
@@ -70,11 +61,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // paddingHorizontal: 10,
     paddingVertical: 20,
     height: Dimensions.get("window").height - 80,
     backgroundColor: '#fff'
   },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff', // Цвет фона
+  }
 });
 
 export default Profile;

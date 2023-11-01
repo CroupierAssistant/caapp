@@ -105,6 +105,8 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     const userExists = await checkIfUserExists(formData.username);
     const usernameLong = (await formData.username.length) >= 3;
     const passwordLong = (await formData.password.length) >= 8;
+    const firstNameLen = (await formData.firstName.length) > 0;
+    const lastNameLen = (await formData.lastName.length) > 0;
 
     const isUsernameValid = await isLatinAndDigits.test(formData.username);
     const isFirstnameValid = await isLatinAndDigits.test(formData.firstName);
@@ -138,7 +140,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
       return;
     }
 
-    if (!isFirstnameValid) {
+    if (firstNameLen && !isFirstnameValid) {
       setErrors({
         ...errors,
         isFirstnameValid: "Разрешены только буквы латинского алфавита и цифры",
@@ -146,7 +148,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
       return;
     }
 
-    if (!isLastnameValid) {
+    if (lastNameLen && !isLastnameValid) {
       setErrors({
         ...errors,
         isLastnameValid: "Разрешены только буквы латинского алфавита и цифры",
