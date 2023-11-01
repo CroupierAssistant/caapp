@@ -5,7 +5,6 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
-const multer = require('multer');
 
 const { User, findUserById } = require("./models/User");
 
@@ -21,46 +20,11 @@ const TexasHoldemResult = require("./models/TexasHoldemResult"); // Import the T
 const UTHBlindResult = require("./models/UTHBlindResult"); // Import the TestResult model
 const UTHTripsResult = require("./models/UTHTripsResult"); // Import the TestResult model
 
-
-
 const app = express();
 
 app.use(cors());
 
-// Настройка Multer
-const storage = multer.diskStorage({
-  destination: 'uploads/',
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
 app.use(bodyParser.json());
-
-// Создание маршрута для загрузки файлов
-app.post('/upload', upload.single('image'), (req, res) => {
-  // Проверка наличия файла в запросе
-  if (!req.files) {
-    return res.status(400).send('Файл не был передан');
-  }
-
-  // Получить данные файла
-  const image = req.files.image;
-
-  // Сохранить файл
-  image.mv('uploads/' + image.filename, (err) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send({
-        success: true,
-        message: 'Файл успешно загружен',
-      });
-    }
-  });
-});
 
 async function hashPassword(password) {
   const saltRounds = 10;
@@ -72,6 +36,24 @@ async function comparePassword(inputPassword, hashedPassword) {
   const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
   return isMatch;
 }
+
+app.post('/verifyToken', (req, res) => {
+  const { authToken } = req.body;
+
+  if (!authToken) {
+    return res.status(400).json({ valid: false, message: 'Токен не предоставлен' });
+  }
+
+  try {
+    // Проверяем токен
+    const decoded = jwt.verify(authToken, 'snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6'); // Замените 'your-secret-key' на ваш секретный ключ
+
+    // Если токен действителен
+    return res.json({ valid: true, user: decoded.user }); // Опционально: возвращаем информацию о пользователе
+  } catch (error) {
+    return res.status(401).json({ valid: false, message: 'Недействительный токен' });
+  }
+});
 
 app.post("/register", async (req, res) => {
   try {
@@ -104,15 +86,7 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    // Проверка значения поля profilePicture
-    // if (newUser.profilePicture === require("@expo/vector-icons/assets/svg/ios-person.svg").buffer) {
-    //   // Если значение по умолчанию, заменить его на изображение, выбранное пользователем
-    //   const image = await ImagePicker.launchImageLibraryAsync();
-    //   newUser.profilePicture = image;
-    //   await newUser.save();
-    // }
-
-    const token = jwt.sign({ userId: newUser._id }, "ваш_секретный_ключ");
+    const token = jwt.sign({ userId: newUser._id }, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6");
 
     return res.json({ success: "Регистрация успешна", user: newUser, token });
   } catch (error) {
@@ -139,7 +113,7 @@ app.post("/login", async (req, res) => {
         .json({ error: "Неверные имя пользователя или пароль" });
     }
 
-    const token = jwt.sign({ userId: user._id }, "ваш_секретный_ключ");
+    const token = jwt.sign({ userId: user._id }, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6");
     return res.json({ success: "Авторизация успешна", user, token });
   } catch (error) {
     console.error(error);
@@ -331,28 +305,6 @@ app.post("/change-password", async (req, res) => {
 
     const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;
-
-    await user.save();
-
-    res.json({ success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
-});
-
-app.put("/change-profile-picture", async (req, res) => {
-  const { username, profilePicture } = req.body;
-
-  try {
-    const user = await User.findOne({ username });
-
-    if (!user) {
-      res.json({ success: false, message: "User not found" });
-      return;
-    }
-
-    user.profilePicture = profilePicture;
 
     await user.save();
 

@@ -22,7 +22,7 @@ const Profile = (props) => {
     onSubscriptionStatus,
   } = props;
 
-  const { login, logout, user } = useContext(AuthContext);
+  const { login, logout, user, authenticated } = useContext(AuthContext);
   const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Profile = (props) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{backgroundColor: "#fff"}}>
       <View style={styles.container}>
-        {!user ? (
+        {!authenticated ? (
           <View
             style={{
               width: "100%",

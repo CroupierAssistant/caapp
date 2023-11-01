@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import Axios from "axios";
+import axios from "axios";
 
 const EditProfile = () => {
     const [image, setImage] = useState('');
 
     const pickImage = async () => {
         // Запросить разрешение на доступ к камере
-        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        const permission = await ImagePicker.getCameraPermissionsAsync();
         if (permission.status !== 'granted') {
             return;
         }
@@ -20,8 +20,7 @@ const EditProfile = () => {
         });
 
         // Получить выбранное фото
-        const image = result.uri
-        console.log(result);
+        const image = result.uri;
 
         // Установить выбранное фото в состояние
         setImage(image);
@@ -29,25 +28,29 @@ const EditProfile = () => {
     };
 
     const handleUpload = async (image) => {
-
         // Если фото было выбрано, загрузить его на сервер
         if (image) {
-            const formData = new FormData();
-            formData.append('image', {
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                data: new FormData(),
+            };
+
+            config.data.append('image', {
                 name: 'image.jpg',
                 type: 'image/jpeg',
                 data: image,
             });
 
-            fetch('https://caapp-server.onrender.com/upload', {
-                method: 'POST',
-                body: formData,
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        setImage(data.image);
+            await axios.post('https://caapp-server.onrender.com/upload', config)
+                .then((response) => {
+                    if (response.status === 200) {
+                        setImage(response.data.image);
                     }
+                })
+                .catch((error) => {
+                    console.log(error);
                 });
         }
     };
@@ -77,6 +80,5 @@ const styles = StyleSheet.create({
         height: 200,
     },
 });
-
 
 export default EditProfile;
