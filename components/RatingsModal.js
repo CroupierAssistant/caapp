@@ -217,11 +217,9 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       >
                         {item.username}
                       </Text>
-                      {item.showUserData && (
-                        <Text style={{ fontSize: 12, textAlign: "center" }}>
-                          {item.firstName} {item.lastName}
-                        </Text>
-                      )}
+                      {/* {item.showUserData && (
+                        <Text style={{ fontSize: 12, textAlign: "center" }}></Text>
+                      )} */}
                     </View>
                     <Text
                       style={{
@@ -288,12 +286,12 @@ const styles = StyleSheet.create({
     lineHeight: 30,
   },
   textIndex: {
-    lineHeight: 25,
+    lineHeight: 22,
     fontWeight: "bold",
   },
   textIndexContainer: {
-    width: 30,
-    height: 30,
+    width: 26,
+    height: 26,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
