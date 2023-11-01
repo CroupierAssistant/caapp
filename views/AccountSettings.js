@@ -90,6 +90,7 @@ const AccountSettings = () => {
       <View style={styles.lineBreak} />
 
       <Text style={styles.label}>Profile visibility</Text>
+      <Text style={styles.explanationText}>This option allows other users to see your profile information (Your name and lastname, birthday, work expirience etc.)</Text>
 
       <View style={styles.checkboxContainer}>
         <TouchableOpacity onPress={() => handleInputChange()}>
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    marginBottom: 10,
+    marginVertical: 10,
   },
   checkbox: {
     height: 20,
@@ -185,6 +186,11 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     color: "#555",
     fontSize: 16,
+  },
+  explanationText: {
+    color: "#777",
+    fontSize: 14,
+    width: "100%",
   },
 });
 
