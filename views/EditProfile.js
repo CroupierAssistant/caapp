@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Axios from "axios";
 
 const EditProfile = () => {
     const [image, setImage] = useState('');
@@ -38,8 +39,7 @@ const EditProfile = () => {
                 data: image,
             });
 
-            fetch('https://caapp-server.onrender.com/upload', {
-                method: 'POST',
+            Axios.post('https://caapp-server.onrender.com/upload', {
                 body: formData,
             })
                 .then((response) => response.json())

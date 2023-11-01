@@ -43,7 +43,7 @@ app.use(bodyParser.json());
 app.post('/upload', upload.single('image'), (req, res) => {
   // Получить данные файла
   const image = req.file;
-
+  console.log(image);
   // Сохранить файл
   image.mv('./uploads/' + image.filename, (err) => {
     if (err) {
