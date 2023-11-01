@@ -29,7 +29,7 @@ app.use(cors());
 
 // Настройка Multer
 const storage = multer.diskStorage({
-  destination: './uploads',
+  destination: 'uploads/',
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
