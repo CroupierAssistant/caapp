@@ -218,7 +218,9 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                         {item.username}
                       </Text>
                       {/* {item.showUserData && (
-                        <Text style={{ fontSize: 12, textAlign: "center" }}></Text>
+                        <Text style={{ fontSize: 12, textAlign: "center" }}>
+                          {item.firstName} {item.lastName}
+                        </Text>
                       )} */}
                     </View>
                     <Text

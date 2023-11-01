@@ -47,12 +47,12 @@ const AccountSettings = () => {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        Alert.alert("Success", "Password changed successfully");
+        Alert.alert("Success", "Account settings changed successfully");
       } else {
         Alert.alert("Error", response.data.message);
       }
     } catch (error) {
-      Alert.alert("Error", "An error occurred while changing password");
+      Alert.alert("Error", "An error occurred while changing account settings");
     }
   };
 
