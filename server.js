@@ -41,11 +41,16 @@ app.use(bodyParser.json());
 
 // Создание маршрута для загрузки файлов
 app.post('/upload', upload.single('image'), (req, res) => {
+  // Проверка наличия файла в запросе
+  if (!req.files) {
+    return res.status(400).send('Файл не был передан');
+  }
+
   // Получить данные файла
-  const image = req.file;
-  console.log(image);
+  const image = req.files.image;
+
   // Сохранить файл
-  image.mv('./uploads/' + image.filename, (err) => {
+  image.mv('uploads/' + image.filename, (err) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -164,24 +169,24 @@ app.post("/saveTestResult", async (req, res) => {
       game === "Blackjack"
         ? BlackjackResult
         : game === "Multiplication"
-        ? MultiplicationResult
-        : game === "Neighbours"
-        ? NeighboursResult
-        : game === "Roulette pictures"
-        ? RoulettePicturesResult
-        : game === "Roulette series"
-        ? RouletteSeriesResult
-        : game === "Russian Poker 5-bonus"
-        ? Russian5bonusResult
-        : game === "Russian Poker 6-bonus"
-        ? Russian6bonusResult
-        : game === "Russian Poker Ante"
-        ? RussianAnteResult
-        : game === "UTH Blind Bets"
-        ? UTHBlindResult
-        : game === "UTH Trips Bets"
-        ? UTHTripsResult
-        : TexasHoldemResult;
+          ? MultiplicationResult
+          : game === "Neighbours"
+            ? NeighboursResult
+            : game === "Roulette pictures"
+              ? RoulettePicturesResult
+              : game === "Roulette series"
+                ? RouletteSeriesResult
+                : game === "Russian Poker 5-bonus"
+                  ? Russian5bonusResult
+                  : game === "Russian Poker 6-bonus"
+                    ? Russian6bonusResult
+                    : game === "Russian Poker Ante"
+                      ? RussianAnteResult
+                      : game === "UTH Blind Bets"
+                        ? UTHBlindResult
+                        : game === "UTH Trips Bets"
+                          ? UTHTripsResult
+                          : TexasHoldemResult;
 
     const newTestResult = await ModelSchema.create({
       userId,

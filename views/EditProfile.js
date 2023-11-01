@@ -8,10 +8,10 @@ const EditProfile = () => {
 
     const pickImage = async () => {
         // Запросить разрешение на доступ к камере
-        // const permission = await ImagePicker.requestCameraPermissionsAsync();
-        // if (permission.status !== 'granted') {
-        //     return;
-        // }
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+        if (permission.status !== 'granted') {
+            return;
+        }
 
         // Открыть диалоговое окно выбора фото
         const result = await ImagePicker.launchImageLibraryAsync({
@@ -20,15 +20,15 @@ const EditProfile = () => {
         });
 
         // Получить выбранное фото
-        const image = result.uri;
+        const image = result.uri
+        console.log(result);
 
         // Установить выбранное фото в состояние
         setImage(image);
+        handleUpload(image)
     };
 
-    const handleUpload = async () => {
-        // Выбрать фото
-        const image = await pickImage();
+    const handleUpload = async (image) => {
 
         // Если фото было выбрано, загрузить его на сервер
         if (image) {
@@ -39,7 +39,8 @@ const EditProfile = () => {
                 data: image,
             });
 
-            Axios.post('https://caapp-server.onrender.com/upload', {
+            fetch('https://caapp-server.onrender.com/upload', {
+                method: 'POST',
                 body: formData,
             })
                 .then((response) => response.json())
@@ -59,7 +60,7 @@ const EditProfile = () => {
             />
             <Button
                 title="Загрузить изображение"
-                onPress={handleUpload}
+                onPress={pickImage}
             />
         </View>
     );
