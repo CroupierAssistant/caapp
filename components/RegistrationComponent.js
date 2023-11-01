@@ -127,7 +127,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     if (userExists) {
       setErrors({
         ...errors,
-        userExists: "Пользователь с таким именем уже существует",
+        userExists: "This username is taken",
       });
       return;
     }
@@ -135,7 +135,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     if (!isUsernameValid) {
       setErrors({
         ...errors,
-        isUsernameValid: "Разрешены только буквы латинского алфавита и цифры",
+        isUsernameValid: "Only Latin alphabet letters and numbers are allowed",
       });
       return;
     }
@@ -143,7 +143,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     if (firstNameLen && !isFirstnameValid) {
       setErrors({
         ...errors,
-        isFirstnameValid: "Разрешены только буквы латинского алфавита и цифры",
+        isFirstnameValid: "Only Latin alphabet letters and numbers are allowed",
       });
       return;
     }
@@ -151,20 +151,20 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     if (lastNameLen && !isLastnameValid) {
       setErrors({
         ...errors,
-        isLastnameValid: "Разрешены только буквы латинского алфавита и цифры",
+        isLastnameValid: "Only Latin alphabet letters and numbers are allowed",
       });
       return;
     }
 
     if (!usernameLong) {
-      setErrors({ ...errors, usernameLong: "Минимум 3 символа" });
+      setErrors({ ...errors, usernameLong: "At least 3 characters" });
       return;
     }
 
     if (emailTaken) {
       setErrors({
         ...errors,
-        emailTaken: "Этот почтовый ящик уже зарегистрирован",
+        emailTaken: "This E-mail has already been registered",
       });
       return;
     }
@@ -172,23 +172,23 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     if (!isMailValid) {
       setErrors({
         ...errors,
-        invalidEmail: "Неверный формат адреса электронной почты",
+        invalidEmail: "Incorrect format of e-mail address",
       });
       return;
     }
 
     if (!passwordLong) {
-      setErrors({ ...errors, passwordLong: "Минимум 8 символов" });
+      setErrors({ ...errors, passwordLong: "At least 8 characters" });
       return;
     }
 
     if (!passMatch) {
-      setErrors({ ...errors, passwordMatch: "Пароли не совпадают" });
+      setErrors({ ...errors, passwordMatch: "Passwords don't match" });
       return;
     }
 
     if (!username || !email || !password || !confirmPassword || !agree) {
-      setErrors({ ...errors, isFormFilled: "Заполните все необходимые поля" });
+      setErrors({ ...errors, isFormFilled: "Fill in all required fields" });
       return;
     }
 
@@ -228,15 +228,15 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
           />
           {errors && errors.userExists ? (
             <Text style={styles.error}>
-              Пользователь с таким именем уже существует
+              This username is taken
             </Text>
           ) : null}
           {errors && errors.usernameLong ? (
-            <Text style={styles.error}>Минимум 3 символа</Text>
+            <Text style={styles.error}>At least 3 characters</Text>
           ) : null}
           {errors && errors.isUsernameValid ? (
             <Text style={styles.error}>
-              Разрешены только буквы латинского алфавита и цифры
+              Only Latin alphabet letters and numbers are allowed
             </Text>
           ) : null}
         </View>
@@ -249,7 +249,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
           />
           {errors && errors.isFirstnameValid ? (
             <Text style={styles.error}>
-              Разрешены только буквы латинского алфавита и цифры
+              Only Latin alphabet letters and numbers are allowed
             </Text>
           ) : null}
         </View>
@@ -263,7 +263,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
           />
           {errors && errors.isLastnameValid ? (
             <Text style={styles.error}>
-              Разрешены только буквы латинского алфавита и цифры
+              Only Latin alphabet letters and numbers are allowed
             </Text>
           ) : null}
         </View>
@@ -285,10 +285,10 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
             onChangeText={(text) => handleInputChange("email", text)}
           />
           {errors && errors.emailTaken ? (
-            <Text style={styles.error}>Электронная почта уже занята</Text>
+            <Text style={styles.error}>This E-mail has already been registered</Text>
           ) : null}
           {errors && errors.invalidEmail ? (
-            <Text style={styles.error}>Неверный формат электронной почты</Text>
+            <Text style={styles.error}>Incorrect format of e-mail address</Text>
           ) : null}
         </View>
 
@@ -306,7 +306,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
             secureTextEntry
           />
           {errors && errors.passwordLong ? (
-            <Text style={styles.error}>Минимум 8 символов</Text>
+            <Text style={styles.error}>At least 8 characters</Text>
           ) : null}
         </View>
 
@@ -324,7 +324,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
             secureTextEntry
           />
           {errors && errors.passwordMatch ? (
-            <Text style={styles.error}>Пароли не совпадают</Text>
+            <Text style={styles.error}>Passwords don't match</Text>
           ) : null}
         </View>
 
@@ -346,7 +346,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
         </View>
 
         {errors && errors.isFormFilled ? (
-          <Text style={styles.error}>Заполните все необходимые поля</Text>
+          <Text style={styles.error}>Fill in all required fields</Text>
         ) : null}
 
         <TouchableOpacity
@@ -409,13 +409,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   input: {
-    height: 40,
+    height: 50,
     width: "100%",
     borderColor: "#29648a",
     borderWidth: 1,
     borderRadius: 3,
     paddingHorizontal: 10,
     color: "#555",
+    fontSize: 20
   },
   error: {
     color: "red",

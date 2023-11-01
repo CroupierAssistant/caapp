@@ -46,8 +46,8 @@ const AuthProvider = ({ children, navigation }) => {
   const logout = async () => {
     await AsyncStorage.removeItem('authToken');
     await AsyncStorage.removeItem('user');
-    await navigation.navigate("Main")
     setUser(null);
+    setAuthenticated(false); 
   };
 
   const updateUser = (newUserData) => {

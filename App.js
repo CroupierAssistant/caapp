@@ -12,7 +12,7 @@ function App() {
     <View style={styles.container}>
     <StatusBar barStyle="light-content" backgroundColor="#fff" />
       <SafeAreaView style={styles.safeArea}>
-        <AuthProvider navigation={navigation}>
+        <AuthProvider >
           <NavigationContainer>
             <MainTabNavigator />
           </NavigationContainer>

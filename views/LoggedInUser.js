@@ -18,6 +18,10 @@ import { AuthContext } from "../context/AuthContext";
 
 const LoggedInUser = ({ user, logout }) => {
   const navigation = useNavigation();
+  const handleLogout = async () => {
+    await logout();
+    await navigation.navigate("Main");
+  };
 
   return (
     <ScrollView
@@ -34,24 +38,24 @@ const LoggedInUser = ({ user, logout }) => {
           height: Dimensions.get("window").height - 80,
         }}
       >
-        <View style={styles.textContainer}>
-          <Text style={styles.nickname}>{user.username}</Text>
-          {user.firstName && user.lastName && (
-            <Text style={styles.username}>
-              {user.firstName} {user.lastName}
+        {user && (
+          <>
+            <View style={styles.textContainer}>
+              <Text style={styles.nickname}>{user.username}</Text>
+              {user.firstName.length || user.lastName.length ? (
+                <Text style={styles.username}>
+                  {user.firstName} {user.lastName}
+                </Text>
+              ) : (
+                <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
+              )}
+            </View>
+
+            <Text style={{ ...styles.timeLimitDescription }}>
+              THE PAGE IS UNDER CONSTRUCTION
             </Text>
-          )}
-          {!user.firstName ||
-            (!user.lastName && (
-              <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
-            ))}
-        </View>
 
-        <Text style={{ ...styles.timeLimitDescription }}>
-          THE PAGE IS UNDER CONSTRUCTION
-        </Text>
-
-        {/* <TouchableOpacity
+            {/* <TouchableOpacity
           onPress={() => navigation.navigate("SubscriptionManagement")}
           style={styles.button}
         >
@@ -65,27 +69,27 @@ const LoggedInUser = ({ user, logout }) => {
           </View>
         </TouchableOpacity> */}
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("EditProfile")}
-          style={styles.button}
-        >
-          <View style={styles.buttonContent}>
-            <AntDesign name="profile" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Edit profile</Text>
-          </View>
-        </TouchableOpacity>
+            {/* <TouchableOpacity
+              onPress={() => navigation.navigate("EditProfile")}
+              style={styles.button}
+            >
+              <View style={styles.buttonContent}>
+                <AntDesign name="profile" size={24} color="#29648a" />
+                <Text style={styles.buttonText}>Edit profile</Text>
+              </View>
+            </TouchableOpacity> */}
 
-        {/* <TouchableOpacity
-          onPress={() => navigation.navigate("AccountSettings")}
-          style={styles.button}
-        >
-          <View style={styles.buttonContent}>
-            <FontAwesome name="gear" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Account settings</Text>
-          </View>
-        </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("AccountSettings")}
+              style={styles.button}
+            >
+              <View style={styles.buttonContent}>
+                <FontAwesome name="gear" size={24} color="#29648a" />
+                <Text style={styles.buttonText}>Account Settings</Text>
+              </View>
+            </TouchableOpacity>
 
-        {/* <TouchableOpacity
+            {/* <TouchableOpacity
           onPress={() => navigation.navigate("Achievements")}
           style={styles.button}
         >
@@ -95,7 +99,7 @@ const LoggedInUser = ({ user, logout }) => {
           </View>
         </TouchableOpacity> */}
 
-        {/* <TouchableOpacity
+            {/* <TouchableOpacity
           onPress={() => navigation.navigate("TestHistory")}
           style={styles.button}
         >
@@ -105,7 +109,7 @@ const LoggedInUser = ({ user, logout }) => {
           </View>
         </TouchableOpacity> */}
 
-        {/* <TouchableOpacity
+            {/* <TouchableOpacity
           onPress={() => navigation.navigate("HelpSupport")}
           style={{ ...styles.button }}
         >
@@ -115,11 +119,18 @@ const LoggedInUser = ({ user, logout }) => {
           </View>
         </TouchableOpacity> */}
 
-        <TouchableOpacity onPress={logout} style={{ ...styles.logoutButton }}>
-          <Text style={{ color: "#fff", textAlign: "center", fontSize: 20 }}>
-            SIGN OUT
-          </Text>
-        </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleLogout}
+              style={{ ...styles.logoutButton }}
+            >
+              <Text
+                style={{ color: "#fff", textAlign: "center", fontSize: 20 }}
+              >
+                SIGN OUT
+              </Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
     </ScrollView>
   );
@@ -158,9 +169,11 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 15,
     paddingHorizontal: 20,
-    borderBottomColor: "#29648a",
+    borderColor: "#29648a",
     borderBottomWidth: 1,
+    borderTopWidth: 1,
     justifyContent: "center",
+    marginBottom: -1,
   },
   buttonContent: {
     flexDirection: "row",
@@ -184,7 +197,8 @@ const styles = StyleSheet.create({
   },
   timeLimitDescription: {
     marginVertical: 30,
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
     textAlign: "center",
     width: "100%",
   },

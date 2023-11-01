@@ -39,7 +39,7 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
         const { token } = response.data;
         AsyncStorage.setItem('authToken', token);
         AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-        login(response.data.user); // Добавление в контекст после успешной авторизации
+        login(response.data.user); 
         setFormData({
           username: "",
           email: "",
@@ -160,13 +160,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   input: {
-    height: 40,
+    height: 50,
     width: "100%",
     borderColor: "#29648a",
     borderWidth: 1,
     borderRadius: 3,
     paddingHorizontal: 10,
     color: "#555",
+    fontSize: 20
   },
   error: {
     color: "red",

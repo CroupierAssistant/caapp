@@ -287,8 +287,8 @@ app.get("/users/:userId", async (req, res) => {
   }
 });
 
-app.post("/change-password", async (req, res) => {
-  const { username, currentPassword, newPassword } = req.body;
+app.post("/change-settings", async (req, res) => {
+  const { username, currentPassword, newPassword, showUserData } = req.body;
 
   try {
     const user = await User.findOne({ username });
@@ -298,13 +298,16 @@ app.post("/change-password", async (req, res) => {
       return;
     }
 
-    if (!(await comparePassword(currentPassword, user.password))) {
-      res.json({ success: false, message: "Incorrect current password" });
-      return;
-    }
+    if(currentPassword && newPassword){
+      if (!(await comparePassword(currentPassword, user.password))) {
+        res.json({ success: false, message: "Incorrect current password" });
+        return;
+      }
 
-    const hashedPassword = await hashPassword(newPassword);
-    user.password = hashedPassword;
+      const hashedPassword = await hashPassword(newPassword);
+      user.password = hashedPassword;
+    }
+    user.showUserData = showUserData;
 
     await user.save();
 
