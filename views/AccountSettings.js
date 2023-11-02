@@ -14,11 +14,13 @@ import { AuthContext } from "../context/AuthContext";
 
 const AccountSettings = () => {
   const { user, updateUser } = useContext(AuthContext);
-  const [isShowData, setIsShowData] = useState(user.showUserData)
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [isShowData, setIsShowData] = useState(user.showUserData); // Добавляем isShowData состояние и инициализируем его значением из user.showUserData
+
+  console.log(user);
   const handleInputChange = () => {
     setIsShowData(prev => !prev)
   }
@@ -43,10 +45,12 @@ const AccountSettings = () => {
       );
 
       if (response.data.success) {
-        updateUser({ ...user, password: newPassword, showUserData: isShowData });
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
+        await updateUser({ ...user, password: newPassword, showUserData: isShowData });
+        await AsyncStorage.removeItem('user');
+        await AsyncStorage.setItem('user', JSON.stringify({ ...user, password: newPassword, showUserData: isShowData }));
+        await setCurrentPassword("");
+        await setNewPassword("");
+        await setConfirmPassword("");
         Alert.alert("Success", "Account settings changed successfully");
       } else {
         Alert.alert("Error", response.data.message);
@@ -95,7 +99,7 @@ const AccountSettings = () => {
       <View style={styles.checkboxContainer}>
         <TouchableOpacity onPress={() => handleInputChange()}>
           <View style={styles.checkbox}>
-            {isShowData && <View style={styles.checkboxInner} />}
+        {isShowData && <View style={styles.checkboxInner} />} 
           </View>
         </TouchableOpacity>
         <Text

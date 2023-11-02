@@ -29,7 +29,6 @@ function MainTabNavigator() {
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            // <AntDesign name="home" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
             focused ? (
               <Image source={require('../assets/icons/home-active.png')} style={{ width: 24, height: 24}}/>
             ) : (
@@ -50,7 +49,6 @@ function MainTabNavigator() {
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            // <MaterialCommunityIcons name="poker-chip" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
             focused ? (
               <Image source={require('../assets/icons/test-active.png')} style={{ width: 24, height: 24}}/>
             ) : (
@@ -71,7 +69,6 @@ function MainTabNavigator() {
           tabBarActiveBackgroundColor: "#29648a",
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
-            // <MaterialIcons name="leaderboard" size={24} color={focused ? "#ffbf00" : "#FFF5EE"} />
             focused ? (
               <Image source={require('../assets/icons/ratings-active.png')} style={{ width: 24, height: 24}}/>
             ) : (
