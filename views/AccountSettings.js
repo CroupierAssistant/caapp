@@ -18,9 +18,8 @@ const AccountSettings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [isShowData, setIsShowData] = useState(user.showUserData); // Добавляем isShowData состояние и инициализируем его значением из user.showUserData
-
-  console.log(user);
+  const [isShowData, setIsShowData] = useState(user.showUserData); 
+  
   const handleInputChange = () => {
     setIsShowData(prev => !prev)
   }
