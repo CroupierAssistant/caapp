@@ -31,8 +31,6 @@ const AccountSettings = () => {
       return;
     }
 
-    console.log(user);
-
     try {
       const response = await axios.post(
         "https://caapp-server.onrender.com/change-settings",
@@ -46,11 +44,9 @@ const AccountSettings = () => {
 
       if (response.data.success) {
         await updateUser({ ...user, password: newPassword, showUserData: isShowData });
-        await AsyncStorage.removeItem('user');
-        await AsyncStorage.setItem('user', JSON.stringify({ ...user, password: newPassword, showUserData: isShowData }));
-        await setCurrentPassword("");
-        await setNewPassword("");
-        await setConfirmPassword("");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
         Alert.alert("Success", "Account settings changed successfully");
       } else {
         Alert.alert("Error", response.data.message);

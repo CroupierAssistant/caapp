@@ -38,7 +38,6 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
         console.log(response.data);
         const { token } = response.data;
         AsyncStorage.setItem('authToken', token);
-        AsyncStorage.setItem('user', JSON.stringify(response.data.user));
         login(response.data.user); 
         setFormData({
           username: "",

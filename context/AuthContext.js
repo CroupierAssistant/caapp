@@ -41,6 +41,7 @@ const AuthProvider = ({ children, navigation }) => {
 
   const login = (userData) => {
     setUser(userData);
+    AsyncStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = async () => {
@@ -52,6 +53,7 @@ const AuthProvider = ({ children, navigation }) => {
 
   const updateUser = (newUserData) => {
     setUser(newUserData);
+    AsyncStorage.setItem('user', JSON.stringify(newUserData));
   };
 
   return (

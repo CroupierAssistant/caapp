@@ -69,7 +69,7 @@ const LoggedInUser = ({ user, logout }) => {
           </View>
         </TouchableOpacity> */}
 
-            {/* <TouchableOpacity
+            <TouchableOpacity
               onPress={() => navigation.navigate("EditProfile")}
               style={styles.button}
             >
@@ -77,7 +77,7 @@ const LoggedInUser = ({ user, logout }) => {
                 <AntDesign name="profile" size={24} color="#29648a" />
                 <Text style={styles.buttonText}>Edit profile</Text>
               </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => navigation.navigate("AccountSettings")}
