@@ -8,6 +8,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
@@ -90,7 +91,7 @@ const EditProfile = () => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
       <View style={styles.container}>
         <Text style={[styles.textHeader]}>Personal info</Text>
         <View style={styles.labelContainer}>
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 10,
-    height: Dimensions.get("window").height - 130,
+    // height: Dimensions.get("window").height - 130,
     width: Dimensions.get("window").width,
   },
   labelContainer: {
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     borderColor: "#29648a",
     borderBottomWidth: 1,
-    width: "100%",
+    width: Dimensions.get("window").width - 20,
   },
   buttonText: {
     color: "#fff",

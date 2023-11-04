@@ -15,7 +15,8 @@ const userSchema = new mongoose.Schema({
     { 
       startDate: Date,
       endDate: Date,
-      jobTitle: String,
+      jobName: String,
+      jobPosition: String,
       location: String,
     }
   ],
