@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   lineBreak: {
     marginVertical: 15,
     borderColor: "#29648a",
-    borderWidth: 1,
+    borderBottomWidth: 1,
     width: "100%",
   },
   checkboxContainer: {

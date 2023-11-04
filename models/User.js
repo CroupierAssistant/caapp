@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const fs = require('fs')
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -7,18 +6,27 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  profilePicture: {
-    type: Buffer,    
-  },
   showUserData: {
     type: Boolean,
     default: false,
   },
+  birthday: Date,
+  experience: [
+    { 
+      startDate: Date,
+      endDate: Date,
+      jobTitle: String,
+      location: String,
+    }
+  ],
+  phoneNumber: String,
+  socialMedia: {
+    instagram: String, 
+    facebook: String, 
+  }
 });
 
 const User = mongoose.model('User', userSchema, 'users');
-
-// module.exports = User;
 
 const findUserById = async (userId) => {
   try {

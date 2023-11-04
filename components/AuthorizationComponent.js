@@ -37,8 +37,8 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
-        AsyncStorage.setItem('authToken', token);
-        login(response.data.user); 
+        AsyncStorage.setItem("authToken", token);
+        login(response.data.user);
         setFormData({
           username: "",
           email: "",
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     paddingHorizontal: 10,
     color: "#555",
-    fontSize: 20
+    fontSize: 20,
   },
   error: {
     color: "red",

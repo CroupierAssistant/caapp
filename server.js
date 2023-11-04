@@ -318,6 +318,32 @@ app.post("/change-settings", async (req, res) => {
   }
 });
 
+app.post("/update-profile", async (req, res) => {
+  const { username, firstName, lastName, email, phoneNumber, experience } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      res.json({ success: false, message: "User not found" });
+      return;
+    }
+
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+    user.experience = experience;
+
+    await user.save();
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 const PORT = 10000;
 
 app.listen(PORT, () => {
