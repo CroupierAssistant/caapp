@@ -18,7 +18,7 @@ function MainTabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { height: 50, borderTopWidth: 2, borderTopColor: '#29648a', backgroundColor: "#29648a"},
+        tabBarStyle: { borderTopWidth: 10, borderTopColor: '#29648a', backgroundColor: "#29648a"},
       }}
     >
       <Tab.Screen

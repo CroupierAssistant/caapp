@@ -22,15 +22,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState(user.email);
   // const [birthday, setBirthday] = useState(""); // Добавляем состояние для дня рождения
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [experience, setExperience] = useState([
-    {
-      startDate: "",
-      endDate: "",
-      jobName: "",
-      jobPosition: "",
-      location: "",
-    },
-  ]);
+  const [experience, setExperience] = useState(user.experience);
 
   const handleAddExperience = () => {
     setExperience([
@@ -43,6 +35,12 @@ const EditProfile = () => {
         location: "",
       },
     ]);
+  };
+
+  const handleDeleteExperience = (index) => {
+    const updatedExperience = [...experience];
+    updatedExperience.splice(index, 1);
+    setExperience(updatedExperience);
   };
 
   const handleChangeExperience = (index, field, value) => {
@@ -79,7 +77,7 @@ const EditProfile = () => {
 
         // Ваши дополнительные действия после успешного обновления
         // ...
-        
+
         // Выводим уведомление об успешном обновлении
         Alert.alert("Success", "Profile updated successfully");
       } else {
@@ -91,7 +89,7 @@ const EditProfile = () => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+    <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.container}>
         <Text style={[styles.textHeader]}>Personal info</Text>
         <View style={styles.labelContainer}>
@@ -122,13 +120,6 @@ const EditProfile = () => {
           <Text style={styles.label}>Email</Text>
           <TextInput editable={false} style={styles.input} value={email} />
         </View>
-        {/* <DatePicker
-          date={birthday}
-          mode="date"
-          placeholder="Select Birthday"
-          format="YYYY-MM-DD"
-          onDateChange={(date) => setBirthday(date)}
-        /> */}
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Phone Number</Text>
           <TextInput
@@ -137,40 +128,11 @@ const EditProfile = () => {
             onChangeText={(text) => setPhoneNumber(text)}
           />
         </View>
-        {/* <TextInput
-        placeholder="Instagram"
-        value={instagram}
-        onChangeText={(text) => setInstagram(text)}
-        />
-        <TextInput
-          placeholder="Facebook"
-          value={facebook}
-          onChangeText={(text) => setFacebook(text)}
-      /> */}
 
         <Text style={[styles.textHeader]}>Work experience</Text>
 
         {experience.map((exp, index) => (
           <View key={index}>
-            {/* <DatePicker
-              date={exp.startDate}
-              mode="date"
-              placeholder="Select Start Date"
-              format="YYYY-MM-DD"
-              onDateChange={(date) =>
-                handleChangeExperience(index, "startDate", date)
-              }
-            />
-
-            <DatePicker
-              date={exp.endDate}
-              mode="date"
-              placeholder="Select End Date"
-              format="YYYY-MM-DD"
-              onDateChange={(date) =>
-                handleChangeExperience(index, "endDate", date)
-              }
-            /> */}
             <View style={styles.labelContainer}>
               <Text style={styles.label}>Casino name</Text>
               <TextInput
@@ -202,6 +164,16 @@ const EditProfile = () => {
               />
             </View>
 
+            <TouchableOpacity
+              onPress={handleDeleteExperience}
+              style={styles.deleteButton}
+            >
+              <FontAwesome name="minus-square-o" size={24} color="#a16e83" />
+              <Text style={styles.deleteButtonText}>
+                Delete this place of work
+              </Text>
+            </TouchableOpacity>
+
             <View style={styles.lineBreak} />
           </View>
         ))}
@@ -230,6 +202,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     // height: Dimensions.get("window").height - 130,
     width: Dimensions.get("window").width,
+    backgroundColor: '#fff'
   },
   labelContainer: {
     marginBottom: 10,
@@ -259,7 +232,7 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   lineBreak: {
-    marginVertical: 15,
+    marginVertical: 5,
     borderColor: "#29648a",
     borderBottomWidth: 1,
     width: Dimensions.get("window").width - 20,
@@ -276,14 +249,26 @@ const styles = StyleSheet.create({
     width: 200,
     padding: 10,
   },
+  deleteButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    // marginVertical: 5,
+    marginBottom: 15
+  },
   addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     marginVertical: 15,
   },
   addButtonText: {
-    color: '#29648a',
+    color: "#29648a",
+    fontSize: 20,
+    marginLeft: 15,
+  },
+  deleteButtonText: {
+    color: "#a16e83",
     fontSize: 20,
     marginLeft: 15,
   },
