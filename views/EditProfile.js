@@ -30,13 +30,18 @@ const EditProfile = () => {
     setExperience([
       ...experience,
       {
-        startDate: "",
-        endDate: "",
+        startDate: null,
+        endDate: null,
         jobName: "",
         jobPosition: "",
         location: "",
       },
     ]);
+  };
+
+  const handleBirthDateChange = (date) => {
+    setBirthday(date);
+    setModalVisible(false);
   };
 
   const handleDeleteExperience = (index) => {
@@ -74,7 +79,7 @@ const EditProfile = () => {
           email,
           phoneNumber,
           experience,
-          birthday
+          birthday,
         });
 
         Alert.alert("Success", "Profile updated successfully");
@@ -85,12 +90,26 @@ const EditProfile = () => {
       Alert.alert("Error", "An error occurred while updating profile");
     }
   };
-  
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
 
-  const handleBirthDateChange = (date) => {
-    setBirthday(date);
+  const [modalVisibleBirthday, setModalVisibleBirthday] = useState(false);
+  const [modalVisibleStartDate, setModalVisibleStartDate] = useState(false);
+  const [modalVisibleEndDate, setModalVisibleEndDate] = useState(false);
+  const [selectedExperienceIndex, setSelectedExperienceIndex] = useState(null);
+
+  const handleOpenStartDatePicker = (index) => {
+    setSelectedExperienceIndex(index);
+    setModalVisibleStartDate(true);
+  };
+
+  const handleOpenEndDatePicker = (index) => {
+    setSelectedExperienceIndex(index);
+    setModalVisibleEndDate(true);
+  };
+
+  const handleExperienceDateChange = (index, field, date) => {
+    const updatedExperience = [...experience];
+    updatedExperience[index][field] = date;
+    setExperience(updatedExperience);
   };
 
   return (
@@ -126,16 +145,21 @@ const EditProfile = () => {
         </View>
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Birthday</Text>
-          <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
-            <Text style={{fontSize: 20}}>{new Date(birthday).toLocaleDateString()}</Text>
+          <TouchableOpacity
+            style={styles.input}
+            onPress={() => setModalVisibleBirthday(true)}
+          >
+            <Text style={{ fontSize: 20 }}>
+              {new Date(birthday).toLocaleDateString()}
+            </Text>
             <FontAwesome name="calendar" size={24} color="#29648a" />
           </TouchableOpacity>
           <DatePicker
-            isVisible={modalVisible}
-            onClose={() => setModalVisible(false)}
+            isVisible={modalVisibleBirthday}
+            onClose={() => setModalVisibleBirthday(false)}
             onDateChange={handleBirthDateChange}
           />
-        </View> 
+        </View>
 
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Email</Text>
@@ -154,6 +178,46 @@ const EditProfile = () => {
 
         {experience.map((exp, index) => (
           <View key={index}>
+            <View style={{...styles.labelContainer, flexDirection: 'row', gap: 5}}>
+              <View style={{flex: 1}}>
+                <Text style={styles.label}>Start</Text>
+                <TouchableOpacity
+                  style={styles.input}
+                  onPress={() => handleOpenStartDatePicker(index)}
+                >
+                  <Text style={{ fontSize: 20 }}>
+                    {new Date(exp.startDate).toLocaleDateString()}
+                  </Text>
+                  <FontAwesome name="calendar" size={24} color="#29648a" />
+                </TouchableOpacity>
+                <DatePicker
+                  isVisible={modalVisibleStartDate && selectedExperienceIndex === index}
+                  onClose={() => setModalVisibleStartDate(false)}
+                  onDateChange={(date) =>
+                    handleExperienceDateChange(index, "startDate", date)
+                  }
+                />
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.label}>Finish</Text>
+                <TouchableOpacity
+                  style={styles.input}
+                  onPress={() => handleOpenEndDatePicker(index)}
+                >
+                  <Text style={{ fontSize: 20 }}>
+                    {new Date(exp.endDate).toLocaleDateString()}
+                  </Text>
+                  <FontAwesome name="calendar" size={24} color="#29648a" />
+                </TouchableOpacity>
+                <DatePicker
+                  isVisible={modalVisibleEndDate && selectedExperienceIndex === index}
+                  onClose={() => setModalVisibleEndDate(false)}
+                  onDateChange={(date) =>
+                    handleExperienceDateChange(index, "endDate", date)
+                  }
+                />
+              </View>
+            </View>
             <View style={styles.labelContainer}>
               <Text style={styles.label}>Casino name</Text>
               <TextInput
@@ -175,7 +239,7 @@ const EditProfile = () => {
               />
             </View>
             <View style={styles.labelContainer}>
-              <Text style={styles.label}>Job Location</Text>
+              <Text style={styles.label}>Country/City</Text>
               <TextInput
                 style={styles.input}
                 value={exp.location}
@@ -241,9 +305,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: "#555",
     fontSize: 20,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row'
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row",
   },
   textHeader: {
     textAlign: "center",
