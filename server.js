@@ -319,7 +319,7 @@ app.post("/change-settings", async (req, res) => {
 });
 
 app.post("/update-profile", async (req, res) => {
-  const { username, firstName, lastName, email, phoneNumber, experience } = req.body;
+  const { username, firstName, lastName, email, phoneNumber, experience, birthday } = req.body;
 
   try {
     const user = await User.findOne({ username });
@@ -334,6 +334,7 @@ app.post("/update-profile", async (req, res) => {
     user.email = email;
     user.phoneNumber = phoneNumber;
     user.experience = experience;
+    user.birthday = birthday;
 
     await user.save();
 

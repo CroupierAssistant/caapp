@@ -9,10 +9,12 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FontAwesome } from "@expo/vector-icons"; // Импортируйте нужную библиотеку иконок
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const EditProfile = () => {
   const { user, updateUser } = useContext(AuthContext);
@@ -20,9 +22,16 @@ const EditProfile = () => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
-  // const [birthday, setBirthday] = useState(""); // Добавляем состояние для дня рождения
+  const [birthday, setBirthday] = useState(user.birthday);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
   const [experience, setExperience] = useState(user.experience);
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+
+  const onBirthdayChange = (event, selectedDate) => {
+    setBirthday(selectedDate || null);
+  };
 
   const handleAddExperience = () => {
     setExperience([
@@ -51,7 +60,6 @@ const EditProfile = () => {
 
   const handleChangeProfile = async () => {
     try {
-      // Отправляем запрос на сервер с обновленными данными пользователя
       const response = await axios.post(
         "https://caapp-server.onrender.com/update-profile",
         {
@@ -61,11 +69,11 @@ const EditProfile = () => {
           email,
           phoneNumber,
           experience,
+          birthday
         }
       );
 
       if (response.data.success) {
-        // Если запрос успешный, обновляем данные пользователя в контексте
         await updateUser({
           ...user,
           firstName,
@@ -73,12 +81,9 @@ const EditProfile = () => {
           email,
           phoneNumber,
           experience,
+          birthday
         });
 
-        // Ваши дополнительные действия после успешного обновления
-        // ...
-
-        // Выводим уведомление об успешном обновлении
         Alert.alert("Success", "Profile updated successfully");
       } else {
         Alert.alert("Error", response.data.message);
@@ -89,7 +94,10 @@ const EditProfile = () => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: '#fff' }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{ flex: 1, backgroundColor: "#fff" }}
+    >
       <View style={styles.container}>
         <Text style={[styles.textHeader]}>Personal info</Text>
         <View style={styles.labelContainer}>
@@ -126,6 +134,27 @@ const EditProfile = () => {
             style={styles.input}
             value={phoneNumber}
             onChangeText={(text) => setPhoneNumber(text)}
+          />
+        </View>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Birthday</Text>
+          <TouchableOpacity onPress={onBirthdayChange} style={styles.datePicker}>
+            <Text>{birthday.toLocaleDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePicker
+            value={birthday ? birthday : new Date()}
+            mode={"date"}
+            display="default"
+            onChange={onBirthdayChange}
+            style={{
+              flex: 1,
+              position: "absolute",
+              // backgroundColor: "#fff",
+              bottom: 0,
+              right: 10,
+              height: 50,
+              width: Dimensions.get("window").width - 20,
+            }}
           />
         </View>
 
@@ -165,7 +194,7 @@ const EditProfile = () => {
             </View>
 
             <TouchableOpacity
-              onPress={handleDeleteExperience}
+              onPress={() => handleDeleteExperience(index)}
               style={styles.deleteButton}
             >
               <FontAwesome name="minus-square-o" size={24} color="#a16e83" />
@@ -200,13 +229,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 10,
-    // height: Dimensions.get("window").height - 130,
     width: Dimensions.get("window").width,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   labelContainer: {
     marginBottom: 10,
-    // width: "100%",
     width: Dimensions.get("window").width - 20,
   },
   label: {
@@ -253,8 +280,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    // marginVertical: 5,
-    marginBottom: 15
+    marginBottom: 15,
   },
   addButton: {
     flexDirection: "row",
@@ -271,6 +297,17 @@ const styles = StyleSheet.create({
     color: "#a16e83",
     fontSize: 20,
     marginLeft: 15,
+  },
+  datePicker: {
+    height: 50,
+    width: "100%",
+    borderColor: "#29648a",
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingHorizontal: 10,
+    color: "#555",
+    fontSize: 20,
+    justifyContent: "center",
   },
 });
 
