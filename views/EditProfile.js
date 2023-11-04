@@ -14,7 +14,7 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { FontAwesome } from "@expo/vector-icons"; // Импортируйте нужную библиотеку иконок
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from "../components/CustomDatePicker";
 
 const EditProfile = () => {
   const { user, updateUser } = useContext(AuthContext);
@@ -24,14 +24,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState(user.email);
   const [birthday, setBirthday] = useState(user.birthday);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [experience, setExperience] = useState(user.experience);
-
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-
-  const onBirthdayChange = (event, selectedDate) => {
-    setBirthday(selectedDate || null);
-  };
+  const [experience, setExperience] = useState(user.experience || []);
 
   const handleAddExperience = () => {
     setExperience([
@@ -69,7 +62,7 @@ const EditProfile = () => {
           email,
           phoneNumber,
           experience,
-          birthday
+          birthday,
         }
       );
 
@@ -91,6 +84,13 @@ const EditProfile = () => {
     } catch (error) {
       Alert.alert("Error", "An error occurred while updating profile");
     }
+  };
+  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleBirthDateChange = (date) => {
+    setBirthday(date);
   };
 
   return (
@@ -125,6 +125,19 @@ const EditProfile = () => {
           />
         </View>
         <View style={styles.labelContainer}>
+          <Text style={styles.label}>Birthday</Text>
+          <TouchableOpacity style={styles.input} onPress={() => setModalVisible(true)}>
+            <Text style={{fontSize: 20}}>{new Date(birthday).toLocaleDateString()}</Text>
+            <FontAwesome name="calendar" size={24} color="#29648a" />
+          </TouchableOpacity>
+          <DatePicker
+            isVisible={modalVisible}
+            onClose={() => setModalVisible(false)}
+            onDateChange={handleBirthDateChange}
+          />
+        </View> 
+
+        <View style={styles.labelContainer}>
           <Text style={styles.label}>Email</Text>
           <TextInput editable={false} style={styles.input} value={email} />
         </View>
@@ -134,27 +147,6 @@ const EditProfile = () => {
             style={styles.input}
             value={phoneNumber}
             onChangeText={(text) => setPhoneNumber(text)}
-          />
-        </View>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Birthday</Text>
-          <TouchableOpacity onPress={onBirthdayChange} style={styles.datePicker}>
-            <Text>{birthday.toLocaleDateString()}</Text>
-          </TouchableOpacity>
-          <DateTimePicker
-            value={birthday ? birthday : new Date()}
-            mode={"date"}
-            display="default"
-            onChange={onBirthdayChange}
-            style={{
-              flex: 1,
-              position: "absolute",
-              // backgroundColor: "#fff",
-              bottom: 0,
-              right: 10,
-              height: 50,
-              width: Dimensions.get("window").width - 20,
-            }}
           />
         </View>
 
@@ -249,6 +241,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: "#555",
     fontSize: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
   textHeader: {
     textAlign: "center",
