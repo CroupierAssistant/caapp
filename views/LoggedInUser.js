@@ -51,9 +51,9 @@ const LoggedInUser = ({ user, logout }) => {
               )}
             </View>
 
-            <Text style={{ ...styles.timeLimitDescription }}>
+            {/* <Text style={{ ...styles.timeLimitDescription }}>
               THE PAGE IS UNDER CONSTRUCTION
-            </Text>
+            </Text> */}
 
             {/* <TouchableOpacity
           onPress={() => navigation.navigate("SubscriptionManagement")}
@@ -85,7 +85,7 @@ const LoggedInUser = ({ user, logout }) => {
             >
               <View style={styles.buttonContent}>
                 <FontAwesome name="gear" size={24} color="#29648a" />
-                <Text style={styles.buttonText}>Account Settings</Text>
+                <Text style={styles.buttonText}>Privacy Settings</Text>
               </View>
             </TouchableOpacity>
 
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#29648a",
+    // borderBottomWidth: 1,
+    // borderBottomColor: "#29648a",
     width: "100%",
   },
   nickname: {

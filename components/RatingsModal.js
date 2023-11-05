@@ -10,10 +10,21 @@ import {
 } from "react-native";
 // import findUserById from "../functions/findUserById";
 import axios from "axios";
+import { AntDesign } from "@expo/vector-icons";
+import UserProfileModal from "./UserProfileModal";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
   const [aggregatedData, setAggregatedData] = useState(null); // Добавляем состояние для хранения данных
+  const [selectedUser, setSelectedUser] = useState(null); // Add selectedUser state
+
+  const openProfile = async (idPassed) => {
+    const user = await findUserById(idPassed);
+    
+    if (user) {
+      setSelectedUser(user);
+    }
+  };
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -83,6 +94,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               result[key] = {
                 maxPercentage: -Infinity,
                 minTimeSpentTest: Infinity,
+                userId: item.userId,
                 amountOfCards: item.amountOfCards,
                 firstName: item.firstName,
                 lastName: item.lastName,
@@ -107,6 +119,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
         newData[amountOfCards] = Object.keys(groupedData)
           .map((username) => ({
             username,
+            userId: groupedData[username].userId,
             maxPercentage: groupedData[username].maxPercentage,
             minTimeSpentTest: groupedData[username].minTimeSpentTest,
             amountOfCards: groupedData[username].amountOfCards,
@@ -138,7 +151,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   }
 
   return (
-    <Modal visible={isVisible} transparent animationType="none">
+    <Modal visible={isVisible} transparent animationType="fade">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <Text style={styles.textHeader}>{game}</Text>
@@ -178,7 +191,10 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                 data={aggregatedData[activeTab]}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => (
-                  <View style={[styles.row]}>
+                  <TouchableOpacity
+                    onPress={() => item.showUserData && openProfile(item.userId)}
+                    style={[styles.row]}
+                  >
                     <View
                       style={[
                         styles.textIndexContainer,
@@ -205,9 +221,9 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                         ...styles.text,
                         width: "50%",
                         paddingHorizontal: 3,
-                        flexDirection: "column",
+                        flexDirection: "row",
                         alignItems: "center",
-                        justifyContent: "center",
+                        justifyContent: "space-between",
                       }}
                     >
                       <Text
@@ -217,11 +233,9 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                       >
                         {item.username}
                       </Text>
-                      {/* {item.showUserData && (
-                        <Text style={{ fontSize: 12, textAlign: "center" }}>
-                          {item.firstName} {item.lastName}
-                        </Text>
-                      )} */}
+                      {item.showUserData && (
+                        <AntDesign name="profile" size={20} color="#29648a" />
+                      )}
                     </View>
                     <Text
                       style={{
@@ -235,7 +249,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                     <Text style={{ ...styles.text, width: "20%" }}>
                       {formatTime(item.minTimeSpentTest)}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 )}
               />
             ) : (
@@ -248,6 +262,11 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
+        <UserProfileModal
+          isVisible={selectedUser !== null}
+          onClose={() => setSelectedUser(null)}
+          user={selectedUser}
+        />
       </View>
     </Modal>
   );
@@ -270,15 +289,17 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     borderBottomWidth: 1,
-    paddingVertical: 5,
+    paddingVertical: 8,
+    borderBottomColor: '#29648a'
   },
   text: {
     // flex: 1,
     flexDirection: "row",
     textAlign: "center",
     fontSize: 14,
-    lineHeight: 30,
+    // lineHeight: 22,
   },
   textNoData: {
     flex: 1,

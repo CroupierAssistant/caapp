@@ -16,7 +16,7 @@ function HomeScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={[styles.textHeader]}>Select a test</Text> */}
+      <Text style={[styles.textHeader]}>TESTS</Text>
 
       <ScrollView
         style={{ flex: 1, width: "100%", backgroundColor: '#fff' }}
@@ -27,7 +27,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("Blackjack")}
         >
           <Text style={styles.buttonText}>Blackjack</Text>
-          <Image source={require('../assets/icons/blackjack.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -35,7 +34,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("MultiplicationTable")}
         >
           <Text style={styles.buttonText}>Multiplication Table</Text>
-          <Image source={require('../assets/icons/multiplication-table.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -43,7 +41,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RouletteSeries")}
         >
           <Text style={styles.buttonText}>Roulette Series</Text>
-          <Image source={require('../assets/icons/roulette.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -51,7 +48,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RoulettePictures")}
         >
           <Text style={styles.buttonText}>Roulette Pictures</Text>
-          <Image source={require('../assets/icons/roulette-pictures.png')} style={styles.buttonIcon}/>
         </TouchableOpacity> */}
 
         <TouchableOpacity
@@ -59,7 +55,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("Neighbours")}
         >
           <Text style={styles.buttonText}>Neighbours</Text>
-          <Image source={require('../assets/icons/neighbours.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -87,7 +82,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPokerAnte")}
         >
           <Text style={styles.buttonText}>Russian poker Ante</Text>
-          <Image source={require('../assets/icons/card3.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -95,7 +89,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPoker5Bonus")}
         >
           <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
-          <Image source={require('../assets/icons/card6.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -103,7 +96,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPokerBonus")}
         >
           <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
-          <Image source={require('../assets/icons/card2.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -111,7 +103,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHBlindBets")}
         >
           <Text style={styles.buttonText}>UTH Blind Bets</Text>
-          <Image source={require('../assets/icons/card5.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -119,7 +110,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHTripsBets")}
         >
           <Text style={styles.buttonText}>UTH Trips Bets</Text>
-          <Image source={require('../assets/icons/card4.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -127,7 +117,6 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("TexasHoldEm")}
         >
           <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
-          <Image source={require('../assets/icons/card1.png')} style={styles.buttonIcon}/>
         </TouchableOpacity>
 
         {/* <View style={styles.break} />

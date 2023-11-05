@@ -30,13 +30,13 @@ function MainTabNavigator() {
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
             focused ? (
-              <Image source={require('../assets/icons/home-active.png')} style={{ width: 24, height: 24}}/>
+              <Image source={require('../assets/icons/account-inactive.png')} style={{ width: 28, height: 28}}/>
             ) : (
-              <Image source={require('../assets/icons/home-inactive.png')} style={{ width: 24, height: 24}}/>
+              <Image source={require('../assets/icons/account-active.png')} style={{ width: 28, height: 28}}/>
             )
           ),
           tabBarLabel: ({ focused, color, size }) => (
-            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>MAIN</Text>
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>PROFILE</Text>
           ),
           headerShown: false,
         }}
