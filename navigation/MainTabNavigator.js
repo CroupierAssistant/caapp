@@ -30,9 +30,9 @@ function MainTabNavigator() {
           tabBarInactiveBackgroundColor: "#29648a",
           tabBarIcon: ({ focused, color, size }) => (
             focused ? (
-              <Image source={require('../assets/icons/account-inactive.png')} style={{ width: 28, height: 28}}/>
+              <Image source={require('../assets/icons/account-inactive.png')} style={{ width: 26, height: 26}}/>
             ) : (
-              <Image source={require('../assets/icons/account-active.png')} style={{ width: 28, height: 28}}/>
+              <Image source={require('../assets/icons/account-active.png')} style={{ width: 26, height: 26}}/>
             )
           ),
           tabBarLabel: ({ focused, color, size }) => (

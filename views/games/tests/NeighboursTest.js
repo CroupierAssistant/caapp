@@ -107,20 +107,6 @@ function NeighboursTest({ route }) {
   };
 
   const handleSkip = () => {
-    // Перенести активнуб карту в конец очереди
-    // if (activeCardIndex < cardList.length - 1) {
-    //   const skippedCard = cardList[activeCardIndex];
-    //   const updatedCardList = [
-    //     ...cardList.slice(0, activeCardIndex),
-    //     ...cardList.slice(activeCardIndex + 1),
-    //     skippedCard,
-    //   ];
-    //   setCardList(updatedCardList);
-    //   setActiveCardIndex(activeCardIndex + 1);
-    // } else {
-    //   // Если это последняя карта, то ничего не делаем или выполняем необходимую логику
-    // }
-
     setCardList(prevList => {
       const newList = [...prevList];
       const skippedCard = newList.splice(activeCardIndex, 1)[0];
@@ -139,7 +125,6 @@ function NeighboursTest({ route }) {
         style={{
           flex: 1,
           width: Dimensions.get("window").width,
-          // height: Dimensions.get("window").height - 220,
         }}
       >
         {showActiveCard && ( // Добавляем проверку, показывать или нет активную карту
@@ -205,13 +190,13 @@ function NeighboursTest({ route }) {
               onPress={openPaytableModal}
               style={{
                 padding: 5,
-                backgroundColor: mode == 'sandbox' ? "#ccc" : '',
+                backgroundColor: "#ccc",
                 minWidth: 100,
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
-              <Text style={{ textAlign: "center" }}>{mode == 'sandbox' ? 'Show info' : ''}</Text>
+              <Text style={{ textAlign: "center" }}>Show info</Text>
             </TouchableOpacity>
 
             {mode === "sandbox" && <Stopwatch onTimeUpdate={onTimeUpdate} />}
