@@ -85,7 +85,7 @@ const LoggedInUser = ({ user, logout }) => {
             >
               <View style={styles.buttonContent}>
                 <FontAwesome name="gear" size={24} color="#29648a" />
-                <Text style={styles.buttonText}>Privacy Settings</Text>
+                <Text style={styles.buttonText}>Account Settings</Text>
               </View>
             </TouchableOpacity>
 

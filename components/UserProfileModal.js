@@ -86,8 +86,8 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
 
               {user.experience.map((exp, index) => (
                 <>
-                <View style={styles.lineBreak} />
-                  <View key={exp._id} style={{ marginVertical: 5 }}>
+                <View style={styles.lineBreak} key={exp._id} />
+                  <View style={{ marginVertical: 5 }}>
                     <View style={styles.labelContainer}>
                       <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Casino:</Text>
                       <Text style={{ fontSize: 16 }}>{exp.jobName}</Text>
