@@ -198,7 +198,7 @@ function RouletteSeriesTest({ route }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#fff", }}>
       {!isDone && (
         <>
           {timerRunning && mode === "timelimit" && (

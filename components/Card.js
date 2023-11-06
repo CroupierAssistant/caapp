@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Dimensions } from "react-native";
 
 function Card({ title, number, index }) {
   return (
@@ -11,7 +11,7 @@ function Card({ title, number, index }) {
             textAlign: "center",
             fontSize: 68,
             fontWeight: "bold",
-            marginVertical: 25,
+            marginVertical: Dimensions.get('window').height * 0.02,
             color: "#fff",
           }}
         >
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // marginVertical: 20,
-    transform: [{scale: 0.8}]
+    // transform: [{scale: 0.8}]
+    maxHeight: Dimensions.get('window').height * 0.25
   },
   cardContainer: {
     borderWidth: 1,

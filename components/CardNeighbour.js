@@ -112,10 +112,11 @@ const styles = StyleSheet.create({
   keyboardContainer: {
     display: "flex",
     width: "100%",
+    maxWidth: 300,
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     // position: 'absolute',
     // bottom: 0,
   },
@@ -126,7 +127,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    height: 50,
     flexWrap: "wrap",
     height: 170,
   },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     padding: 5,
     width: "90%",
     backgroundColor: "#29648a",
-    transform: [{ scale: 0.9 }],
+    // transform: [{ scale: 0.9 }],
   },
 });
 
