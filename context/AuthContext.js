@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import Constants from 'expo-constants';
 
 const AuthContext = createContext();
 
@@ -13,30 +12,23 @@ const AuthProvider = ({ children, navigation }) => {
     const checkAuthentication = async () => {
       try {
         const authToken = await AsyncStorage.getItem('authToken');
-
+  
         if (authToken) {
           const response = await axios.post('https://caapp-server.onrender.com/verifyToken', {
             authToken,
           });
-
+  
           if (response.data.valid) {
+            setAuthenticated(true);
             const userData = JSON.parse(await AsyncStorage.getItem('user'));
-
-            // Считываем ID устройства
-            const deviceId = Constants.deviceId;
-
-            // Проверяем, совпадает ли ID устройства
-            if (userData.deviceId === deviceId) {
-              setAuthenticated(true);
-              setUser(userData);
-            } else {
-              await logout(); // Несовпадение, выполняем выход
-            }
+            setUser(userData);
           } else {
-            await logout(); // Невалидный токен, выполняем выход
+            setAuthenticated(false);
+            setUser(null);
           }
         } else {
-          await logout(); // Отсутствует токен, выполняем выход
+          setAuthenticated(false);
+          setUser(null);
         }
       } catch (error) {
         console.error('Ошибка при проверке аутентификации:', error);
@@ -46,16 +38,10 @@ const AuthProvider = ({ children, navigation }) => {
     checkAuthentication();
   }, []);
 
-  const login = async (userData) => {
-    // Считываем ID устройства
-    const deviceId = Constants.deviceId;
 
-    // Добавляем ID устройства к объекту пользователя перед сохранением
-    const updatedUserData = { ...userData, deviceId };
-    setUser(updatedUserData);
-
-    // Сохраняем пользователя
-    AsyncStorage.setItem('user', JSON.stringify(updatedUserData));
+  const login = (userData) => {
+    setUser(userData);
+    AsyncStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = async () => {
@@ -65,16 +51,9 @@ const AuthProvider = ({ children, navigation }) => {
     setAuthenticated(false); 
   };
 
-  const updateUser = async (newUserData) => {
-    // Считываем ID устройства
-    const deviceId = Constants.deviceId;
-
-    // Добавляем ID устройства к объекту пользователя перед обновлением
-    const updatedUserData = { ...newUserData, deviceId };
-    setUser(updatedUserData);
-
-    // Обновляем пользователя
-    AsyncStorage.setItem('user', JSON.stringify(updatedUserData));
+  const updateUser = (newUserData) => {
+    setUser(newUserData);
+    AsyncStorage.setItem('user', JSON.stringify(newUserData));
   };
 
   return (

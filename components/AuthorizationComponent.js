@@ -11,10 +11,8 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
-import Constants from 'expo-constants';
 
 const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
-
   const { login, logout, user } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -31,24 +29,16 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
     setFormData({ ...formData, [field]: value });
   };
 
-  // Считываем ID устройства
-  const deviceId = Constants.deviceId;
-
   const handleLogin = () => {
     Axios.post("https://caapp-server.onrender.com/login", {
       username: formData.username,
       password: formData.password,
-      deviceId
     })
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
-
-        // Добавляем ID устройства к объекту пользователя перед сохранением
-        const updatedUserData = { ...response.data.user, deviceId };
-
         AsyncStorage.setItem("authToken", token);
-        login(updatedUserData);
+        login(response.data.user);
         setFormData({
           username: "",
           email: "",

@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  deviceId: String,
   keyboardPosition: {
     type: String,
     default: 'center',
