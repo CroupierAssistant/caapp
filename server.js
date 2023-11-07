@@ -113,6 +113,13 @@ app.post("/login", async (req, res) => {
         .json({ error: "Неверные имя пользователя или пароль" });
     }
 
+    // Считываем ID устройства
+    const deviceId = req.body.deviceId;
+
+    // Обновляем данные пользователя с новым deviceId
+    user.deviceId = deviceId;
+    await user.save();
+
     const token = jwt.sign({ userId: user._id }, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6");
     return res.json({ success: "Авторизация успешна", user, token });
   } catch (error) {
@@ -120,6 +127,7 @@ app.post("/login", async (req, res) => {
     return res.status(500).json({ error: "Ошибка сервера" });
   }
 });
+
 
 app.post("/saveTestResult", async (req, res) => {
   try {
