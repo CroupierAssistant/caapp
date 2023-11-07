@@ -288,7 +288,7 @@ app.get("/users/:userId", async (req, res) => {
 });
 
 app.post("/change-settings", async (req, res) => {
-  const { username, currentPassword, newPassword, showUserData } = req.body;
+  const { username, currentPassword, newPassword, showUserData, keyboardPosition } = req.body;
 
   try {
     const user = await User.findOne({ username });
@@ -308,6 +308,7 @@ app.post("/change-settings", async (req, res) => {
       user.password = hashedPassword;
     }
     user.showUserData = showUserData;
+    user.keyboardPosition = keyboardPosition
 
     await user.save();
 

@@ -299,7 +299,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
           <TextInput
             style={{
               ...styles.input,
-              borderColor: errors && errors.passwordMatch ? "red" : "#29648a",
+              borderColor: errors && errors.passwordLong || errors.passwordMatch ? "red" : "#29648a",
             }}
             value={formData.password}
             onChangeText={(text) => handleInputChange("password", text)}

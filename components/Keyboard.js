@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   Text,
@@ -8,9 +8,13 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { AuthContext } from "../context/AuthContext";
 
 const Keyboard = ({ onKeyboardPress, handleInputChange, mode }) => {
   const [inputValue, setInputValue] = useState("");
+  const { user } = useContext(AuthContext);
+
+  const keyboardPosition = user.keyboardPosition
 
   const handleKeyPress = (value) => {
     if (value === "DEL") {
@@ -29,7 +33,7 @@ const Keyboard = ({ onKeyboardPress, handleInputChange, mode }) => {
   };
 
   return (
-    <View style={styles.keyboard}>
+    <View style={{...styles.keyboard, alignItems: keyboardPosition,}}>
       <View style={{ flex: 1, backgroundColor: "#fff", justifyContent: "space-between",}}>
         <View style={styles.row}>
           <View style={styles.inputContainer}>
@@ -151,9 +155,8 @@ const styles = StyleSheet.create({
     right: 0,
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center",
     height: Dimensions.get('window').height * 0.35,
-    maxHeight: 300,
+    maxHeight: 250,
     backgroundColor: "#29648a",
   },
   row: {
