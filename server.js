@@ -97,7 +97,7 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, deviceId } = req.body;
 
     // Проверка на обязательные поля
     if (!username || !password) {
@@ -112,9 +112,6 @@ app.post("/login", async (req, res) => {
         .status(401)
         .json({ error: "Неверные имя пользователя или пароль" });
     }
-
-    // Считываем ID устройства
-    const deviceId = req.body.deviceId;
 
     // Обновляем данные пользователя с новым deviceId
     user.deviceId = deviceId;

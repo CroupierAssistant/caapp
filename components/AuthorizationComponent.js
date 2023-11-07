@@ -31,17 +31,18 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
     setFormData({ ...formData, [field]: value });
   };
 
+  // Считываем ID устройства
+  const deviceId = Constants.deviceId;
+
   const handleLogin = () => {
     Axios.post("https://caapp-server.onrender.com/login", {
       username: formData.username,
       password: formData.password,
+      deviceId
     })
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
-
-        // Считываем ID устройства
-        const deviceId = Constants.deviceId;
 
         // Добавляем ID устройства к объекту пользователя перед сохранением
         const updatedUserData = { ...response.data.user, deviceId };

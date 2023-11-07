@@ -48,7 +48,7 @@ const AuthProvider = ({ children, navigation }) => {
 
   const login = async (userData) => {
     // Считываем ID устройства
-    const deviceId = DeviceInfo.getUniqueId();
+    const deviceId = Constants.deviceId;
 
     // Добавляем ID устройства к объекту пользователя перед сохранением
     const updatedUserData = { ...userData, deviceId };
@@ -67,7 +67,7 @@ const AuthProvider = ({ children, navigation }) => {
 
   const updateUser = async (newUserData) => {
     // Считываем ID устройства
-    const deviceId = DeviceInfo.getUniqueId();
+    const deviceId = Constants.deviceId;
 
     // Добавляем ID устройства к объекту пользователя перед обновлением
     const updatedUserData = { ...newUserData, deviceId };
