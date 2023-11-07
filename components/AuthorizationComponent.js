@@ -11,8 +11,12 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
+import DeviceInfo from "react-native-device-info";
 
 const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
+  // Считываем ID устройства
+  const deviceId = DeviceInfo.getUniqueId();
+
   const { login, logout, user } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -37,8 +41,15 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
       .then((response) => {
         console.log(response.data);
         const { token } = response.data;
+
+        // Считываем ID устройства
+        const deviceId = DeviceInfo.getUniqueId();
+
+        // Добавляем ID устройства к объекту пользователя перед сохранением
+        const updatedUserData = { ...response.data.user, deviceId };
+
         AsyncStorage.setItem("authToken", token);
-        login(response.data.user);
+        login(updatedUserData);
         setFormData({
           username: "",
           email: "",
