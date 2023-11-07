@@ -11,11 +11,9 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
-import DeviceInfo from "react-native-device-info";
+import Constants from 'expo-constants';
 
 const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
-  // Считываем ID устройства
-  const deviceId = DeviceInfo.getUniqueId();
 
   const { login, logout, user } = useContext(AuthContext);
   const [error, setError] = useState(null);
@@ -43,7 +41,7 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
         const { token } = response.data;
 
         // Считываем ID устройства
-        const deviceId = DeviceInfo.getUniqueId();
+        const deviceId = Constants.deviceId;
 
         // Добавляем ID устройства к объекту пользователя перед сохранением
         const updatedUserData = { ...response.data.user, deviceId };

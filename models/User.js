@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   email: String,
   password: String,
-  deviceId: String, // Добавляем поле для хранения deviceId
+  deviceId: String,
   keyboardPosition: {
     type: String,
     default: 'center',

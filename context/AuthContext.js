@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import DeviceInfo from 'react-native-device-info'; // Подключаем библиотеку для работы с устройством
+import Constants from 'expo-constants';
 
 const AuthContext = createContext();
 
@@ -23,7 +23,7 @@ const AuthProvider = ({ children, navigation }) => {
             const userData = JSON.parse(await AsyncStorage.getItem('user'));
 
             // Считываем ID устройства
-            const deviceId = DeviceInfo.getUniqueId();
+            const deviceId = Constants.deviceId;
 
             // Проверяем, совпадает ли ID устройства
             if (userData.deviceId === deviceId) {
