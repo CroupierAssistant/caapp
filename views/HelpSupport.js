@@ -27,10 +27,9 @@ const HelpSupport = () => {
         croupierassistant@gmail.com.
       </Text>
       <Text style={[styles.text]}>Thank you for your valuable input!</Text>
-      <Text style={[styles.text]}>Sincerely,</Text>
-      <Text style={[styles.text]}>Pavlo Zorin</Text>
+      <Text style={[styles.text]}>Sincerely, Pavlo Zorin</Text>
       <TouchableOpacity style={styles.button} onPress={sendEmail}>
-        <Text style={styles.buttonText}>Contact Support</Text>
+        <Text style={styles.buttonText}>Send E-mail</Text>
       </TouchableOpacity>
     </View>
   );
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 10,
+    backgroundColor: '#fff',
     paddingVertical: 20,
   },
   text: {

@@ -22,7 +22,7 @@ const EditProfile = () => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
-  const [birthday, setBirthday] = useState(user.birthday);
+  const [birthday, setBirthday] = useState(user.birthday || 0);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
   const [experience, setExperience] = useState(user.experience || []);
 
@@ -41,7 +41,7 @@ const EditProfile = () => {
 
   const handleBirthDateChange = (date) => {
     setBirthday(date);
-    setModalVisible(false);
+    setModalVisibleBirthday(false);
   };
 
   const handleDeleteExperience = (index) => {
