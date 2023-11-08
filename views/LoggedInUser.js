@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   TouchableOpacity,
@@ -11,10 +11,22 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from '@expo/vector-icons';
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
+
+const MenuButton = ({ onPress, icon, text }) => {
+  return (
+    <TouchableOpacity onPress={onPress} style={styles.button}>
+      <View style={styles.buttonContent}>
+        <Text style={{width: 40, alignItems: 'center', justifyContent: 'center'}}>{icon}</Text>
+        <Text style={styles.buttonText}>{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const LoggedInUser = ({ user, logout }) => {
   const navigation = useNavigation();
@@ -51,73 +63,41 @@ const LoggedInUser = ({ user, logout }) => {
               )}
             </View>
 
-            {/* <Text style={{ ...styles.timeLimitDescription }}>
-              THE PAGE IS UNDER CONSTRUCTION
-            </Text> */}
+            {/* <MenuButton
+              onPress={() => navigation.navigate("SubscriptionManagement")}
+              icon={<MaterialCommunityIcons name="crown-circle-outline" size={26} color="#ffbf00" />}
+              text="Subscription"
+            /> */}
 
-            {/* <TouchableOpacity
-          onPress={() => navigation.navigate("SubscriptionManagement")}
-          style={styles.button}
-        >
-          <View style={styles.buttonContent}>
-            <MaterialCommunityIcons
-              name="crown-circle"
-              size={24}
-              color="#ffbf00"
-            />
-            <Text style={styles.buttonText}>Subscription</Text>
-          </View>
-        </TouchableOpacity> */}
-
-            <TouchableOpacity
+            <MenuButton
               onPress={() => navigation.navigate("EditProfile")}
-              style={styles.button}
-            >
-              <View style={styles.buttonContent}>
-                <AntDesign name="profile" size={24} color="#29648a" />
-                <Text style={styles.buttonText}>Edit profile</Text>
-              </View>
-            </TouchableOpacity>
+              icon={<AntDesign name="profile" size={22} color="#29648a" />}
+              text="Edit profile"
+            />
 
-            <TouchableOpacity
+            <MenuButton
               onPress={() => navigation.navigate("AccountSettings")}
-              style={styles.button}
-            >
-              <View style={styles.buttonContent}>
-                <FontAwesome name="gear" size={24} color="#29648a" />
-                <Text style={styles.buttonText}>Account Settings</Text>
-              </View>
-            </TouchableOpacity>
+              icon={<Ionicons name="settings-outline" size={24} color="#29648a" />}
+              text="Account Settings"
+            />
 
-            {/* <TouchableOpacity
-          onPress={() => navigation.navigate("Achievements")}
-          style={styles.button}
-        >
-          <View style={styles.buttonContent}>
-            <Ionicons name="ios-medal" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Achievements</Text>
-          </View>
-        </TouchableOpacity> */}
+            {/* <MenuButton
+              onPress={() => navigation.navigate("Achievements")}
+              icon={<Ionicons name="medal-outline" size={24} color="#29648a" />}
+              text="Achievements"
+            /> */}
 
-            {/* <TouchableOpacity
-          onPress={() => navigation.navigate("TestHistory")}
-          style={styles.button}
-        >
-          <View style={styles.buttonContent}>
-            <MaterialIcons name="history" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Test history</Text>
-          </View>
-        </TouchableOpacity> */}
+            {/* <MenuButton
+              onPress={() => navigation.navigate("TestHistory")}
+              icon={<MaterialIcons name="history" size={24} color="#29648a" />}
+              text="Test history"
+            /> */}
 
-            {/* <TouchableOpacity
-          onPress={() => navigation.navigate("HelpSupport")}
-          style={{ ...styles.button }}
-        >
-          <View style={styles.buttonContent}>
-            <Ionicons name="help-circle" size={24} color="#29648a" />
-            <Text style={styles.buttonText}>Help & support</Text>
-          </View>
-        </TouchableOpacity> */}
+            <MenuButton
+              onPress={() => navigation.navigate("HelpSupport")}
+              icon={<Feather name="help-circle" size={24} color="#29648a" />}
+              text="Help & support"
+            />
 
             <TouchableOpacity
               onPress={handleLogout}
@@ -144,8 +124,6 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: "center",
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#29648a",
     width: "100%",
   },
   nickname: {
@@ -165,7 +143,6 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   button: {
-    // width: Dimensions.get("screen").width,
     width: "100%",
     paddingVertical: 15,
     paddingHorizontal: 20,

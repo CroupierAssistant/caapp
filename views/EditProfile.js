@@ -109,6 +109,15 @@ const EditProfile = () => {
   const handleExperienceDateChange = (index, field, date) => {
     const updatedExperience = [...experience];
     updatedExperience[index][field] = date;
+  
+    if (field === "endDate" && date < updatedExperience[index].startDate) {
+      updatedExperience[index].startDate = date;
+    }
+  
+    if (field === "startDate" && date > updatedExperience[index].endDate) {
+      updatedExperience[index].endDate = date;
+    }
+  
     setExperience(updatedExperience);
   };
 

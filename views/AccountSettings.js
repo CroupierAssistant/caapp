@@ -55,48 +55,48 @@ const AccountSettings = () => {
       return;
     }
 
-    // if (
-    //   newPassword !== confirmPassword ||
-    //   newPassword.length === 0 ||
-    //   confirmPassword.length === 0 ||
-    //   !passwordCurrent
-    // ) {
-    //   setErrors({
-    //     ...errors,
-    //     passwordCurrent: "Enter current password",
-    //   });
-    //   return;
-    // }
-
-    try {
-      const response = await axios.post(
-        "https://caapp-server.onrender.com/change-settings",
-        {
-          username: user.username,
-          currentPassword,
-          newPassword,
-          showUserData: isShowData,
-          keyboardPosition: selectedPosition,
-        }
-      );
-
-      if (response.data.success) {
-        await updateUser({
-          ...user,
-          password: newPassword,
-          showUserData: isShowData,
-          keyboardPosition: selectedPosition,
-        });
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setErrors({ passwordMatch: "", passwordLong: "", passwordCurrent: "" });
-        Alert.alert("Success", "Account settings changed successfully");
+    if (passwordLong && newPassword.length != 0 && passMatch) {
+      if (!passwordCurrent) {
+        return;
       } else {
-        Alert.alert("Error", response.data.message);
+        try {
+          const response = await axios.post(
+            "https://caapp-server.onrender.com/change-settings",
+            {
+              username: user.username,
+              currentPassword,
+              newPassword,
+              showUserData: isShowData,
+              keyboardPosition: selectedPosition,
+            }
+          );
+
+          if (response.data.success) {
+            await updateUser({
+              ...user,
+              password: newPassword,
+              showUserData: isShowData,
+              keyboardPosition: selectedPosition,
+            });
+            setCurrentPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+            setErrors({
+              passwordMatch: "",
+              passwordLong: "",
+              passwordCurrent: "",
+            });
+            Alert.alert("Success", "Account settings changed successfully");
+          } else {
+            Alert.alert("Error", response.data.message);
+          }
+        } catch (error) {
+          Alert.alert(
+            "Error",
+            "An error occurred while changing account settings"
+          );
+        }
       }
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while changing account settings");
     }
   };
 

@@ -11,7 +11,7 @@ import {
 
 const UserProfileModal = ({ isVisible, onClose, user }) => {
   if (!user) {
-    return null; // Return null if user is null
+    return null;
   }
 
   return (
@@ -20,13 +20,6 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
         <View style={styles.modalContent}>
           <View style={styles.textContainer}>
             <Text style={styles.nickname}>{user.username}</Text>
-            {/* {user.firstName.length || user.lastName.length ? (
-              <Text style={styles.username}>
-                {user.firstName} {user.lastName}
-              </Text>
-            ) : (
-              <Text style={styles.usernameUnknown}>"A User Has No Name"</Text>
-            )} */}
           </View>
           <View
             style={{
@@ -40,12 +33,12 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
             <ScrollView>
               <Text
                 style={{
-                //   marginBottom: 5,
+                  //   marginBottom: 5,
                   fontSize: 18,
                   fontWeight: "bold",
                   color: "#29648a",
-                  textTransform: 'uppercase',
-                  textAlign: 'center'
+                  textTransform: "uppercase",
+                  textAlign: "center",
                 }}
               >
                 Personal info
@@ -53,19 +46,39 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
 
               <View style={styles.lineBreak} />
               <View style={styles.labelContainer}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Name:</Text>
-                <Text style={{ fontSize: 16 }}>{user.firstName && user.lastName ? `${user.firstName} ${user.lastName}`: `A User Has No Name`}</Text>
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#29648a" }}
+                >
+                  Name:
+                </Text>
+                <Text style={{ fontSize: 16 }}>
+                  {user.firstName && user.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : `A User Has No Name`}
+                </Text>
               </View>
               <View style={styles.labelContainer}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Email:</Text>
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#29648a" }}
+                >
+                  Email:
+                </Text>
                 <Text style={{ fontSize: 16 }}>{user.email}</Text>
               </View>
               <View style={styles.labelContainer}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Phone:</Text>
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#29648a" }}
+                >
+                  Phone:
+                </Text>
                 <Text style={{ fontSize: 16 }}>{user.phoneNumber}</Text>
               </View>
               <View style={styles.labelContainer}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Birthday:</Text>
+                <Text
+                  style={{ fontSize: 16, fontWeight: "bold", color: "#29648a" }}
+                >
+                  Birthday:
+                </Text>
                 <Text style={{ fontSize: 16 }}>
                   {new Date(user.birthday).toLocaleDateString()}
                 </Text>
@@ -77,44 +90,86 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
                   fontSize: 18,
                   fontWeight: "bold",
                   color: "#29648a",
-                  textTransform: 'uppercase',
-                  textAlign: 'center'
+                  textTransform: "uppercase",
+                  textAlign: "center",
                 }}
               >
                 Experience
               </Text>
 
-              {user.experience.map((exp, index) => (
-                <>
-                <View style={styles.lineBreak} key={exp._id} />
-                  <View style={{ marginVertical: 5 }}>
-                    <View style={styles.labelContainer}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Casino:</Text>
-                      <Text style={{ fontSize: 16 }}>{exp.jobName}</Text>
+              {user.experience
+                .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+                .map((exp, index) => (
+                  <>
+                    <View style={styles.lineBreak} key={exp._id} />
+                    <View style={{ marginVertical: 5 }}>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          Casino:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>{exp.jobName}</Text>
+                      </View>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          Position:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>{exp.jobPosition}</Text>
+                      </View>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          Location:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>{exp.location}</Text>
+                      </View>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          Start Date:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>
+                          {new Date(exp.startDate).toLocaleDateString()}
+                        </Text>
+                      </View>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          End Date:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>
+                          {new Date(exp.endDate).toLocaleDateString()}
+                        </Text>
+                      </View>
                     </View>
-                    <View style={styles.labelContainer}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Position:</Text>
-                      <Text style={{ fontSize: 16 }}>{exp.jobPosition}</Text>
-                    </View>
-                    <View style={styles.labelContainer}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Location:</Text>
-                      <Text style={{ fontSize: 16 }}>{exp.location}</Text>
-                    </View>
-                    <View style={styles.labelContainer}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>Start Date:</Text>
-                      <Text style={{ fontSize: 16 }}>
-                        {new Date(exp.startDate).toLocaleDateString()}
-                      </Text>
-                    </View>
-                    <View style={styles.labelContainer}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#29648a' }}>End Date:</Text>
-                      <Text style={{ fontSize: 16 }}>
-                        {new Date(exp.endDate).toLocaleDateString()}
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              ))}
+                  </>
+                ))}
             </ScrollView>
           </View>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
