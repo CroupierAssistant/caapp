@@ -14,7 +14,7 @@ const Keyboard = ({ onKeyboardPress, handleInputChange, mode }) => {
   const [inputValue, setInputValue] = useState("");
   const { user } = useContext(AuthContext);
 
-  const keyboardPosition = user.keyboardPosition
+  const keyboardPosition = user && user.keyboardPosition || 'center'
 
   const handleKeyPress = (value) => {
     if (value === "DEL") {
