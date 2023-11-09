@@ -100,9 +100,24 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
               {user.experience
                 .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
                 .map((exp, index) => (
-                  <>
-                    <View style={styles.lineBreak} key={exp._id} />
+                  <View  key={exp._id} >
+                    <View style={styles.lineBreak} />
                     <View style={{ marginVertical: 5 }}>
+                      <View style={styles.labelContainer}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontWeight: "bold",
+                            color: "#29648a",
+                          }}
+                        >
+                          Date:
+                        </Text>
+                        <Text style={{ fontSize: 16 }}>
+                          {new Date(exp.startDate).toLocaleDateString()} -{" "}
+                          {new Date(exp.endDate).toLocaleDateString()}
+                        </Text>
+                      </View>
                       <View style={styles.labelContainer}>
                         <Text
                           style={{
@@ -139,36 +154,8 @@ const UserProfileModal = ({ isVisible, onClose, user }) => {
                         </Text>
                         <Text style={{ fontSize: 16 }}>{exp.location}</Text>
                       </View>
-                      <View style={styles.labelContainer}>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: "bold",
-                            color: "#29648a",
-                          }}
-                        >
-                          Start Date:
-                        </Text>
-                        <Text style={{ fontSize: 16 }}>
-                          {new Date(exp.startDate).toLocaleDateString()}
-                        </Text>
-                      </View>
-                      <View style={styles.labelContainer}>
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            fontWeight: "bold",
-                            color: "#29648a",
-                          }}
-                        >
-                          End Date:
-                        </Text>
-                        <Text style={{ fontSize: 16 }}>
-                          {new Date(exp.endDate).toLocaleDateString()}
-                        </Text>
-                      </View>
                     </View>
-                  </>
+                  </View>
                 ))}
             </ScrollView>
           </View>
