@@ -8,6 +8,7 @@ const fs = require("fs");
 
 const { User, findUserById } = require("./models/User");
 const ActionLog = require("./models/ActionLog");
+const TestLog = require("./models/TestLog");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -193,11 +194,27 @@ app.post("/saveTestResult", async (req, res) => {
   }
 });
 
-app.post("/saveLog", async (req, res) => {
+app.post("/saveActionLog", async (req, res) => {
   try {
     const { level, user, message } = req.body;
 
     const newLog = await ActionLog.create({ level, user, message });
+
+    return res.json({
+      success: "Log saved successfully",
+      log: newLog,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/saveTestLog", async (req, res) => {
+  try {
+    const { level, user, game, percentage, time } = req.body;
+
+    const newLog = await TestLog.create({ level, user, game, percentage, time });
 
     return res.json({
       success: "Log saved successfully",

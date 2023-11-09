@@ -3,8 +3,9 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import saveTestResult from "../functions/saveTestResult";
 import { AuthContext } from "../context/AuthContext";
+import saveTestResult from "../functions/saveTestResult";
+import saveTestLog from "../functions/saveTestLog";
 
 const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
   const [percentage, setPercentage] = useState(0);
@@ -16,6 +17,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
 
     try {
       const response = await saveTestResult(userId, nickname, amountOfCards, game, type, percent, time);
+      await saveTestLog(type, nickname, game, percent, time)
       console.log(response);
       // Handle success
     } catch (error) {
@@ -54,7 +56,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     handleSaveTestResult({
       userId: user && user._id ? user._id : '',
       nickname: user && user.username ? user.username : '\/guest\/',
-      amountOfCards: amountOfCards,
+      amountOfCards: mode == 'timelimit' ? amountOfCards : cardResults.length,
       game: gameName,
       type: mode,
       percent: calculatedPercentage,

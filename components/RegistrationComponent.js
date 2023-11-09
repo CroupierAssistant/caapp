@@ -11,7 +11,7 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
-import saveLog from "../functions/saveLog";
+import saveActionLog from "../functions/saveActionLog";
 
 const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
   const { login } = useContext(AuthContext);
@@ -199,7 +199,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
         formData
       );
       
-      saveLog('newRegistration', username, `Пользователь зарегистрирован`);
+      saveActionLog('newRegistration', username, `Пользователь зарегистрирован`);
       
       login(response.data.user);
       console.log(response.data);

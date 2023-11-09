@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const saveLog = async (level, user, message) => {
+const saveActionLog = async (level, user, message) => {
   try {
     const response = await axios.post(
-      "https://caapp-server.onrender.com/saveLog",
+      "https://caapp-server.onrender.com/saveActionLog",
       {
         level,
         user,
@@ -17,4 +17,4 @@ const saveLog = async (level, user, message) => {
   }
 };
 
-export default saveLog;
+export default saveActionLog;

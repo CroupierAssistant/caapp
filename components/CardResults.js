@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import saveTestResult from "../functions/saveTestResult";
 import { AuthContext } from "../context/AuthContext";
+import saveTestResult from "../functions/saveTestResult";
+import saveTestLog from "../functions/saveTestLog";
 
 
 const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) => {
@@ -14,6 +15,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
   const handleSaveTestResult = async ({userId, nickname, cards, game, type, percent, time,}) => {
     try {
       const response = await saveTestResult(userId, nickname, cards, game, type, percent, time,);
+      await saveTestLog(type, nickname, game, percent, time)
       console.log(response);
       // Handle success
     } catch (error) {
@@ -50,7 +52,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
     handleSaveTestResult({
       userId: user && user._id ? user._id : '',
       nickname: user && user.username ? user.username : '\/guest\/',
-      cards: amountOfCards,
+      cards: mode == 'timelimit' ? amountOfCards : cardResults.length,
       game: gameName,
       type: mode,
       percent: calculatedPercentage,
