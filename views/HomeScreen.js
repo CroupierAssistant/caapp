@@ -1,17 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Image
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../context/AuthContext";
 
 function HomeScreen({ route }) {
-  const { login, logout, user } = useContext(AuthContext);
   const navigation = useNavigation();
 
   return (

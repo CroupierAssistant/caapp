@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
 
 const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
-  const { login, logout, user } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     username: "",

@@ -11,9 +11,10 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
+import { saveLog } from "../models/Log";
 
 const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
-  const { login, logout, user } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -197,6 +198,9 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
         "https://caapp-server.onrender.com/register",
         formData
       );
+      
+      saveLog('newRegistration', username, `Пользователь зарегистрирован`);
+      
       login(response.data.user);
       console.log(response.data);
     } catch (error) {

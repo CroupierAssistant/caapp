@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { saveLog } from '../models/Log';
 
 const AuthContext = createContext();
 
@@ -41,10 +42,12 @@ const AuthProvider = ({ children, navigation }) => {
 
   const login = (userData) => {
     setUser(userData);
+    saveLog('login', userData.username, `Пользователь вошел в систему`);
     AsyncStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const logout = async () => {
+  const logout = async (name) => {
+    saveLog('logout', name, `Пользователь вышел из системы`);
     await AsyncStorage.removeItem('authToken');
     await AsyncStorage.removeItem('user');
     setUser(null);
@@ -52,6 +55,7 @@ const AuthProvider = ({ children, navigation }) => {
   };
 
   const updateUser = (newUserData) => {
+    saveLog('profileUpdate', newUserData.username, `Пользователь обновил данные профиля либо настройки аккаунта`);
     setUser(newUserData);
     AsyncStorage.setItem('user', JSON.stringify(newUserData));
   };

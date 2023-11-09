@@ -31,7 +31,7 @@ const MenuButton = ({ onPress, icon, text }) => {
 const LoggedInUser = ({ user, logout }) => {
   const navigation = useNavigation();
   const handleLogout = async () => {
-    await logout();
+    await logout(user.username);
     await navigation.navigate("Main");
   };
 
