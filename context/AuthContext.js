@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { saveLog } from '../models/Log';
+import saveLog from '../functions/saveLog';
 
 const AuthContext = createContext();
 

@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 
 const { User, findUserById } = require("./models/User");
+const { ActionLog } = require("./models/ActionLog");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -37,21 +38,25 @@ async function comparePassword(inputPassword, hashedPassword) {
   return isMatch;
 }
 
-app.post('/verifyToken', (req, res) => {
+app.post("/verifyToken", (req, res) => {
   const { authToken } = req.body;
 
   if (!authToken) {
-    return res.status(400).json({ valid: false, message: 'Токен не предоставлен' });
+    return res
+      .status(400)
+      .json({ valid: false, message: "Токен не предоставлен" });
   }
 
   try {
     // Проверяем токен
-    const decoded = jwt.verify(authToken, 'snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6'); // Замените 'your-secret-key' на ваш секретный ключ
+    const decoded = jwt.verify(authToken, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6"); // Замените 'your-secret-key' на ваш секретный ключ
 
     // Если токен действителен
     return res.json({ valid: true, user: decoded.user }); // Опционально: возвращаем информацию о пользователе
   } catch (error) {
-    return res.status(401).json({ valid: false, message: 'Недействительный токен' });
+    return res
+      .status(401)
+      .json({ valid: false, message: "Недействительный токен" });
   }
 });
 
@@ -86,7 +91,10 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ userId: newUser._id }, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6");
+    const token = jwt.sign(
+      { userId: newUser._id },
+      "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6"
+    );
 
     return res.json({ success: "Регистрация успешна", user: newUser, token });
   } catch (error) {
@@ -113,7 +121,10 @@ app.post("/login", async (req, res) => {
         .json({ error: "Неверные имя пользователя или пароль" });
     }
 
-    const token = jwt.sign({ userId: user._id }, "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6");
+    const token = jwt.sign(
+      { userId: user._id },
+      "snyOtnE6JCZXhO72ZdtQ3QhrFQKqiBX6"
+    );
     return res.json({ success: "Авторизация успешна", user, token });
   } catch (error) {
     console.error(error);
@@ -143,24 +154,24 @@ app.post("/saveTestResult", async (req, res) => {
       game === "Blackjack"
         ? BlackjackResult
         : game === "Multiplication"
-          ? MultiplicationResult
-          : game === "Neighbours"
-            ? NeighboursResult
-            : game === "Roulette pictures"
-              ? RoulettePicturesResult
-              : game === "Roulette series"
-                ? RouletteSeriesResult
-                : game === "Russian Poker 5-bonus"
-                  ? Russian5bonusResult
-                  : game === "Russian Poker 6-bonus"
-                    ? Russian6bonusResult
-                    : game === "Russian Poker Ante"
-                      ? RussianAnteResult
-                      : game === "UTH Blind Bets"
-                        ? UTHBlindResult
-                        : game === "UTH Trips Bets"
-                          ? UTHTripsResult
-                          : TexasHoldemResult;
+        ? MultiplicationResult
+        : game === "Neighbours"
+        ? NeighboursResult
+        : game === "Roulette pictures"
+        ? RoulettePicturesResult
+        : game === "Roulette series"
+        ? RouletteSeriesResult
+        : game === "Russian Poker 5-bonus"
+        ? Russian5bonusResult
+        : game === "Russian Poker 6-bonus"
+        ? Russian6bonusResult
+        : game === "Russian Poker Ante"
+        ? RussianAnteResult
+        : game === "UTH Blind Bets"
+        ? UTHBlindResult
+        : game === "UTH Trips Bets"
+        ? UTHTripsResult
+        : TexasHoldemResult;
 
     const newTestResult = await ModelSchema.create({
       userId,
@@ -175,6 +186,22 @@ app.post("/saveTestResult", async (req, res) => {
     return res.json({
       success: "Test result saved successfully",
       testResult: newTestResult,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+app.post("/saveLog", async (req, res) => {
+  try {
+    const { level, user, message } = req.body;
+
+    const newLog = await ActionLog.create({ level, user, message });
+
+    return res.json({
+      success: "Log saved successfully",
+      log: newLog,
     });
   } catch (error) {
     console.error(error);
@@ -288,7 +315,13 @@ app.get("/users/:userId", async (req, res) => {
 });
 
 app.post("/change-settings", async (req, res) => {
-  const { username, currentPassword, newPassword, showUserData, keyboardPosition } = req.body;
+  const {
+    username,
+    currentPassword,
+    newPassword,
+    showUserData,
+    keyboardPosition,
+  } = req.body;
 
   try {
     const user = await User.findOne({ username });
@@ -298,7 +331,7 @@ app.post("/change-settings", async (req, res) => {
       return;
     }
 
-    if(currentPassword && newPassword){
+    if (currentPassword && newPassword) {
       if (!(await comparePassword(currentPassword, user.password))) {
         res.json({ success: false, message: "Incorrect current password" });
         return;
@@ -308,7 +341,7 @@ app.post("/change-settings", async (req, res) => {
       user.password = hashedPassword;
     }
     user.showUserData = showUserData;
-    user.keyboardPosition = keyboardPosition
+    user.keyboardPosition = keyboardPosition;
 
     await user.save();
 
@@ -320,7 +353,15 @@ app.post("/change-settings", async (req, res) => {
 });
 
 app.post("/update-profile", async (req, res) => {
-  const { username, firstName, lastName, email, phoneNumber, experience, birthday } = req.body;
+  const {
+    username,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    experience,
+    birthday,
+  } = req.body;
 
   try {
     const user = await User.findOne({ username });
