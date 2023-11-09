@@ -11,7 +11,7 @@ import {
 import Axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../context/AuthContext";
-import { saveLog } from "../models/ActionLog";
+import saveLog from "../functions/saveLog";
 
 const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
   const { login } = useContext(AuthContext);
