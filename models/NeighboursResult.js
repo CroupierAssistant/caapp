@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const NeighboursSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const NeighboursSchema = new mongoose.Schema({
   },
 });
 
-const NeighboursResult = mongoose.model('NeighboursResult', NeighboursSchema);
+const NeighboursResult = connectionResults.model('NeighboursResult', NeighboursSchema);
 
 module.exports = NeighboursResult;

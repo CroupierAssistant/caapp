@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { connectionUser } = require('../db');
 
 const LogSchema = new mongoose.Schema({
   level: String,
@@ -7,6 +8,6 @@ const LogSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
 });
 
-const ActionLog = mongoose.model("ActionLog", LogSchema);
+const ActionLog = connectionUser.model("ActionLog", LogSchema);
 
 module.exports = ActionLog

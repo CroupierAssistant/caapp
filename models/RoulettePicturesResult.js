@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const RoulettePicturesSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const RoulettePicturesSchema = new mongoose.Schema({
   },
 });
 
-const RoulettePicturesResult = mongoose.model('RoulettePicturesResult', RoulettePicturesSchema);
+const RoulettePicturesResult = connectionResults.model('RoulettePicturesResult', RoulettePicturesSchema);
 
 module.exports = RoulettePicturesResult;

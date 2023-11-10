@@ -11,7 +11,8 @@ const saveTestResult = async (
 ) => {
   try {
     const response = await axios.post(
-      "https://caapp-server.onrender.com/saveTestResult",
+      // "https://caapp-server.onrender.com/saveTestResult",
+      "http://192.168.31.124:10000/saveTestResult",
       {
         userId,
         username,

@@ -32,7 +32,8 @@ const Ratings = () => {
     setSelectedGame(gameName);
     setModalVisible(true);
 
-    fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
+    // fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
+    fetch(`http://192.168.31.124:10000/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

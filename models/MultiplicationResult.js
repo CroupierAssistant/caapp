@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const MultiplicationSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const MultiplicationSchema = new mongoose.Schema({
   },
 });
 
-const MultiplicationResult = mongoose.model('MultiplicationResult', MultiplicationSchema);
+const MultiplicationResult = connectionResults.model('MultiplicationResult', MultiplicationSchema);
 
 module.exports = MultiplicationResult;

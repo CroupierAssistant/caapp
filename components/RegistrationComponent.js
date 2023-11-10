@@ -29,7 +29,8 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
   async function checkIfUserExists(username) {
     try {
       const response = await Axios.get(
-        `https://caapp-server.onrender.com/userExists?username=${username}`
+        // `https://caapp-server.onrender.com/userExists?username=${username}`
+        `http://192.168.31.124:10000/userExists?username=${username}`
       );
       return response.data.exists;
     } catch (error) {
@@ -41,7 +42,8 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
   async function checkIfEmailExists(email) {
     try {
       const response = await Axios.get(
-        `https://caapp-server.onrender.com/emailExists?email=${email}`
+        // `https://caapp-server.onrender.com/emailExists?email=${email}`
+        `http://192.168.31.124:10000/emailExists?email=${email}`
       );
       return response.data.exists;
     } catch (error) {
@@ -195,7 +197,8 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
 
     try {
       const response = await Axios.post(
-        "https://caapp-server.onrender.com/register",
+        // "https://caapp-server.onrender.com/register",
+        "http://192.168.31.124:10000/register",
         formData
       );
       

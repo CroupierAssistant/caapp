@@ -15,7 +15,8 @@ const AuthProvider = ({ children, navigation }) => {
         const authToken = await AsyncStorage.getItem('authToken');
   
         if (authToken) {
-          const response = await axios.post('https://caapp-server.onrender.com/verifyToken', {
+          // const response = await axios.post('https://caapp-server.onrender.com/verifyToken', {
+          const response = await axios.post('http://192.168.31.124:10000/verifyToken', {
             authToken,
           });
   

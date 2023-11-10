@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const UTHTripsSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const UTHTripsSchema = new mongoose.Schema({
   },
 });
 
-const UTHTripsResult = mongoose.model('UTHTripsResult', UTHTripsSchema);
+const UTHTripsResult = connectionResults.model('UTHTripsResult', UTHTripsSchema);
 
 module.exports = UTHTripsResult;

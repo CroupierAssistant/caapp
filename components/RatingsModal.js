@@ -41,7 +41,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const findUserById = async (userId) => {
     try {
       const response = await axios.get(
-        `https://caapp-server.onrender.com/users/${userId}`
+        // `https://caapp-server.onrender.com/users/${userId}`
+        `http://192.168.31.124:10000/users/${userId}`
       );
       return response.data;
     } catch (error) {

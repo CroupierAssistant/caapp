@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { connectionResults } = require('../db');
 
 const BlackjackSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const BlackjackSchema = new mongoose.Schema({
   },
 });
 
-const BlackjackResult = mongoose.model("BlackjackResult", BlackjackSchema);
+const BlackjackResult = connectionResults.model("BlackjackResult", BlackjackSchema);
 
 module.exports = BlackjackResult;

@@ -58,7 +58,8 @@ const AccountSettings = () => {
     if ((passwordLong && passMatch && passwordCurrent) || (!newPassword && !confirmPassword && !passwordCurrent)) {
       try {
         const response = await axios.post(
-          "https://caapp-server.onrender.com/change-settings",
+          // "https://caapp-server.onrender.com/change-settings",
+          "http://192.168.31.124:10000/change-settings",
           {
             username: user.username,
             currentPassword,

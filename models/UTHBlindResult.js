@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { connectionResults } = require('../db');
 
 const UTHBlindSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const UTHBlindSchema = new mongoose.Schema({
   },
 });
 
-const UTHBlindResult = mongoose.model("UTHBlindResult", UTHBlindSchema);
+const UTHBlindResult = connectionResults.model("UTHBlindResult", UTHBlindSchema);
 
 module.exports = UTHBlindResult;

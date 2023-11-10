@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionUser } = require('../db');
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -31,7 +32,7 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-const User = mongoose.model('User', userSchema, 'users');
+const User = connectionUser.model('User', userSchema, 'users');
 
 const findUserById = async (userId) => {
   try {

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const TexasHoldemSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const TexasHoldemSchema = new mongoose.Schema({
   },
 });
 
-const TexasHoldemResult = mongoose.model('TexasHoldemResult', TexasHoldemSchema);
+const TexasHoldemResult = connectionResults.model('TexasHoldemResult', TexasHoldemSchema);
 
 module.exports = TexasHoldemResult;

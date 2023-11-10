@@ -59,7 +59,8 @@ const EditProfile = () => {
   const handleChangeProfile = async () => {
     try {
       const response = await axios.post(
-        "https://caapp-server.onrender.com/update-profile",
+        // "https://caapp-server.onrender.com/update-profile",
+        "http://192.168.31.124:10000/update-profile",
         {
           username: user.username,
           firstName,

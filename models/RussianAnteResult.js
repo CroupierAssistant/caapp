@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const RussianAnteSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const RussianAnteSchema = new mongoose.Schema({
   },
 });
 
-const RussianAnteResult = mongoose.model('RussianAnteResult', RussianAnteSchema);
+const RussianAnteResult = connectionResults.model('RussianAnteResult', RussianAnteSchema);
 
 module.exports = RussianAnteResult;

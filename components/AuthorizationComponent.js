@@ -30,7 +30,8 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
   };
 
   const handleLogin = () => {
-    Axios.post("https://caapp-server.onrender.com/login", {
+    // Axios.post("https://caapp-server.onrender.com/login", {
+    Axios.post("http://192.168.31.124:10000/login", {
       username: formData.username,
       password: formData.password,
     })

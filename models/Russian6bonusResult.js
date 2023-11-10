@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { connectionResults } = require('../db');
 
 const Russian6bonusSchema = new mongoose.Schema({
   userId: String,
@@ -14,6 +15,6 @@ const Russian6bonusSchema = new mongoose.Schema({
   },
 });
 
-const Russian6bonusResult = mongoose.model('Russian6bonusResult', Russian6bonusSchema);
+const Russian6bonusResult = connectionResults.model('Russian6bonusResult', Russian6bonusSchema);
 
 module.exports = Russian6bonusResult;
