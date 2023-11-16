@@ -7,9 +7,11 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import TestsStackNavigator from "./TestsStackNavigator";
 import Ratings from "../views/Ratings";
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import Social from "../views/Social"
 
 // Создаем нижнюю навигацию
 const Tab = createBottomTabNavigator();
@@ -77,6 +79,23 @@ function MainTabNavigator() {
           ),
           tabBarLabel: ({ focused, color, size }) => (
             <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>RATINGS</Text>
+          ),
+          headerShown: false,
+          detachPreviousScreen: true,
+        }}
+      />
+      <Tab.Screen
+        name="Social"
+        component={Social}
+        options={{
+          tabBarShowLabel: true,
+          tabBarActiveBackgroundColor: "#29648a",
+          tabBarInactiveBackgroundColor: "#29648a",
+          tabBarIcon: ({ focused, color, size }) => (
+            <FontAwesome5 name="user-friends" size={24} color={focused ? '#ffbf00' : "#FFF5EE"} />
+          ),
+          tabBarLabel: ({ focused, color, size }) => (
+            <Text style={{fontSize: 10, color: focused ? "#ffbf00" : "#FFF5EE"}}>SOCIAL</Text>
           ),
           headerShown: false,
           detachPreviousScreen: true,

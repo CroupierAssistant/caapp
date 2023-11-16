@@ -152,7 +152,6 @@ function RoulettePicturesSide() {
 
         {
         activeChips.map((ch, index) => {
-          // console.log(activeChips, betsArray)
           return (
             <View style={[styles.chip, styles[ch]]} key={index}>
               <Text style={styles.chipBet}>{betsArray[index]}</Text>
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
       height: 0,
     },
     position: "absolute",
-    borderRadius: 50,
+    borderRadius: 30,
     borderWidth: 3,
     borderColor: "rgb(131, 30, 30)",
     width: 40,

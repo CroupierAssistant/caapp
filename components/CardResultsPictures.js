@@ -18,7 +18,6 @@ const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards, game
 
     try {
       const response = await saveTestResult(userId, nickname, amountOfCards, game, type, percent, time);
-      console.log(response);
       // Handle success
     } catch (error) {
       console.error(error);

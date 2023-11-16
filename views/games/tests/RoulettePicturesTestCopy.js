@@ -16,8 +16,6 @@ function RoulettePicturesTest() {
   const handleAddPayout = (payout) => {
     setPayouts([...payouts, 'payout']);
     // setPayouts([...payouts, payout]);
-    
-    console.log(payouts);
   };
 
   // Здесь вы можете подготовить данные, которые будут переданы в FlatList

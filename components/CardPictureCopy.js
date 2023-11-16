@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     transform: [{scale: 0.9}]
   },
   cardContainer: {
-    borderRadius: 5,
+    borderRadius: 3,
     padding: 10,
     width: "90%",
     backgroundColor: "#29648a57",

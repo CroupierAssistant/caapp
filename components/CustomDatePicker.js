@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     flexDirection: "column",
     width: Dimensions.get("window").width - 20,
-    borderRadius: 5,
+    borderRadius: 3,
     paddingBottom: 15,
   },
   picker: {

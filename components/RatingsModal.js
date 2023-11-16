@@ -42,7 +42,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     try {
       const response = await axios.get(
         // `https://caapp-server.onrender.com/users/${userId}`
-        `http://192.168.31.124:10000/users/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "#fff",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 3,
     width: Dimensions.get("window").width * 0.95,
     height: Dimensions.get("window").height * 0.8,
   },
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     height: 26,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: 30,
   },
   textHeader: {
     textAlign: "center",

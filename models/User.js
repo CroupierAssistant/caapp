@@ -29,7 +29,25 @@ const userSchema = new mongoose.Schema({
   socialMedia: {
     instagram: String, 
     facebook: String, 
-  }
+  },
+  friends: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  friendsRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
+  myFriendRequests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 const User = connectionUser.model('User', userSchema, 'users');

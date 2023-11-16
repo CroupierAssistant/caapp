@@ -33,20 +33,20 @@ connectionResults.once('open', () => {
 });
 
 // Второе подключение
-const connectionTests = mongoose.createConnection('mongodb+srv://G0rdonShumway:qweasdzxcwsx89@croupierassistantcluste.pnmla6y.mongodb.net/testsDatabase?retryWrites=true&w=majority', {
+const connectionDuels = mongoose.createConnection('mongodb+srv://G0rdonShumway:qweasdzxcwsx89@croupierassistantcluste.pnmla6y.mongodb.net/duelsDatabase?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 // Обработка ошибок для второго подключения
-connectionTests.on('error', (error) => {
-  console.error('Ошибка подключения ко второй MongoDB базе данных: "testsDatabase"', error);
+connectionDuels.on('error', (error) => {
+  console.error('Ошибка подключения ко второй MongoDB базе данных: "duelsDatabase"', error);
 });
 
 // Успешное подключение ко второй базе данных
-connectionTests.once('open', () => {
-  console.log('Подключено MongoDB к базе данных: "testsDatabase"');
+connectionDuels.once('open', () => {
+  console.log('Подключено MongoDB к базе данных: "duelsDatabase"');
 });
 
 // Экспорт подключений
-module.exports = { connectionUser, connectionResults, connectionTests };
+module.exports = { connectionUser, connectionResults, connectionDuels };

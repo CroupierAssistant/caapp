@@ -9,6 +9,7 @@ const fs = require("fs");
 const { User, findUserById } = require("./models/User");
 const ActionLog = require("./models/ActionLog");
 const TestLog = require("./models/TestLog");
+const DuelModel = require("./models/DuelModel");
 
 const BlackjackResult = require("./models/BlackjackResult"); // Import the TestResult model
 const MultiplicationResult = require("./models/MultiplicationResult"); // Import the TestResult model
@@ -212,9 +213,16 @@ app.post("/saveActionLog", async (req, res) => {
 
 app.post("/saveTestLog", async (req, res) => {
   try {
-    const { level, user, game, percentage, time } = req.body;
+    const { level, user, game, amountOfCards, percentage, time } = req.body;
 
-    const newLog = await TestLog.create({ level, user, game, percentage, time });
+    const newLog = await TestLog.create({
+      level,
+      user,
+      game,
+      amountOfCards,
+      percentage,
+      time,
+    });
 
     return res.json({
       success: "Log saved successfully",
@@ -403,6 +411,278 @@ app.post("/update-profile", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
+
+// Маршрут для получения списка всех пользователей
+app.get("/users", async (req, res) => {
+  try {
+    const users = await User.find(
+      {},
+      "username firstName lastName showUserData"
+    );
+    res.status(200).json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching users.", error: error.message });
+  }
+});
+
+// Маршрут для поиска пользователей по username, firstname или lastname
+app.get("/searchUsers", async (req, res) => {
+  const { query } = req.query;
+
+  try {
+    const users = await User.find(
+      {
+        $or: [
+          { username: { $regex: query, $options: "i" } },
+          { firstName: { $regex: query, $options: "i" } },
+          { lastName: { $regex: query, $options: "i" } },
+        ],
+      },
+      "username firstName lastName showUserData"
+    );
+
+    res.status(200).json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error searching users.", error: error.message });
+  }
+});
+
+app.get("/myRequests/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId).populate(
+      "friendsRequests",
+      "username firstName lastName"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(user.friendsRequests);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching friends.", error: error.message });
+  }
+});
+
+app.get("/requestsToMe/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId).populate(
+      "myFriendRequests",
+      "username firstName lastName"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(user.myFriendRequests);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching friends.", error: error.message });
+  }
+});
+
+app.get("/myFriends/:userId", async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findById(userId).populate(
+      "friends",
+      "username firstName lastName"
+    );
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    res.status(200).json(user.friends);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching friends.", error: error.message });
+  }
+});
+
+// Эндпоинт для добавления друга
+app.post("/addFriendRequest", async (req, res) => {
+  const { userId, userFriendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const userFriend = await User.findById(userFriendId);
+
+    if (!user || !userFriend) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Добавление userFriendId в список запросов на дружбу пользователя userId
+    if (!user.myFriendRequests.includes(userFriendId))
+      user.myFriendRequests.push(userFriendId);
+    await user.save();
+
+    // Добавление userId в список запросов на дружбу пользователя userFriendId
+    if (!userFriend.friendsRequests.includes(userId))
+      userFriend.friendsRequests.push(userId);
+    await userFriend.save();
+
+    res.status(200).json({ message: "Friend request sent successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error sending friend request.", error: error.message });
+  }
+});
+
+app.post("/cancelFriendRequest", async (req, res) => {
+  const { userId, userFriendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const userFriend = await User.findById(userFriendId);
+
+    if (!user || !userFriend) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Удаление userFriendId из списка запросов на дружбу пользователя userId
+    const index1 = user.myFriendRequests.indexOf(userFriendId);
+    if (index1 !== -1) {
+      user.myFriendRequests.splice(index1, 1);
+    }
+    await user.save();
+
+    // Удаление userId из списка запросов на дружбу пользователя userFriendId
+    const index2 = userFriend.friendsRequests.indexOf(userId);
+    if (index2 !== -1) {
+      userFriend.friendsRequests.splice(index2, 1);
+    }
+    await userFriend.save();
+
+    res.status(200).json({ message: "Friend request cancelled successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({
+        message: "Error cancelling friend request.",
+        error: error.message,
+      });
+  }
+});
+
+// Эндпоинт для одобрения запроса на добавление в друзья
+app.post("/approveFriendRequest", async (req, res) => {
+  const { userId, userFriendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const userFriend = await User.findById(userFriendId);
+
+    if (!user || !userFriend) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Проверка наличия запроса в списке запросов у пользователя user
+    if (!user.friendsRequests.includes(userFriendId)) {
+      return res.status(404).json({ message: "Friend request not found." });
+    }
+
+    // Удаление userFriendId из списка запросов на дружбу пользователя userId
+    const index1 = user.friendsRequests.indexOf(userFriendId);
+    if (index1 !== -1) {
+      user.friendsRequests.splice(index1, 1);
+    }
+    await user.save();
+
+    // Удаление userId из списка запросов на дружбу пользователя userFriendId
+    const index2 = userFriend.myFriendRequests.indexOf(userId);
+    if (index2 !== -1) {
+      userFriend.myFriendRequests.splice(index2, 1);
+    }
+    
+    await userFriend.save();
+
+    // Добавление пользователей в список друзей у обоих пользователей
+    if (!user.friends.includes(userFriendId)) user.friends.push(userFriendId);
+    if (!userFriend.friends.includes(userId)) userFriend.friends.push(userId);
+
+    await Promise.all([user.save(), userFriend.save()]);
+
+    res.status(200).json({ message: "Friend request approved successfully." });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error approving friend request.",
+      error: error.message,
+    });
+  }
+});
+
+// Эндпоинт для удаления друга
+app.post("/removeFriend", async (req, res) => {
+  const { userId, userFriendId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    const friend = await User.findById(userFriendId);
+
+    if (!user || !friend) {
+      return res.status(404).json({ message: "User or friend not found." });
+    }
+
+    // Удаление друга из списка друзей текущего пользователя
+    user.friends.pull(userFriendId);
+    await user.save();
+
+    // Удаление текущего пользователя из списка друзей друга
+    friend.friends.pull(userId);
+    await friend.save();
+
+    res.status(200).json({ message: "Friend removed successfully." });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error removing friend.", error: error.message });
+  }
+});
+
+// Эндпоинт для отправки запроса duelist'у
+app.post("/sendTestRequest", async (req, res) => {
+  const {
+    username,
+    duelistId,
+    cardResults,
+    timeSpent,
+    mode,
+    amountOfCards,
+    gameName,
+  } = req.body;
+
+  try {
+    const newDuel = new DuelModel({
+      username,
+      duelistId,
+      game: gameName,
+      amountOfCards,
+      cardResults,
+      timestamp: Date.now(),
+    });
+
+    await newDuel.save();
+
+    res.status(200).json({ message: "Test request sent to duelist" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to send test request to duelist" });
+  }
+});
+
 
 const PORT = 10000;
 

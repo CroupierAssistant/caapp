@@ -16,7 +16,7 @@ import CardResults from "../../../components/CardResults";
 import { useNavigation } from "@react-navigation/native";
 import Stopwatch from "../../../components/Stopwatch";
 
-function RouletteSeriesTest({ route }) {
+function MultiplicationTableTest({ route }) {
   const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations, gameName } =
     route.params;
 
@@ -74,6 +74,7 @@ function RouletteSeriesTest({ route }) {
       handleSubmit();
     }
   };
+
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -203,6 +204,7 @@ function RouletteSeriesTest({ route }) {
           <Keyboard
             onKeyboardPress={handleKeyboardPress}
             handleInputChange={handleInputChange}
+            mode={mode}
           />
         </>
       )}
@@ -236,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RouletteSeriesTest;
+export default MultiplicationTableTest;

@@ -6,6 +6,7 @@ const TestLogSchema = new mongoose.Schema({
   message: String,
   user: String,
   game: String,
+  amountOfCards: Number, 
   percentage: Number,
   time: String,
   timestamp: { type: Date, default: Date.now },

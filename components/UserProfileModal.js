@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "#fff",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 3,
     justifyContent: "space-between",
     width: Dimensions.get("window").width * 0.95,
     height: Dimensions.get("window").height * 0.8,

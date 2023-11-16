@@ -28,7 +28,9 @@ function CardTest({ route }) {
     step,
     combinations,
     splitCoeff,
-    gameName
+    gameName,
+    isDuel,
+    duelist,
   } = route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
@@ -274,6 +276,8 @@ function CardTest({ route }) {
           mode={mode}
           amountOfCards={amountOfCards}
           gameName={gameName}
+          isDuel={isDuel}
+          duelist={duelist}
         />
       )}
     </View>

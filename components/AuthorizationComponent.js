@@ -31,12 +31,11 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
 
   const handleLogin = () => {
     // Axios.post("https://caapp-server.onrender.com/login", {
-    Axios.post("http://192.168.31.124:10000/login", {
+    Axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/login", {
       username: formData.username,
       password: formData.password,
     })
       .then((response) => {
-        console.log(response.data);
         const { token } = response.data;
         AsyncStorage.setItem("authToken", token);
         login(response.data.user);
@@ -48,7 +47,6 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
           agree: false,
         });
         setError(null);
-        console.log(response.data.user);
       })
       .catch((error) => {
         console.error(error);

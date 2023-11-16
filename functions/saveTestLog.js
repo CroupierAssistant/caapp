@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const saveTestLog = async (level, user, game, percentage, time) => {
+const saveTestLog = async (level, user, game, amountOfCards, percentage, time) => {
   try {
     const response = await axios.post(
       // "https://caapp-server.onrender.com/saveTestLog",
-      "http://192.168.31.124:10000/saveTestLog",
+      "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/saveTestLog",
       {
         level,
         user,
         game,
+        amountOfCards,
         percentage,
         time,
       }
