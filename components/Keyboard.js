@@ -131,7 +131,7 @@ const Keyboard = ({ onKeyboardPress, handleInputChange, mode }) => {
             }}
             onPress={() =>
               handleKeyPress(
-                mode === "timelimit" && inputValue
+                mode === "timeLimit" && inputValue
                   ? "OK"
                   : mode === "sandbox"
                   ? "OK"

@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function HomeScreen({ route }) {
   const navigation = useNavigation();
@@ -16,9 +17,10 @@ function HomeScreen({ route }) {
       <Text style={[styles.textHeader]}>TESTS</Text>
 
       <ScrollView
-        style={{ flex: 1, width: "100%", backgroundColor: '#fff' }}
+        style={{ flex: 1, width: "100%", backgroundColor: "#fff" }}
         showsVerticalScrollIndicator={false}
       >
+
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Blackjack")}
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 20,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   break: {
     height: 2,
@@ -150,24 +152,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginVertical: 3,
     borderRadius: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 54
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 54,
   },
   buttonIcon: {
     width: 40,
     height: 40,
-    resizeMode: 'contain',
-    position: 'absolute',
+    resizeMode: "contain",
+    position: "absolute",
     top: 8,
-    right: 15
+    right: 15,
   },
   buttonText: {
     color: "#fff",
     fontSize: 20,
-    textTransform: 'uppercase',
-    fontWeight: '300'
+    textTransform: "uppercase",
+    fontWeight: "300",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   textHeader: {
     textAlign: "center",
@@ -175,7 +180,7 @@ const styles = StyleSheet.create({
     color: "#29648a",
     fontWeight: "bold",
     marginBottom: 20,
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
 });
 

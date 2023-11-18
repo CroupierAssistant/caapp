@@ -12,7 +12,7 @@ const saveTestResult = async (
   try {
     const response = await axios.post(
       // "https://caapp-server.onrender.com/saveTestResult",
-      "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/saveTestResult",
+      "http://192.168.31.124:10000/saveTestResult",
       {
         userId,
         username,

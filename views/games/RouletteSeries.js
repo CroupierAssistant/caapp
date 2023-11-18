@@ -14,11 +14,11 @@ import Switcher from "../../components/Switcher";
 
 function RouletteSeries() {
   const navigation = useNavigation();
-  const [timeLimit, setTimeLimit] = useState(90000);
+  const [timeLimit, settimeLimit] = useState(90000);
 
   const handleNavigateToTest = () => {
     navigation.navigate("RouletteSeriesTest", {
-      mode: isEnabled ? "sandbox" : "timelimit",
+      mode: isEnabled ? "sandbox" : "timeLimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
@@ -78,7 +78,7 @@ function RouletteSeries() {
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
-    setTimeLimit(value * 9000);
+    settimeLimit(value * 9000);
     setSelectedButton(value);
   };
 

@@ -26,7 +26,7 @@ const SocialComponent = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users"
+        "http://192.168.31.124:10000/users"
       );
       setUsers(response.data);
     } catch (error) {
@@ -37,7 +37,7 @@ const SocialComponent = () => {
   const fetchMyRequests = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myRequests/${userId}`
+        `http://192.168.31.124:10000/myRequests/${userId}`
       );
       setMyRequests(response.data);
     } catch (error) {
@@ -48,7 +48,7 @@ const SocialComponent = () => {
   const fetchRequestsToMe = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/requestsToMe/${userId}`
+        `http://192.168.31.124:10000/requestsToMe/${userId}`
       );
       setRequestToMe(response.data);
     } catch (error) {
@@ -59,7 +59,7 @@ const SocialComponent = () => {
   const fetchMyFriends = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+        `http://192.168.31.124:10000/myFriends/${userId}`
       );
       setMyFriends(response.data);
     } catch (error) {
@@ -96,7 +96,7 @@ const SocialComponent = () => {
       // Выполняем запрос на поиск только если текст не пустой
       if (text.trim() !== "") {
         const response = await axios.get(
-          `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/searchUsers?query=${text}`
+          `http://192.168.31.124:10000/searchUsers?query=${text}`
         );
         setUsers(response.data);
       } else {
@@ -111,7 +111,7 @@ const SocialComponent = () => {
   const addFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/addFriendRequest",
+        "http://192.168.31.124:10000/addFriendRequest",
         { userId, userFriendId }
       );
 
@@ -120,7 +120,7 @@ const SocialComponent = () => {
       fetchMyFriends();
 
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `http://192.168.31.124:10000/user/${userId}`
       );
       updateUser(updatedUserData.data);
 
@@ -133,7 +133,7 @@ const SocialComponent = () => {
   const cancelFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/cancelFriendRequest",
+        "http://192.168.31.124:10000/cancelFriendRequest",
         { userId, userFriendId }
       );
 
@@ -142,7 +142,7 @@ const SocialComponent = () => {
       fetchMyFriends();
       
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `http://192.168.31.124:10000/user/${userId}`
       );
       updateUser(updatedUserData.data)
       // Можно добавить сообщение об успешной отправке запроса
@@ -154,7 +154,7 @@ const SocialComponent = () => {
   const approveFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/approveFriendRequest",
+        "http://192.168.31.124:10000/approveFriendRequest",
         { userId, userFriendId }
       );
 
@@ -163,7 +163,7 @@ const SocialComponent = () => {
       fetchMyFriends();
       
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `http://192.168.31.124:10000/user/${userId}`
       );
       updateUser(updatedUserData.data)
       // Можно добавить сообщение об успешном одобрении запроса
@@ -175,7 +175,7 @@ const SocialComponent = () => {
   const removeFriend = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/removeFriend",
+        "http://192.168.31.124:10000/removeFriend",
         { userId, userFriendId }
       );
       setMyFriends(myFriends.filter((friend) => friend._id !== userFriendId));
@@ -185,7 +185,7 @@ const SocialComponent = () => {
       fetchMyFriends();
 
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `http://192.168.31.124:10000/user/${userId}`
       );
       updateUser(updatedUserData.data)
     } catch (error) {

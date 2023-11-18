@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import saveTestResult from "../functions/saveTestResult";
 import saveTestLog from "../functions/saveTestLog";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const CardResults = ({
   cardResults,
@@ -14,7 +15,11 @@ const CardResults = ({
   gameName,
   isDuel,
   duelist,
+  isRespond,
+  duelId,
+  timeLimit,
 }) => {
+  const navigation = useNavigation();
   const [percentage, setPercentage] = useState(0);
   const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
 
@@ -48,7 +53,6 @@ const CardResults = ({
     }
   };
 
-
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -72,69 +76,81 @@ const CardResults = ({
 
     const calculatedPercentage =
       (correctAnswers * 100) /
-      (mode == "timelimit" ? amountOfCards : cardResults.length);
+      (mode == "timeLimit" ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
 
     handleSaveTestResult({
       userId: user && user._id ? user._id : "",
       nickname: user && user.username ? user.username : "/guest/",
-      cards: mode == "timelimit" ? amountOfCards : cardResults.length,
+      cards: mode == "timeLimit" ? amountOfCards : cardResults.length,
       game: gameName,
       type: mode,
       percent: calculatedPercentage,
       time: timeSpent,
     });
 
-    handleTestCompletion()
+    const sendResults = async (percentage) => {
+      try {
+        const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
+  
+        const response = await axios.post(
+          "http://192.168.31.124:10000/sendTestRequest",
+          {
+            username: user.username,
+            duelistId: duelist._id,
+            gameName,
+            amountOfCards,
+            sender: [{ username: user.username, timeSpent, percentage }, ...cardResults],
+            cards: cleanedCardResults,
+            isDuel,
+            timeLimit
+          }
+        );
+  
+        if (response.status === 200) {
+          // Результаты успешно отправлены
+        } else {
+          // Обработка ошибок при отправке
+        }
+      } catch (error) {
+        console.error("Error sending test results:", error);
+        // Обработка ошибок при отправке запроса
+      }
+    };
+
+    const sendRespondResults = async (percentage) => {
+      try {
+        const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
+  
+        const response = await axios.post(
+          "http://192.168.31.124:10000/sendRespondResults",
+          {
+            reciever: [{ username: user.username, timeSpent, percentage }, ...cardResults],
+            duelId,
+          }
+        );
+  
+        if (response.status === 200) {
+          
+        } else {
+          // Обработка ошибок при отправке
+        }
+      } catch (error) {
+        console.error("Error sending test results:", error);
+        // Обработка ошибок при отправке запроса
+      }
+    };
+  
+    if (isDuel && duelist) {
+      sendResults(calculatedPercentage);
+    }
+    if (isRespond) {
+      sendRespondResults(calculatedPercentage)
+    }
+
   }, [cardResults]);
 
-  // Функция для отправки запроса на прохождение теста duelist'у
-  const sendTestResultsToDuelist = async () => {
-    try {
-      const response = await axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/sendTestRequest", {
-        username: user.username,
-        duelistId: duelist._id,
-        cardResults,
-        timeSpent,
-        mode,
-        amountOfCards,
-        gameName,
-      });
-
-      if (response.status === 200) {
-        // Результаты успешно отправлены
-      } else {
-        // Обработка ошибок при отправке
-      }
-    } catch (error) {
-      console.error("Error sending test results:", error);
-      // Обработка ошибок при отправке запроса
-    }
-  };
-
-  // Функция, вызываемая после прохождения теста для сохранения результатов и отправки запроса duelist'у
-  const handleTestCompletion = async () => {
-    if (isDuel && duelist) {
-      try {
-        await sendTestResultsToDuelist(
-          cardResults,
-          timeSpent,
-          mode,
-          amountOfCards,
-          gameName,
-          isDuel,
-          duelist,
-        );
-        // Обработка успешного сохранения результатов и отправки запроса
-        // Можете показать уведомление или выполнить другие действия
-      } catch (error) {
-        // Обработка ошибок при сохранении результатов и отправке запроса
-        console.error(error);
-        // Показать уведомление об ошибке или выполнить другие действия
-      }
-    }
-  };
 
   return (
     <View style={{ ...styles.container, paddingBottom: isDuel ? 50 : 0 }}>
@@ -144,7 +160,7 @@ const CardResults = ({
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
         Correct answers: {rightAnswersAmount} /{" "}
-        {mode == "timelimit" ? amountOfCards : cardResults.length}
+        {mode == "timeLimit" ? amountOfCards : cardResults.length}
       </Text>
 
       {isDuel && duelist && (

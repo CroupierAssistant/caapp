@@ -82,7 +82,7 @@ function CardNeighbour({ number, index, onSubmit, otherNumbers, onSkip, mode }) 
         <View style={styles.keyboardContainerRow}>{renderOptions}</View>
         <TouchableOpacity
           onPress={() =>
-            mode === "timelimit" && selectedOptions.length || mode === "sandbox"
+            mode === "timeLimit" && selectedOptions.length || mode === "sandbox"
               ? onSubmit(selectedOptions)
               : onSkip()
           }

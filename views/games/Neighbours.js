@@ -10,11 +10,11 @@ function Neighbours() {
   const { user } = useContext(AuthContext);
   const [isPremium, setIsPremium] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [timeLimit, setTimeLimit] = useState(60000);
+  const [timeLimit, settimeLimit] = useState(60000);
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
-    setTimeLimit(value * 6000);
+    settimeLimit(value * 6000);
     setSelectedButton(value);
   };
 
@@ -24,7 +24,7 @@ function Neighbours() {
 
   const handleNavigateToTest = () => {
     navigation.navigate("NeighboursTest", {
-      mode: isEnabled ? "sandbox" : "timelimit",
+      mode: isEnabled ? "sandbox" : "timeLimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 37),
       timeLimit: timeLimit,
       gameName: "Neighbours",

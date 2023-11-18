@@ -22,7 +22,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 function Blackjack() {
   const { user } = useContext(AuthContext);
   const navigation = useNavigation();
-  const [timeLimit, setTimeLimit] = useState(60000);
+  const [timeLimit, settimeLimit] = useState(60000);
   const [isDuel, setIsDuel] = useState(null);
   const [myFriends, setMyFriends] = useState([]);
   const [duelist, setDuelist] = useState(null);
@@ -32,7 +32,7 @@ function Blackjack() {
   const fetchMyFriends = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+        `http://192.168.31.124:10000/myFriends/${userId}`
       );
       setMyFriends(response.data);
     } catch (error) {
@@ -54,7 +54,7 @@ function Blackjack() {
 
   const handleNavigateToTest = () => {
     navigation.navigate("CardTest", {
-      mode: isEnabled ? "sandbox" : "timelimit",
+      mode: isEnabled ? "sandbox" : "timeLimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
@@ -100,7 +100,7 @@ function Blackjack() {
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
     setSelectedButton(value);
-    setTimeLimit(value * 6000);
+    settimeLimit(value * 6000);
   };
 
   const [selectedStep, setSelectedStep] = useState("5");

@@ -116,7 +116,7 @@ function RoulettePicturesTest() {
     <View style={{ flex: 1, backgroundColor: "#fff", }}>
       {!isDone && (
         <>
-          {timerRunning && mode === "timelimit" && (
+          {timerRunning && mode === "timeLimit" && (
             <Timer time={timeLimit + 1000} setIsDone={setIsDone} setTimeSpent={setTimeSpent}/>
           )}
           <FlatList

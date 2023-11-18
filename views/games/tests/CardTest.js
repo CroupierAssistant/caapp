@@ -16,9 +16,10 @@ import CardResults from "../../../components/CardResults";
 import Paytable from "../../../components/Paytable";
 import Stopwatch from "../../../components/Stopwatch";
 import { AuthContext } from "../../../context/AuthContext";
-
+import { useNavigation } from "@react-navigation/native";
 
 function CardTest({ route }) {
+  const navigation = useNavigation();
   const {
     timeLimit,
     mode,
@@ -31,6 +32,9 @@ function CardTest({ route }) {
     gameName,
     isDuel,
     duelist,
+    duelId,
+    cardsDuel,
+    isRespond,
   } = route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
@@ -45,7 +49,7 @@ function CardTest({ route }) {
   const [timePassedParent, setTimePassedParent] = useState("");
   const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
 
-  const [percentageTest, setPercentageTest] = useState(0)
+  const [percentageTest, setPercentageTest] = useState(0);
 
   const flatListRef = useRef(null);
 
@@ -68,8 +72,9 @@ function CardTest({ route }) {
       const newResult = {
         cardName: cardList[activeCardIndex].title,
         cardNumber: cardList[activeCardIndex].number,
-        rightAnswer:
-          cardList[activeCardIndex].number * cardList[activeCardIndex].coeff,
+        rightAnswer: cardList[activeCardIndex].rightAnswer
+          ? cardList[activeCardIndex].rightAnswer
+          : cardList[activeCardIndex].number * cardList[activeCardIndex].coeff,
         userInput: text,
       };
       return [...prev, newResult];
@@ -83,13 +88,13 @@ function CardTest({ route }) {
     } else {
       setShowActiveCard(false);
       setIsDone(true);
-
+      if (isDuel) navigation.navigate('Tests')
     }
     setInputValue("");
   };
 
   const handleSkipCard = () => {
-    setCardList(prevList => {
+    setCardList((prevList) => {
       const newList = [...prevList];
       const skippedCard = newList.splice(activeCardIndex, 1)[0];
       newList.push(skippedCard);
@@ -108,47 +113,61 @@ function CardTest({ route }) {
   };
 
   useEffect(() => {
-    function generateUniqueRandomNumbers(amount, min, max, st) {
-      if (amount === 0) {
-        amount = max / st + 1;
-      }
-
-      const uniqueNumbers = new Set();
-      let attempts = 0;
-      const maxAttempts = 10000;
-
-      while (uniqueNumbers.size < amount && attempts < maxAttempts) {
-        const randomNum = Math.round(Math.random() * (max - min) + min);
-        if (randomNum % st === 0) {
-          uniqueNumbers.add(randomNum);
+    if (!cardsDuel) {
+      function generateUniqueRandomNumbers(amount, min, max, st) {
+        if (amount === 0) {
+          amount = max / st + 1;
         }
-        attempts++;
+
+        const uniqueNumbers = new Set();
+        let attempts = 0;
+        const maxAttempts = 10000;
+
+        while (uniqueNumbers.size < amount && attempts < maxAttempts) {
+          const randomNum = Math.round(Math.random() * (max - min) + min);
+          if (randomNum % st === 0) {
+            uniqueNumbers.add(randomNum);
+          }
+          attempts++;
+        }
+
+        return Array.from(uniqueNumbers);
       }
 
-      return Array.from(uniqueNumbers);
+      const cardNumbers = generateUniqueRandomNumbers(
+        amountOfCards,
+        minBet,
+        maxBet,
+        step
+      );
+
+      const cardData = cardNumbers.map((number, index) => {
+        const randomGameIndex = Math.floor(Math.random() * combinations.length);
+        const randomGame = combinations[randomGameIndex];
+
+        return {
+          title: randomGame.name,
+          coeff: randomGame.coeff,
+          index:
+            amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+          number,
+        };
+      });
+
+      setCardList(cardData);
+    } else {
+      const cardData = cardsDuel.map((card, index) => {
+        return {
+          title: card.cardName,
+          rightAnswer: card.rightAnswer,
+          index:
+            amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+          number: card.cardNumber,
+        };
+      });
+      setCardList(cardData);
     }
 
-    const cardNumbers = generateUniqueRandomNumbers(
-      amountOfCards,
-      minBet,
-      maxBet,
-      step
-    );
-
-    const cardData = cardNumbers.map((number, index) => {
-      const randomGameIndex = Math.floor(Math.random() * combinations.length);
-      const randomGame = combinations[randomGameIndex];
-
-      return {
-        title: randomGame.name,
-        coeff: randomGame.coeff,
-        index:
-          amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
-        number,
-      };
-    });
-
-    setCardList(cardData);
     setTimerRunning(true);
 
     return () => {
@@ -180,10 +199,10 @@ function CardTest({ route }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff", }}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       {!isDone && (
         <>
-          {mode === "timelimit" && (
+          {mode === "timeLimit" && (
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
@@ -273,11 +292,14 @@ function CardTest({ route }) {
         <CardResults
           cardResults={cardResults}
           timeSpent={timeSpent}
-          mode={mode}
           amountOfCards={amountOfCards}
           gameName={gameName}
+          mode={mode}
           isDuel={isDuel}
           duelist={duelist}
+          isRespond={isRespond}
+          duelId={duelId}
+          timeLimit={timeLimit}
         />
       )}
     </View>

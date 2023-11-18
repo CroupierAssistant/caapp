@@ -45,7 +45,7 @@ function TestsStackNavigator({ navigation, route }) {
       <Stack.Screen name="NiuNiuCombinations" component={NiuNiuCombinations} options={{ title: "Niu-Niu Combinations" }}/>
       <Stack.Screen name="Neighbours" component={Neighbours} options={{ title: "Neighbours" }}/>
 
-      <Stack.Screen name="CardTest" component={CardTest} options={{ title: "", tabBarStyle: {display: 'none'}, }}/>
+      <Stack.Screen name="CardTest" component={CardTest} options={{ title: ""}}/>
       <Stack.Screen name="RouletteSeriesTest" component={RouletteSeriesTest} options={{ title: "" }}/>
       <Stack.Screen name="MultiplicationTableTest" component={MultiplicationTableTest} options={{ title: "" }}/>
       <Stack.Screen name="NiuNiuCombinationsTest" component={NiuNiuCombinationsTest} options={{ title: "" }}/>

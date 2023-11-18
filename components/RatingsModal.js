@@ -42,7 +42,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     try {
       const response = await axios.get(
         // `https://caapp-server.onrender.com/users/${userId}`
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users/${userId}`
+        `http://192.168.31.124:10000/users/${userId}`
       );
       return response.data;
     } catch (error) {

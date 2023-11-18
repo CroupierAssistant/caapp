@@ -48,14 +48,14 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
 
     const calculatedPercentage =
       (correctAnswers * 100) /
-      (mode == "timelimit" ? amountOfCards : cardResults.length);
+      (mode == "timeLimit" ? amountOfCards : cardResults.length);
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
     
     handleSaveTestResult({
       userId: user && user._id ? user._id : '',
       nickname: user && user.username ? user.username : '\/guest\/',
-      amountOfCards: mode == 'timelimit' ? amountOfCards : cardResults.length,
+      amountOfCards: mode == 'timeLimit' ? amountOfCards : cardResults.length,
       game: gameName,
       type: mode,
       percent: calculatedPercentage,
@@ -75,7 +75,7 @@ const CardResults = ({ cardResults, timeSpent, mode, amountOfCards, gameName }) 
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
         Correct answers: {rightAnswersAmount} /{" "}
-        {mode == "timelimit" ? amountOfCards : cardResults.length}
+        {mode == "timeLimit" ? amountOfCards : cardResults.length}
       </Text>
       <FlatList
         data={cardResults}

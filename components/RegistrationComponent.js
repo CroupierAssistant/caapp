@@ -30,7 +30,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.get(
         // `https://caapp-server.onrender.com/userExists?username=${username}`
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/userExists?username=${username}`
+        `http://192.168.31.124:10000/userExists?username=${username}`
       );
       return response.data.exists;
     } catch (error) {
@@ -43,7 +43,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.get(
         // `https://caapp-server.onrender.com/emailExists?email=${email}`
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/emailExists?email=${email}`
+        `http://192.168.31.124:10000/emailExists?email=${email}`
       );
       return response.data.exists;
     } catch (error) {
@@ -198,7 +198,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.post(
         // "https://caapp-server.onrender.com/register",
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/register",
+        "http://192.168.31.124:10000/register",
         formData
       );
       

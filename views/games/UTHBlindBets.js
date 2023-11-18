@@ -15,11 +15,11 @@ import Paytable from "../../components/Paytable";
 
 function UTHBlindBets() {
   const navigation = useNavigation();
-  const [timeLimit, setTimeLimit] = useState(90000);
+  const [timeLimit, settimeLimit] = useState(90000);
 
   const handleNavigateToTest = () => {
     navigation.navigate("CardTest", {
-      mode: isEnabled ? "sandbox" : "timelimit",
+      mode: isEnabled ? "sandbox" : "timeLimit",
       amountOfCards: Number(!isEnabled ? selectedButton : 0),
       minBet: Number(selectedMinBet),
       maxBet: Number(selectedMaxBet),
@@ -78,7 +78,7 @@ function UTHBlindBets() {
 
   const [selectedButton, setSelectedButton] = useState("10");
   const handleButtonPress = (value) => {
-    setTimeLimit(value * 9000);
+    settimeLimit(value * 9000);
     setSelectedButton(value);
   };
 

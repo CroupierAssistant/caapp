@@ -201,7 +201,7 @@ function RouletteSeriesTest({ route }) {
     <View style={{ flex: 1, backgroundColor: "#fff", }}>
       {!isDone && (
         <>
-          {timerRunning && mode === "timelimit" && (
+          {timerRunning && mode === "timeLimit" && (
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
@@ -266,7 +266,7 @@ function RouletteSeriesTest({ route }) {
           >
             <View style={styles.modal}>
               <View style={{ width: "100%" }}>
-                {mode === "timelimit" && (
+                {mode === "timeLimit" && (
                   <Text style={styles.modalInfo}>
                 The goal is to calculate the payout for {amountOfCards} bets.
                 The time limit is {timeLimit / 1000} seconds. Specify the

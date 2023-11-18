@@ -31,7 +31,7 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
 
   const handleLogin = () => {
     // Axios.post("https://caapp-server.onrender.com/login", {
-    Axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/login", {
+    Axios.post("http://192.168.31.124:10000/login", {
       username: formData.username,
       password: formData.password,
     })

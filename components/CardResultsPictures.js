@@ -74,7 +74,7 @@ const CardResultsPictures = ({ cardResults, timeSpent, mode, amountOfCards, game
     <View style={styles.container}>
       <Text style={[styles.header, { lineHeight: 22 }]}>
         Test Results: {percentage ? Number(percentage).toFixed(2) : "0"}%
-        {mode === "timelimit" && ` in ${formatTime(timeSpent)}`}
+        {mode === "timeLimit" && ` in ${formatTime(timeSpent)}`}
       </Text>
       <Text style={[styles.header, { fontSize: 20, lineHeight: 20 }]}>
         Correct answers: {rightAnswersAmount} / {amountOfCards}

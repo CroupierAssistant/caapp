@@ -657,11 +657,14 @@ app.post("/sendTestRequest", async (req, res) => {
   const {
     username,
     duelistId,
-    cardResults,
-    timeSpent,
-    mode,
-    amountOfCards,
     gameName,
+    amountOfCards,
+    sender,
+    cards,
+    timeSpent,
+    calculatedPercentage,
+    isDuel,
+    timeLimit,
   } = req.body;
 
   try {
@@ -670,7 +673,12 @@ app.post("/sendTestRequest", async (req, res) => {
       duelistId,
       game: gameName,
       amountOfCards,
-      cardResults,
+      sender, // Передаем отправителя
+      cards,
+      timeSpent,
+      percentage: calculatedPercentage,
+      isDuel,
+      timeLimit,
       timestamp: Date.now(),
     });
 
@@ -680,6 +688,42 @@ app.post("/sendTestRequest", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to send test request to duelist" });
+  }
+});
+
+app.post("/sendRespondResults", async (req, res) => {
+  const {
+    reciever,
+    duelId
+  } = req.body;
+
+  try {
+    const duel = await DuelModel.findById(duelId); // Находим дуэль по ее идентификатору
+
+    if (!duel) {
+      return res.status(404).json({ message: 'Duel not found' });
+    }
+
+    // Обновляем свойство reciever у найденной дуэли
+    duel.reciever = reciever;
+    await duel.save(); // Сохраняем изменения
+
+    res.status(200).json({ message: 'Reciever updated successfully' });
+  } catch (error) {
+    console.error('Error updating reciever:', error);
+    res.status(500).json({ error: 'Failed to update reciever' });
+  }
+});
+
+// Поиск по базе данных duelsDatabase
+app.get('/duelsByUserId/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const duels = await DuelModel.find({ duelistId: userId });
+    res.status(200).json(duels);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching duels by user ID', error: error.message });
   }
 });
 

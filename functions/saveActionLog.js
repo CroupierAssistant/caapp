@@ -4,7 +4,7 @@ const saveActionLog = async (level, user, message) => {
   try {
     const response = await axios.post(
       // "https://caapp-server.onrender.com/saveActionLog",
-      "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/saveActionLog",
+      "http://192.168.31.124:10000/saveActionLog",
       {
         level,
         user,

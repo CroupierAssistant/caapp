@@ -145,7 +145,7 @@ function NeighboursTest({ route }) {
     <View style={{ flex: 1, backgroundColor: "#fff", }}>
       {!isDone && (
         <>
-          {timerRunning && mode === "timelimit" && (
+          {timerRunning && mode === "timeLimit" && (
             <Timer
               time={timeLimit}
               setIsDone={setIsDone}
