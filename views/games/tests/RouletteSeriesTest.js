@@ -100,33 +100,35 @@ function RouletteSeriesTest({ route }) {
     if (isDone) {
       const newResults = cardList
         .map((card) => {
+          
+          const sector = card;
+          const bet = card.number;
+
+          let playsBy;
+          let playsByBefore;
+          let playsByAfter;
+
+          if (bet <= sector.critical) {
+            playsBy = round5(bet / sector.coefficientBeforeCritical);
+          } else {
+            playsByBefore =
+              sector.critical / sector.coefficientBeforeCritical;
+            playsByAfter =
+              (bet - sector.critical) / sector.coefficientAfterCritical;
+            playsBy = round5(playsByAfter + playsByBefore);
+          }
+
           const isCardIncluded = cardResults.some(
             (result) =>
               result.cardName === card.title &&
               result.cardNumber === card.number &&
               result.rightAnswer ===
-                (card.rightAnswer ? card.rightAnswer : card.number * card.coeff)
+                (card.rightAnswer ? card.rightAnswer : (playsBy < maxBet * 2 ? playsBy : maxBet * 2))
           );
 
           if (isCardIncluded) {
             return null; // Если карта уже есть в cardResults, вернем null
           } else {
-            const sector = card;
-            const bet = card.number;
-
-            let playsBy;
-            let playsByBefore;
-            let playsByAfter;
-
-            if (bet <= sector.critical) {
-              playsBy = round5(bet / sector.coefficientBeforeCritical);
-            } else {
-              playsByBefore =
-                sector.critical / sector.coefficientBeforeCritical;
-              playsByAfter =
-                (bet - sector.critical) / sector.coefficientAfterCritical;
-              playsBy = round5(playsByAfter + playsByBefore);
-            }
 
             return {
               cardName: card.title,
