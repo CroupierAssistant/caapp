@@ -13,6 +13,7 @@ import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Loader from "./Loader";
+import DuelModal from "./DuelModal";
 
 function DuelAll() {
   const navigation = useNavigation();
@@ -20,7 +21,9 @@ function DuelAll() {
   const [duels, setDuels] = useState([]);
   const [isDuel, setIsDuel] = useState(true);
   const [selectedDuel, setSelectedDuel] = useState(null);
+  const [selectedDuelist, setSelectedDuelist] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isShowGameList, setIsShowGameList] = useState(false);
   const [users, setUsers] = useState([]);
   const [myFriends, setMyFriends] = useState([]);
   const userId = user && user._id ? user._id : "";
@@ -28,6 +31,15 @@ function DuelAll() {
   const handleToggleModalToDuel = (duel) => {
     setSelectedDuel(duel);
     setIsDuel((prev) => !prev);
+  };
+
+  const handleCloseModal = () => {
+    setIsShowGameList(false);
+  };
+  
+  const handleSelectDuelist = (duelist) => {
+    setSelectedDuelist(duelist);
+    setIsShowGameList(true);
   };
 
   const fetchUsers = async () => {
@@ -126,7 +138,7 @@ function DuelAll() {
                   </Text>
                 )}
                 <TouchableOpacity
-                  onPress={() => addFriendRequest(userId, userFromList._id)}
+                  onPress={() => handleSelectDuelist(userFromList)}
                 >
                   <MaterialCommunityIcons
                     name="sword-cross"
@@ -137,6 +149,14 @@ function DuelAll() {
               </View>
             ))}
           </>
+          {isShowGameList && (
+            <DuelModal
+              user={user}
+              isShowGameList={isShowGameList}
+              selectedDuelist={selectedDuelist}
+              onClose={handleCloseModal}
+            />
+          )}
         </ScrollView>
       )}
     </>
