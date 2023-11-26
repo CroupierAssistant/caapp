@@ -10,29 +10,28 @@ import {
   Button,
   Dimensions,
 } from "react-native";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
+import axios from "axios";
 
-import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function Blackjack() {
-  const { user } = useContext(AuthContext);
   const navigation = useNavigation();
   const [timeLimit, settimeLimit] = useState(60000);
   const [isDuel, setIsDuel] = useState(null);
   const [myFriends, setMyFriends] = useState([]);
   const [duelist, setDuelist] = useState(null);
 
+  const { user } = useContext(AuthContext);
   const userId = user && user._id ? user._id : "";
 
   const fetchMyFriends = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.31.124:10000/myFriends/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
       );
       setMyFriends(response.data);
     } catch (error) {
@@ -52,6 +51,11 @@ function Blackjack() {
     setDuelist(null);
   }, []);
 
+  const handleToggleModalToDuel = () => {
+    setIsDuel((prev) => !prev);
+    setDuelist(null);
+  };
+
   const handleNavigateToTest = () => {
     navigation.navigate("CardTest", {
       mode: isEnabled ? "sandbox" : "timeLimit",
@@ -66,12 +70,7 @@ function Blackjack() {
       isDuel: isDuel,
       duelist: duelist ? duelist : null,
     });
-    handleToggleModalToDuel()
-  };
-
-  const handleToggleModalToDuel = () => {
-    setIsDuel((prev) => !prev);
-    setDuelist(null);
+    isDuel && handleToggleModalToDuel();
   };
 
   const [combinations, setCombinations] = useState([
@@ -544,12 +543,20 @@ function Blackjack() {
                         name="sword-cross"
                         size={70}
                         color="#a16e83"
-                        style={{marginVertical: 20}}
+                        style={{ marginVertical: 20 }}
                       />
                       <Text style={styles.duelistName}>{duelist.username}</Text>
                     </View>
 
-                    <Text style={{fontSize: 16, textAlign: 'center', color: "#29648a" }}>The user will receive a duel notification as soon as you complete the test</Text>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: "center",
+                        color: "#29648a",
+                      }}
+                    >
+                      The user will receive your challenge request as soon as you complete the test
+                    </Text>
 
                     <View style={styles.buttonContainer}>
                       <TouchableOpacity
@@ -582,16 +589,18 @@ function Blackjack() {
         </Modal>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={{
-              ...styles.startButton,
-              backgroundColor: !user ? "#555" : "#b59410",
-            }}
-            onPress={handleToggleModalToDuel}
-            disabled={!user}
-          >
-            <Text style={styles.startButtonText}>Duel Start</Text>
-          </TouchableOpacity>
+          {!isEnabled && (
+            <TouchableOpacity
+              style={{
+                ...styles.startButton,
+                backgroundColor: !user ? "#555" : "#b59410",
+              }}
+              onPress={handleToggleModalToDuel}
+              disabled={!user}
+            >
+              <Text style={styles.startButtonText}>Duel Start</Text>
+            </TouchableOpacity>
+          )}
           <TouchableOpacity
             style={styles.startButton}
             onPress={handleNavigateToTest}
@@ -619,16 +628,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
   },
-  duelistName: {
-    fontSize: 30,
-    color: "#29648a",
-    fontWeight: "bold",
-  },
-  duelistContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   lockIcon: {
     textAlign: "center",
   },
@@ -648,22 +647,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRightWidth: 0,
     borderColor: "#29648a",
-  },
-  startButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "#008486",
-    borderRadius: 3,
-    width: '49%'
-  },
-  buttonContainer: {
-    width: "100%",
-    marginTop: "auto",
-    marginBottom: 15,
-    marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    gap: 5,
   },
   startButtonText: {
     color: "#fff",
@@ -713,6 +696,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
     marginBottom: -5,
+  },
+  startButton: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: "#008486",
+    borderRadius: 3,
+    width: "49%",
+  },
+  buttonContainer: {
+    width: "100%",
+    marginTop: "auto",
+    marginBottom: 15,
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    gap: 5,
+  },
+  duelistName: {
+    fontSize: 30,
+    color: "#29648a",
+    fontWeight: "bold",
+  },
+  duelistContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContainer: {
     flex: 1,

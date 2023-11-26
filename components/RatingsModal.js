@@ -12,15 +12,17 @@ import {
 import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
 import UserProfileModal from "./UserProfileModal";
+import Loader from "./Loader";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
   const [aggregatedData, setAggregatedData] = useState(null); // Добавляем состояние для хранения данных
   const [selectedUser, setSelectedUser] = useState(null); // Add selectedUser state
+  const [isLoading, setIsLoading] = useState(true);
 
   const openProfile = async (idPassed) => {
     const user = await findUserById(idPassed);
-    
+
     if (user) {
       setSelectedUser(user);
     }
@@ -42,7 +44,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     try {
       const response = await axios.get(
         // `https://caapp-server.onrender.com/users/${userId}`
-        `http://192.168.31.124:10000/users/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -137,19 +139,13 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       });
 
       setAggregatedData(newData);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     };
 
     getRatingData();
   }, [ratings]);
-
-  // Проверяем, есть ли данные перед использованием
-  if (!aggregatedData) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
     <Modal visible={isVisible} transparent animationType="fade">
@@ -177,6 +173,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               <Text style={styles.tabText}>30 Cards</Text>
             </TouchableOpacity>
           </View>
+
           <View
             style={{
               borderWidth: 2,
@@ -187,78 +184,92 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               borderBottomRightRadius: 3,
             }}
           >
-            {aggregatedData[activeTab].length > 0 ? (
-              <FlatList
-                data={aggregatedData[activeTab]}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    onPress={() => item.showUserData && openProfile(item.userId)}
-                    style={[styles.row]}
-                  >
-                    <View
-                      style={[
-                        styles.textIndexContainer,
-                        index === 0
-                          ? styles.gold
-                          : index === 1
-                          ? styles.silver
-                          : index === 2
-                          ? styles.bronze
-                          : "",
-                      ]}
-                    >
-                      <Text
-                        style={{
-                          ...styles.textIndex,
-                          color: index >= 0 && index <= 2 ? "#fff" : "",
-                        }}
-                      >
-                        {index + 1}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        ...styles.text,
-                        width: "50%",
-                        paddingHorizontal: 3,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        style={{ fontSize: 14, textAlign: "center" }}
-                      >
-                        {item.username}
-                      </Text>
-                      {item.showUserData && (
-                        <AntDesign name="profile" size={20} color="#29648a" />
-                      )}
-                    </View>
-                    <Text
-                      style={{
-                        ...styles.text,
-                        width: "20%",
-                        paddingHorizontal: 3,
-                      }}
-                    >
-                      {Number(item.maxPercentage).toFixed(2)}%
-                    </Text>
-                    <Text style={{ ...styles.text, width: "20%" }}>
-                      {formatTime(item.minTimeSpentTest)}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              />
+            {isLoading ? (
+              <Loader />
             ) : (
-              <Text style={styles.textNoData}>
-                {`¯\\_(ツ)_/¯\nNo one's here... You can be the first!`}
-              </Text>
+              <>
+                {aggregatedData &&
+                aggregatedData[activeTab].length > 0 ? (
+                  <FlatList
+                    data={aggregatedData[activeTab]}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => (
+                      <TouchableOpacity
+                        onPress={() =>
+                          item.showUserData && openProfile(item.userId)
+                        }
+                        style={[styles.row]}
+                      >
+                        <View
+                          style={[
+                            styles.textIndexContainer,
+                            index === 0
+                              ? styles.gold
+                              : index === 1
+                              ? styles.silver
+                              : index === 2
+                              ? styles.bronze
+                              : "",
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              ...styles.textIndex,
+                              color: index >= 0 && index <= 2 ? "#fff" : "",
+                            }}
+                          >
+                            {index + 1}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            ...styles.text,
+                            width: "50%",
+                            paddingHorizontal: 3,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Text
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
+                            style={{ fontSize: 14, textAlign: "center" }}
+                          >
+                            {item.username}
+                          </Text>
+                          {item.showUserData && (
+                            <AntDesign
+                              name="profile"
+                              size={20}
+                              color="#29648a"
+                            />
+                          )}
+                        </View>
+                        <Text
+                          style={{
+                            ...styles.text,
+                            width: "20%",
+                            paddingHorizontal: 3,
+                          }}
+                        >
+                          {Number(item.maxPercentage).toFixed(2)}%
+                        </Text>
+                        <Text style={{ ...styles.text, width: "20%" }}>
+                          {formatTime(item.minTimeSpentTest)}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                ) : (
+                  <Text style={styles.textNoData}>
+                    {`No one's here... You can be the first!`}
+                  </Text>
+                )}
+              </>
             )}
           </View>
+
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
@@ -293,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomWidth: 1,
     paddingVertical: 8,
-    borderBottomColor: '#29648a'
+    borderBottomColor: "#29648a",
   },
   text: {
     // flex: 1,

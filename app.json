@@ -4,10 +4,10 @@
     "slug": "caapp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-2.png",
+    "icon": "./assets/icon-1.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-3.png",
+      "image": "./assets/splash-1.png",
       "resizeMode": "cover",
       "backgroundColor": "#fff"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon-2.png",
+        "foregroundImage": "./assets/icon-1.png",
         "backgroundColor": "#fff"
       },
       "permissions": [
@@ -33,7 +33,7 @@
       "package": "com.g0rdonshumway.caapp"
     },
     "web": {
-      "favicon": "./assets/icon-2.png"
+      "favicon": "./assets/icon-1.png"
     },
     "extra": {
       "eas": {

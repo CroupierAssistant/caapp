@@ -13,7 +13,7 @@ const cardSchema = new mongoose.Schema({
 
 const DuelSchema = new mongoose.Schema({
   username: String,
-  duelistId: mongoose.Schema.Types.ObjectId,
+  duelistId: String,
   game: String,
   amountOfCards: Number,
   sender: [cardSchema],
@@ -21,7 +21,7 @@ const DuelSchema = new mongoose.Schema({
   cards: [cardSchema],
   timestamp: { type: Date, default: Date.now },
   isDuel: Boolean,
-  timeLimit: Number
+  timeLimit: Number,
 });
 
 const DuelModel = connectionDuels.model("Duel", DuelSchema);

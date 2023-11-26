@@ -37,7 +37,6 @@ function CardTest({ route }) {
     isRespond,
   } = route.params;
 
-  const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
   const [timerRunning, setTimerRunning] = useState(false);
   const [showActiveCard, setShowActiveCard] = useState(true);
@@ -46,10 +45,8 @@ function CardTest({ route }) {
   const [cardResults, setCardResults] = useState([]);
   const [cardList, setCardList] = useState([]);
   const [isDone, setIsDone] = useState(false);
-  const [timePassedParent, setTimePassedParent] = useState("");
+  const [showResult, setShowResult] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
-
-  const [percentageTest, setPercentageTest] = useState(0);
 
   const flatListRef = useRef(null);
 
@@ -80,6 +77,36 @@ function CardTest({ route }) {
       return [...prev, newResult];
     });
   };
+
+  useEffect(() => {
+    if (isDone) {
+      const newResults = cardList.map((card) => {
+        const isCardIncluded = cardResults.some(
+          (result) =>
+            result.cardName === card.title &&
+            result.cardNumber === card.number &&
+            result.rightAnswer ===
+              (card.rightAnswer ? card.rightAnswer : card.number * card.coeff)
+        );
+  
+        if (isCardIncluded) {
+          return null; // Если карта уже есть в cardResults, вернем null
+        } else {
+          return {
+            cardName: card.title,
+            cardNumber: card.number,
+            rightAnswer: card.rightAnswer
+              ? card.rightAnswer
+              : card.number * card.coeff,
+            userInput: "",
+          };
+        }
+      }).filter((result) => result !== null); // Убираем все null из новых результатов
+  
+      setCardResults((prev) => [...prev, ...newResults]);
+      setShowResult(true)
+    }
+  }, [isDone]);
 
   const handleSubmit = () => {
     // Переходим к следующей карте
@@ -190,10 +217,6 @@ function CardTest({ route }) {
     );
   };
 
-  const updateTimer = (formattedTime) => {
-    setTimePassedParent(formattedTime);
-  };
-
   const onTimeUpdate = (time) => {
     setTimeSpent(time);
   };
@@ -288,7 +311,7 @@ function CardTest({ route }) {
           />
         </>
       )}
-      {isDone && (
+      {isDone && showResult && (
         <CardResults
           cardResults={cardResults}
           timeSpent={timeSpent}

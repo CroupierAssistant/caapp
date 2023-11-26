@@ -11,6 +11,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import Loader from "../components/Loader";
 
 const SocialComponent = () => {
   const { updateUser, user, authenticated } = useContext(AuthContext);
@@ -20,15 +21,17 @@ const SocialComponent = () => {
   const [myRequests, setMyRequests] = useState([]);
   const [requestToMe, setRequestToMe] = useState([]);
   const [currentTab, setCurrentTab] = useState("SearchFriends");
+  const [isLoading, setIsLoading] = useState(true);
 
   const userId = user && user._id ? user._id : "";
 
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.31.124:10000/users"
+        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users"
       );
       setUsers(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -37,7 +40,7 @@ const SocialComponent = () => {
   const fetchMyRequests = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.31.124:10000/myRequests/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myRequests/${userId}`
       );
       setMyRequests(response.data);
     } catch (error) {
@@ -48,7 +51,7 @@ const SocialComponent = () => {
   const fetchRequestsToMe = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.31.124:10000/requestsToMe/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/requestsToMe/${userId}`
       );
       setRequestToMe(response.data);
     } catch (error) {
@@ -59,9 +62,10 @@ const SocialComponent = () => {
   const fetchMyFriends = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.31.124:10000/myFriends/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
       );
       setMyFriends(response.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching friends:", error);
     }
@@ -96,7 +100,7 @@ const SocialComponent = () => {
       // Выполняем запрос на поиск только если текст не пустой
       if (text.trim() !== "") {
         const response = await axios.get(
-          `http://192.168.31.124:10000/searchUsers?query=${text}`
+          `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/searchUsers?query=${text}`
         );
         setUsers(response.data);
       } else {
@@ -111,7 +115,7 @@ const SocialComponent = () => {
   const addFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "http://192.168.31.124:10000/addFriendRequest",
+        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/addFriendRequest",
         { userId, userFriendId }
       );
 
@@ -120,7 +124,7 @@ const SocialComponent = () => {
       fetchMyFriends();
 
       const updatedUserData = await axios.get(
-        `http://192.168.31.124:10000/user/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
       );
       updateUser(updatedUserData.data);
 
@@ -133,18 +137,18 @@ const SocialComponent = () => {
   const cancelFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "http://192.168.31.124:10000/cancelFriendRequest",
+        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/cancelFriendRequest",
         { userId, userFriendId }
       );
 
       fetchMyRequests();
       fetchRequestsToMe();
       fetchMyFriends();
-      
+
       const updatedUserData = await axios.get(
-        `http://192.168.31.124:10000/user/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
       );
-      updateUser(updatedUserData.data)
+      updateUser(updatedUserData.data);
       // Можно добавить сообщение об успешной отправке запроса
     } catch (error) {
       console.error("Error sending friend request:", error);
@@ -154,18 +158,18 @@ const SocialComponent = () => {
   const approveFriendRequest = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "http://192.168.31.124:10000/approveFriendRequest",
+        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/approveFriendRequest",
         { userId, userFriendId }
       );
 
       fetchMyRequests();
       fetchRequestsToMe();
       fetchMyFriends();
-      
+
       const updatedUserData = await axios.get(
-        `http://192.168.31.124:10000/user/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
       );
-      updateUser(updatedUserData.data)
+      updateUser(updatedUserData.data);
       // Можно добавить сообщение об успешном одобрении запроса
     } catch (error) {
       console.error("Error approving friend request:", error);
@@ -175,7 +179,7 @@ const SocialComponent = () => {
   const removeFriend = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "http://192.168.31.124:10000/removeFriend",
+        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/removeFriend",
         { userId, userFriendId }
       );
       setMyFriends(myFriends.filter((friend) => friend._id !== userFriendId));
@@ -185,9 +189,9 @@ const SocialComponent = () => {
       fetchMyFriends();
 
       const updatedUserData = await axios.get(
-        `http://192.168.31.124:10000/user/${userId}`
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
       );
-      updateUser(updatedUserData.data)
+      updateUser(updatedUserData.data);
     } catch (error) {
       console.error("Error removing friend:", error);
     }
@@ -207,90 +211,119 @@ const SocialComponent = () => {
             onChangeText={(text) => handleSearch(text)}
           />
         )}
-        <ScrollView
-          style={{
-            ...styles.userList,
-            paddingVertical: currentTab === "MyFriends" ? 0 : 10,
-          }}
-        >
-          {currentTab === "MyFriends" && myRequests.length > 0 && (
-            <>
-              <Text style={styles.sectionTitle}>Friendship requests</Text>
-              {myRequests.map((userFromList, index) => (
-                <React.Fragment key={userFromList._id}>
-                  <TouchableOpacity
-                    style={styles.userItem}
-                    
-                  >
-                    <View>
-                      <Text style={styles.username}>
-                        {userFromList.username}{" "}
-                      </Text>
-                      {userFromList.showUserData && (
-                        <Text>
-                          {userFromList.firstName} {userFromList.lastName}
-                        </Text>
-                      )}
-                    </View>
-                    <TouchableOpacity onPress={() => approveFriendRequest(userId, userFromList._id)}>
-                      <Feather name="user-plus" size={28} color="#479761" />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
-                </React.Fragment>
-              ))}
-              
-            </>
-          )}
-          
+        <>
+          {isLoading && <Loader />}
+          {!isLoading && (
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                ...styles.userList,
+                paddingVertical: currentTab === "MyFriends" ? 0 : 10,
+              }}
+            >
+              {currentTab === "MyFriends" && myRequests.length > 0 && (
+                <>
+                  <Text style={styles.sectionTitle}>Friendship requests</Text>
+                  {myRequests.map((userFromList, index) => (
+                    <React.Fragment key={userFromList._id}>
+                      <TouchableOpacity
+                        style={[
+                          styles.userItem,
+                          { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
+                          {
+                            borderBottomWidth:
+                              index === myRequests.length - 1 ? 0 : 1,
+                          }, // Убрать нижнюю границу для последнего элемента
+                        ]}
+                      >
+                        <View>
+                          <Text style={styles.username}>
+                            {userFromList.username}{" "}
+                          </Text>
+                          {userFromList.showUserData && (
+                            <Text>
+                              {userFromList.firstName} {userFromList.lastName}
+                            </Text>
+                          )}
+                        </View>
+                        <TouchableOpacity
+                          onPress={() =>
+                            approveFriendRequest(userId, userFromList._id)
+                          }
+                        >
+                          <Feather name="user-plus" size={28} color="#479761" />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
 
-          {filteredList.length > 0 && (
-            <>
-              {currentTab === "MyFriends" && <Text style={styles.sectionTitle}>Friends list</Text>}
-              {filteredList.map((userFromList) => (
-                <TouchableOpacity
-                  key={userFromList._id}
-                  style={styles.userItem}
-                >
-                  <View>
-                    <Text style={styles.username}>
-                      {userFromList.username}
-                    </Text>
-                    {userFromList.showUserData && (
-                      <Text>
-                        {userFromList.firstName} {userFromList.lastName}
-                      </Text>
-                    )}
-                  </View>
-                  {myFriends.find(
-                    (friend) => friend._id === userFromList._id
-                  ) ? (
-                    <TouchableOpacity
-                      onPress={() => removeFriend(userId, userFromList._id)}
-                    >
-                      <Feather name="user-minus" size={28} color="#a16e83" />
-                    </TouchableOpacity>
-                  ) : requestToMe.find(
-                      (friend) => friend._id === userFromList._id
-                    ) ? (
-                    <TouchableOpacity
-                      onPress={() =>
-                        cancelFriendRequest(userId, userFromList._id)
-                      }
-                    >
-                      <Feather name="user-x" size={28} color="#ffbf00" />
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => addFriendRequest(userId, userFromList._id)}
-                    >
-                      <Feather name="user-plus" size={28} color="#479761" />
-                    </TouchableOpacity>
+              {filteredList.length > 0 && (
+                <>
+                  {currentTab === "MyFriends" && (
+                    <Text style={styles.sectionTitle}>Friends list</Text>
                   )}
-                </TouchableOpacity>
-              ))}
-            </>
+                  {filteredList.map((userFromList, index) => (
+                    <TouchableOpacity
+                      key={userFromList._id}
+                      style={[
+                        styles.userItem,
+                        { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
+                        {
+                          borderBottomWidth:
+                            index === filteredList.length - 1 ? 0 : 1,
+                        }, // Убрать нижнюю границу для последнего элемента
+                      ]}
+                    >
+                      <View>
+                        <Text style={styles.username}>
+                          {userFromList.username}
+                        </Text>
+                        {userFromList.showUserData && (
+                          <Text>
+                            {userFromList.firstName} {userFromList.lastName}
+                          </Text>
+                        )}
+                      </View>
+                      {myFriends.find(
+                        (friend) => friend._id === userFromList._id
+                      ) ? (
+                        <TouchableOpacity
+                          onPress={() => removeFriend(userId, userFromList._id)}
+                        >
+                          <Feather
+                            name="user-minus"
+                            size={28}
+                            color="#a16e83"
+                          />
+                        </TouchableOpacity>
+                      ) : requestToMe.find(
+                          (friend) => friend._id === userFromList._id
+                        ) ? (
+                        <TouchableOpacity
+                          onPress={() =>
+                            cancelFriendRequest(userId, userFromList._id)
+                          }
+                        >
+                          <Feather name="user-x" size={28} color="#ffbf00" />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            addFriendRequest(userId, userFromList._id)
+                          }
+                        >
+                          <Feather name="user-plus" size={28} color="#479761" />
+                        </TouchableOpacity>
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </>
+              )}
+            </ScrollView>
           )}
-        </ScrollView>
+        </>
       </View>
     );
   };
@@ -361,8 +394,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 54,
     borderColor: "#29648a",
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: -1,

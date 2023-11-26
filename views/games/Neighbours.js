@@ -71,18 +71,18 @@ function Neighbours() {
                 style={[
                   styles.radioButton,
                   !user && styles.radioButtonDisabled,
-                  selectedButton === "15" && styles.selectedButton,
+                  selectedButton === "20" && styles.selectedButton,
                 ]}
-                onPress={() => handleButtonPress("15")}
+                onPress={() => handleButtonPress("20")}
               >
                 {user ? (
                   <Text
                     style={[
                       styles.radioButtonText,
-                      selectedButton === "15" && styles.selectedRadioButtonText,
+                      selectedButton === "20" && styles.selectedRadioButtonText,
                     ]}
                   >
-                    15 cards
+                    20 cards
                   </Text>
                 ) : (
                   <FontAwesome
@@ -99,18 +99,18 @@ function Neighbours() {
                   styles.radioButton,
                   styles.radioButtonLast,
                   !user && styles.radioButtonDisabled,
-                  selectedButton === "20" && styles.selectedButton,
+                  selectedButton === "30" && styles.selectedButton,
                 ]}
-                onPress={() => handleButtonPress("20")}
+                onPress={() => handleButtonPress("30")}
               >
                 {user ? (
                   <Text
                     style={[
                       styles.radioButtonText,
-                      selectedButton === "20" && styles.selectedRadioButtonText,
+                      selectedButton === "30" && styles.selectedRadioButtonText,
                     ]}
                   >
-                    20 cards
+                    30 cards
                   </Text>
                 ) : (
                   <FontAwesome

@@ -20,7 +20,7 @@ const Timer = (props) => {
         setTimeSpent(time)
       }
       
-    }, 1000);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [startTime, time]);

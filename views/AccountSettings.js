@@ -59,7 +59,7 @@ const AccountSettings = () => {
       try {
         const response = await axios.post(
           // "https://caapp-server.onrender.com/change-settings",
-          "http://192.168.31.124:10000/change-settings",
+          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/change-settings",
           {
             username: user.username,
             currentPassword,

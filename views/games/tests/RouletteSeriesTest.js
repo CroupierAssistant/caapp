@@ -14,10 +14,23 @@ import Card from "../../../components/Card";
 import Keyboard from "../../../components/Keyboard";
 import CardResults from "../../../components/CardResults";
 import Stopwatch from "../../../components/Stopwatch";
+import { useNavigation } from "@react-navigation/native";
 
 function RouletteSeriesTest({ route }) {
-  const { timeLimit, mode, amountOfCards, minBet, maxBet, combinations, gameName } =
-    route.params;
+  const {
+    timeLimit,
+    mode,
+    amountOfCards,
+    minBet,
+    maxBet,
+    combinations,
+    gameName,
+    isDuel,
+    duelist,
+    duelId,
+    cardsDuel,
+    isRespond,
+  } = route.params;
 
   const [modalVisible, setModalVisible] = useState(true);
   const [showPaytableModal, setShowPaytableModal] = useState(false);
@@ -31,6 +44,8 @@ function RouletteSeriesTest({ route }) {
   const [timePassedParent, setTimePassedParent] = useState("");
   const [timeSpent, setTimeSpent] = useState(0); // Добавляем состояние времени
   const flatListRef = useRef(null);
+  const [percentageTest, setPercentageTest] = useState(0);
+  const [showResult, setShowResult] = useState(false);
 
   const startTimer = () => {
     setModalVisible(false);
@@ -81,6 +96,53 @@ function RouletteSeriesTest({ route }) {
     });
   };
 
+  useEffect(() => {
+    if (isDone) {
+      const newResults = cardList
+        .map((card) => {
+          const isCardIncluded = cardResults.some(
+            (result) =>
+              result.cardName === card.title &&
+              result.cardNumber === card.number &&
+              result.rightAnswer ===
+                (card.rightAnswer ? card.rightAnswer : card.number * card.coeff)
+          );
+
+          if (isCardIncluded) {
+            return null; // Если карта уже есть в cardResults, вернем null
+          } else {
+            const sector = card;
+            const bet = card.number;
+
+            let playsBy;
+            let playsByBefore;
+            let playsByAfter;
+
+            if (bet <= sector.critical) {
+              playsBy = round5(bet / sector.coefficientBeforeCritical);
+            } else {
+              playsByBefore =
+                sector.critical / sector.coefficientBeforeCritical;
+              playsByAfter =
+                (bet - sector.critical) / sector.coefficientAfterCritical;
+              playsBy = round5(playsByAfter + playsByBefore);
+            }
+
+            return {
+              cardName: card.title,
+              cardNumber: card.number,
+              rightAnswer: playsBy < maxBet * 2 ? playsBy : maxBet * 2,
+              userInput: "",
+            };
+          }
+        })
+        .filter((result) => result !== null); // Убираем все null из новых результатов
+
+      setCardResults((prev) => [...prev, ...newResults]);
+      setShowResult(true);
+    }
+  }, [isDone]);
+
   const handleSubmit = () => {
     if (activeCardIndex < cardList.length - 1) {
       setActiveCardIndex(activeCardIndex + 1);
@@ -92,7 +154,7 @@ function RouletteSeriesTest({ route }) {
   };
 
   const handleSkipCard = () => {
-    setCardList(prevList => {
+    setCardList((prevList) => {
       const newList = [...prevList];
       const skippedCard = newList.splice(activeCardIndex, 1)[0];
       newList.push(skippedCard);
@@ -127,54 +189,69 @@ function RouletteSeriesTest({ route }) {
   }
 
   useEffect(() => {
-    function generateUniqueRandomNumbers(amount, min, max, st) {
-      if (amount === 0) {
-        amount = max / st + 1;
-      }
-
-      const uniqueNumbers = new Set();
-      let attempts = 0;
-      const maxAttempts = 10000;
-
-      while (uniqueNumbers.size < amount && attempts < maxAttempts) {
-        const randomNum = Math.round(Math.random() * (max - min) + min);
-        if (randomNum % st === 0) {
-          uniqueNumbers.add(randomNum);
+    if (!cardsDuel) {
+      function generateUniqueRandomNumbers(amount, min, max, st) {
+        if (amount === 0) {
+          amount = max / st + 1;
         }
-        attempts++;
+
+        const uniqueNumbers = new Set();
+        let attempts = 0;
+        const maxAttempts = 10000;
+
+        while (uniqueNumbers.size < amount && attempts < maxAttempts) {
+          const randomNum = Math.round(Math.random() * (max - min) + min);
+          if (randomNum % st === 0) {
+            uniqueNumbers.add(randomNum);
+          }
+          attempts++;
+        }
+
+        return Array.from(uniqueNumbers);
       }
 
-      return Array.from(uniqueNumbers);
+      const cardNumbers = generateUniqueRandomNumbers(
+        amountOfCards,
+        minBet,
+        maxBet,
+        5
+      );
+
+      const cardData = cardNumbers.map((number, index) => {
+        const randomGameIndex = Math.floor(Math.random() * combinations.length);
+        const randomGame = combinations[randomGameIndex];
+
+        const minNumber =
+          Number(minBet) * Number(randomGame.coefficientBeforeCritical);
+        const bet = round5(
+          getRandomMultipleOfFive(minNumber, randomGame.maxBet)
+        );
+
+        return {
+          title: randomGame.name,
+          maxBet: randomGame.maxBet,
+          critical: randomGame.critical,
+          coefficientBeforeCritical: randomGame.coefficientBeforeCritical,
+          coefficientAfterCritical: randomGame.coefficientAfterCritical,
+          index:
+            amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+          number: bet,
+        };
+      });
+      setCardList(cardData);
+    } else {
+      const cardData = cardsDuel.map((card, index) => {
+        return {
+          title: card.cardName,
+          rightAnswer: card.rightAnswer,
+          index:
+            amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
+          number: card.cardNumber,
+        };
+      });
+      setCardList(cardData);
     }
 
-    const cardNumbers = generateUniqueRandomNumbers(
-      amountOfCards,
-      minBet,
-      maxBet,
-      5
-    );
-
-    const cardData = cardNumbers.map((number, index) => {
-      const randomGameIndex = Math.floor(Math.random() * combinations.length);
-      const randomGame = combinations[randomGameIndex];
-
-      const minNumber =
-        Number(minBet) * Number(randomGame.coefficientBeforeCritical);
-      const bet = round5(getRandomMultipleOfFive(minNumber, randomGame.maxBet));
-
-      return {
-        title: randomGame.name,
-        maxBet: randomGame.maxBet,
-        critical: randomGame.critical,
-        coefficientBeforeCritical: randomGame.coefficientBeforeCritical,
-        coefficientAfterCritical: randomGame.coefficientAfterCritical,
-        index:
-          amountOfCards > 0 ? `${index + 1} / ${amountOfCards}` : index + 1,
-        number: bet,
-      };
-    });
-
-    setCardList(cardData);
     setTimerRunning(true);
   }, []);
 
@@ -198,7 +275,7 @@ function RouletteSeriesTest({ route }) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff", }}>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
       {!isDone && (
         <>
           {timerRunning && mode === "timeLimit" && (
@@ -268,10 +345,11 @@ function RouletteSeriesTest({ route }) {
               <View style={{ width: "100%" }}>
                 {mode === "timeLimit" && (
                   <Text style={styles.modalInfo}>
-                The goal is to calculate the payout for {amountOfCards} bets.
-                The time limit is {timeLimit / 1000} seconds. Specify the
-                highest denomination for the sector's payout (DO NOT WRITE THE
-                REST). The step is 5, with a maximum progressive of 50.
+                    The goal is to calculate the payout for {amountOfCards}{" "}
+                    bets. The time limit is {timeLimit / 1000} seconds. Specify
+                    the highest denomination for the sector's payout (DO NOT
+                    WRITE THE REST). The step is 5, with a maximum progressive
+                    of 50.
                   </Text>
                 )}
                 {mode === "sandbox" && (
@@ -298,13 +376,18 @@ function RouletteSeriesTest({ route }) {
           />
         </>
       )}
-      {isDone && (
+      {isDone && showResult && (
         <CardResults
           cardResults={cardResults}
           timeSpent={timeSpent}
           mode={mode}
           amountOfCards={amountOfCards}
           gameName={gameName}
+          isDuel={isDuel}
+          duelist={duelist}
+          isRespond={isRespond}
+          duelId={duelId}
+          timeLimit={timeLimit}
         />
       )}
     </View>

@@ -33,7 +33,7 @@ const Ratings = () => {
     setModalVisible(true);
 
     // fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
-    fetch(`http://192.168.31.124:10000/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
+    fetch(`https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
       .then((response) => response.json())
       .then((data) => {
         setRatings(data); // Предполагается, что данные приходят в формате JSON

@@ -6,15 +6,48 @@ import {
   Switch,
   StyleSheet,
   ScrollView,
+  Dimensions,
+  Modal,
 } from "react-native";
 import { AuthContext } from "../../context/AuthContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Switcher from "../../components/Switcher";
+import axios from "axios";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function RouletteSeries() {
+  const { user } = useContext(AuthContext);
   const navigation = useNavigation();
   const [timeLimit, settimeLimit] = useState(90000);
+  const [isDuel, setIsDuel] = useState(null);
+  const [myFriends, setMyFriends] = useState([]);
+  const [duelist, setDuelist] = useState(null);
+
+  const userId = user && user._id ? user._id : "";
+
+  const fetchMyFriends = async () => {
+    try {
+      const response = await axios.get(
+        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+      );
+      setMyFriends(response.data);
+    } catch (error) {
+      console.error("Error fetching friends:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchMyFriends();
+    } else {
+      setMyFriends([]);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    setDuelist(null);
+  }, []);
 
   const handleNavigateToTest = () => {
     navigation.navigate("RouletteSeriesTest", {
@@ -26,6 +59,8 @@ function RouletteSeries() {
       splitCoeff: false,
       step: selectedStep,
       gameName: "Roulette series",
+      isDuel: isDuel,
+      duelist: duelist ? duelist : null,
       combinations: [
         {
           name: "Voisins de zero",
@@ -57,9 +92,13 @@ function RouletteSeries() {
         },
       ],
     });
+    isDuel && handleToggleModalToDuel();
   };
 
-  const { user } = useContext(AuthContext);
+  const handleToggleModalToDuel = () => {
+    setIsDuel((prev) => !prev);
+    setDuelist(null);
+  };
 
   useEffect(() => {
     setSelectedButton("10");
@@ -408,12 +447,133 @@ function RouletteSeries() {
             </>
           </>
         )}
-        <TouchableOpacity
-          style={[styles.startButton]}
-          onPress={handleNavigateToTest}
+        <Modal
+          visible={isDuel}
+          transparent
+          animationType="fade"
+          onRequestClose={handleToggleModalToDuel}
         >
-          <Text style={[styles.startButtonText]}>Start</Text>
-        </TouchableOpacity>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.textHeader}>Roulette series Duel</Text>
+
+              <View
+                style={{
+                  borderWidth: 2,
+                  flex: 1,
+                  borderColor: "#29648a",
+                  padding: 10,
+                  borderRadius: 3,
+                }}
+              >
+                {!duelist && (
+                  <ScrollView
+                    style={{ flex: 1 }}
+                    showsVerticalScrollIndicator={false}
+                  >
+                    {myFriends.map((userFromList) => (
+                      <TouchableOpacity
+                        key={userFromList._id}
+                        style={styles.userItem}
+                      >
+                        <View>
+                          <Text style={styles.username}>
+                            {userFromList.username}
+                          </Text>
+                          {userFromList.showUserData && (
+                            <Text>
+                              {userFromList.firstName} {userFromList.lastName}
+                            </Text>
+                          )}
+                        </View>
+
+                        <TouchableOpacity
+                          onPress={() => setDuelist(userFromList)}
+                        >
+                          <MaterialCommunityIcons
+                            name="sword-cross"
+                            size={24}
+                            color="#a16e83"
+                          />
+                        </TouchableOpacity>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                )}
+                {duelist && (
+                  <>
+                    <View style={styles.duelistContainer}>
+                      <Text style={styles.duelistName}>{user.username}</Text>
+                      <MaterialCommunityIcons
+                        name="sword-cross"
+                        size={70}
+                        color="#a16e83"
+                        style={{ marginVertical: 20 }}
+                      />
+                      <Text style={styles.duelistName}>{duelist.username}</Text>
+                    </View>
+
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        textAlign: "center",
+                        color: "#29648a",
+                      }}
+                    >
+                      The user will receive a duel notification as soon as you
+                      complete the test
+                    </Text>
+
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity
+                        style={{
+                          ...styles.startButton,
+                          backgroundColor: !user ? "#555" : "#a16e83",
+                        }}
+                        onPress={() => setDuelist(null)}
+                      >
+                        <Text style={styles.startButtonText}>cancel</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.startButton}
+                        onPress={handleNavigateToTest}
+                      >
+                        <Text style={styles.startButtonText}>start</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+              </View>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handleToggleModalToDuel}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <View style={styles.buttonContainer}>
+          {/* {!isEnabled && (
+            <TouchableOpacity
+              style={{
+                ...styles.startButton,
+                backgroundColor: !user ? "#555" : "#b59410",
+              }}
+              onPress={handleToggleModalToDuel}
+              disabled={!user}
+            >
+              <Text style={styles.startButtonText}>Duel Start</Text>
+            </TouchableOpacity>
+          )} */}
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={handleNavigateToTest}
+          >
+            <Text style={styles.startButtonText}>Solo Start</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -453,15 +613,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRightWidth: 0,
     borderColor: "#29648a",
-  },
-  startButton: {
-    width: "50%",
-    marginTop: "auto",
-    marginBottom: 15,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    backgroundColor: "#008486",
-    borderRadius: 3,
   },
   startButtonText: {
     color: "#fff",
@@ -511,6 +662,80 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
     marginBottom: -5,
+  },
+  buttonContainer: {
+    width: "100%",
+    marginTop: "auto",
+    marginBottom: 15,
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    gap: 5,
+  },
+  startButton: {
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    backgroundColor: "#008486",
+    borderRadius: 3,
+    width: "49%",
+  },
+  duelistName: {
+    fontSize: 30,
+    color: "#29648a",
+    fontWeight: "bold",
+  },
+  duelistContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 3,
+    width: Dimensions.get("window").width * 0.95,
+    height: Dimensions.get("window").height * 0.8,
+  },
+  textHeader: {
+    textAlign: "center",
+    fontSize: 24,
+    color: "#29648a",
+    fontWeight: "bold",
+    marginBottom: 10,
+    textTransform: "uppercase",
+  },
+  closeButton: {
+    alignSelf: "center",
+    padding: 10,
+  },
+  closeButtonText: {
+    fontSize: 16,
+    color: "#29648a", // Цвет кнопки закрытия
+    textTransform: "uppercase",
+    fontWeight: "bold",
+  },
+  userItem: {
+    width: "100%",
+    height: 54,
+    borderColor: "#29648a",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: -1,
+    flexDirection: "row",
+    paddingHorizontal: 10,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#29648a",
   },
 });
 

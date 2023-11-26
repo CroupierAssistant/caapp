@@ -80,31 +80,33 @@ const CardResults = ({
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
 
-    handleSaveTestResult({
-      userId: user && user._id ? user._id : "",
-      nickname: user && user.username ? user.username : "/guest/",
-      cards: mode == "timeLimit" ? amountOfCards : cardResults.length,
-      game: gameName,
-      type: mode,
-      percent: calculatedPercentage,
-      time: timeSpent,
-    });
+    // if (!isDuel) {
+      handleSaveTestResult({
+        userId: user && user._id ? user._id : "",
+        nickname: user && user.username ? user.username : "/guest/",
+        cards: mode == "timeLimit" ? amountOfCards : cardResults.length,
+        game: gameName,
+        type: mode,
+        percent: calculatedPercentage,
+        time: timeSpent,
+      });
+    // }
 
     const sendResults = async (percentage) => {
       try {
         const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
   
         const response = await axios.post(
-          "http://192.168.31.124:10000/sendTestRequest",
+          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/sendTestRequest",
           {
             username: user.username,
-            duelistId: duelist._id,
+            duelistId: duelist.username,
             gameName,
             amountOfCards,
             sender: [{ username: user.username, timeSpent, percentage }, ...cardResults],
             cards: cleanedCardResults,
             isDuel,
-            timeLimit
+            timeLimit,
           }
         );
   
@@ -121,10 +123,8 @@ const CardResults = ({
 
     const sendRespondResults = async (percentage) => {
       try {
-        const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
-  
         const response = await axios.post(
-          "http://192.168.31.124:10000/sendRespondResults",
+          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/sendRespondResults",
           {
             reciever: [{ username: user.username, timeSpent, percentage }, ...cardResults],
             duelId,

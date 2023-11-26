@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 function HomeScreen({ route }) {
   const navigation = useNavigation();
@@ -20,12 +21,15 @@ function HomeScreen({ route }) {
         style={{ flex: 1, width: "100%", backgroundColor: "#fff" }}
         showsVerticalScrollIndicator={false}
       >
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("Blackjack")}
         >
           <Text style={styles.buttonText}>Blackjack</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -40,6 +44,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RouletteSeries")}
         >
           <Text style={styles.buttonText}>Roulette Series</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         {/* <TouchableOpacity
@@ -56,31 +64,15 @@ function HomeScreen({ route }) {
           <Text style={styles.buttonText}>Neighbours</Text>
         </TouchableOpacity>
 
-        {/* <TouchableOpacity
-          style={{ ...styles.button, backgroundColor: "#aaa" }}
-          onPress={() => navigation.navigate("#")}
-          disabled={true}
-        >
-          <Text style={styles.buttonText}>
-            Roulette Straight Up Complete Bet
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ ...styles.button, backgroundColor: "#aaa" }}
-          onPress={() => navigation.navigate("#")}
-          disabled={true}
-        >
-          <Text style={styles.buttonText}>
-            Roulette Complete Bet Intersections
-          </Text>
-        </TouchableOpacity> */}
-
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate("RussianPokerAnte")}
         >
           <Text style={styles.buttonText}>Russian poker Ante</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -88,6 +80,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPoker5Bonus")}
         >
           <Text style={styles.buttonText}>Russian poker 5-bonus</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -95,6 +91,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("RussianPokerBonus")}
         >
           <Text style={styles.buttonText}>Russian poker 6-bonus</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -102,6 +102,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHBlindBets")}
         >
           <Text style={styles.buttonText}>UTH Blind Bets</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -109,6 +113,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("UTHTripsBets")}
         >
           <Text style={styles.buttonText}>UTH Trips Bets</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -116,6 +124,10 @@ function HomeScreen({ route }) {
           onPress={() => navigation.navigate("TexasHoldEm")}
         >
           <Text style={styles.buttonText}>Texas Hold'em Bonus</Text>
+          {/* <Text style={styles.buttonText}>
+            <Entypo name="plus" size={20} color="#fff" />
+            <MaterialCommunityIcons name="sword-cross" size={20} color="#fff" />
+          </Text> */}
         </TouchableOpacity>
 
         {/* <View style={styles.break} />

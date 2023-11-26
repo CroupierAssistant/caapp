@@ -716,11 +716,21 @@ app.post("/sendRespondResults", async (req, res) => {
 });
 
 // Поиск по базе данных duelsDatabase
-app.get('/duelsByUserId/:userId', async (req, res) => {
-  const { userId } = req.params;
+app.get('/duelDefense/:username', async (req, res) => {
+  const { username } = req.params;
 
   try {
-    const duels = await DuelModel.find({ duelistId: userId });
+    const duels = await DuelModel.find({ duelistId: username });
+    res.status(200).json(duels);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching duels by user ID', error: error.message });
+  }
+});
+app.get('/duelAttack/:username', async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const duels = await DuelModel.find({ username: username });
     res.status(200).json(duels);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching duels by user ID', error: error.message });

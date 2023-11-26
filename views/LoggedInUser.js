@@ -72,7 +72,7 @@ const LoggedInUser = ({ user, logout }) => {
             <MenuButton
               onPress={() => navigation.navigate("EditProfile")}
               icon={<AntDesign name="profile" size={22} color="#29648a" />}
-              text="Edit profile"
+              text="Edit Profile"
             />
 
             <MenuButton
@@ -96,7 +96,7 @@ const LoggedInUser = ({ user, logout }) => {
             <MenuButton
               onPress={() => navigation.navigate("HelpSupport")}
               icon={<Feather name="help-circle" size={24} color="#29648a" />}
-              text="Help & support"
+              text="Help & Support"
             />
 
             <TouchableOpacity
