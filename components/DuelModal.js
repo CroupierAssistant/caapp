@@ -6,6 +6,7 @@ import {
   Modal,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -357,6 +358,7 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
                   borderBottomRightRadius: 3,
                 }}
               >
+                <ScrollView style={{flex: 1}}>
                 {games.map((game, index) => (
                   <TouchableOpacity
                     key={index.toString()}
@@ -371,7 +373,7 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
                       <Text style={styles.username}>{game}</Text>
                     </View>
                   </TouchableOpacity>
-                ))}
+                ))}</ScrollView>
               </View>
 
               <TouchableOpacity style={styles.closeButton} onPress={onClose}>

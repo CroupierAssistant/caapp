@@ -30,8 +30,8 @@ const AuthorizationComponent = ({ setIsRegistering, isRegistering }) => {
   };
 
   const handleLogin = () => {
-    // Axios.post("https://caapp-server.onrender.com/login", {
-    Axios.post("https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/login", {
+    Axios.post("https://caapp-server.onrender.com/login", {
+    // Axios.post("https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/login", {
       username: formData.username,
       password: formData.password,
     })

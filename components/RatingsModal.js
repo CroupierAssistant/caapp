@@ -43,8 +43,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const findUserById = async (userId) => {
     try {
       const response = await axios.get(
-        // `https://caapp-server.onrender.com/users/${userId}`
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users/${userId}`
+        `https://caapp-server.onrender.com/users/${userId}`
+        // `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -52,100 +52,84 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
       throw error;
     }
   };
-
   useEffect(() => {
     const getRatingData = async () => {
-      const updatedRatings = await Promise.all(
-        ratings.map(async (item) => {
-          try {
-            const user = await findUserById(item.userId);
-            if (user) {
-              return {
-                ...item,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                showUserData: user.showUserData,
-              };
-            }
-          } catch (error) {
-            console.error("Ошибка при получении данных о пользователе:", error);
-            return item;
+      try {
+        const groupedByAmountOfCards = {
+          10: [],
+          20: [],
+          30: [],
+        };
+  
+        ratings.forEach((item) => {
+          if (item.amountOfCards) {
+            const key = item.amountOfCards.toString();
+            groupedByAmountOfCards[key].push(item);
           }
-        })
-      );
-
-      const groupedByAmountOfCards = {
-        10: [],
-        20: [],
-        30: [],
-      };
-
-      updatedRatings.forEach((item) => {
-        if (item.amountOfCards) {
-          const key = item.amountOfCards.toString();
-          groupedByAmountOfCards[key].push(item);
-        }
-      });
-
-      const newData = {};
-
-      Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
-        const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
-          (result, item) => {
-            const key = item.username;
-            if (!result[key]) {
-              result[key] = {
-                maxPercentage: -Infinity,
-                minTimeSpentTest: Infinity,
-                userId: item.userId,
-                amountOfCards: item.amountOfCards,
-                firstName: item.firstName,
-                lastName: item.lastName,
-                showUserData: item.showUserData,
-              };
-            }
-
-            if (item.percentage > result[key].maxPercentage) {
-              result[key].maxPercentage = item.percentage;
-              result[key].minTimeSpentTest = item.timeSpentTest;
-            } else if (item.percentage === result[key].maxPercentage) {
-              if (item.timeSpentTest < result[key].minTimeSpentTest) {
-                result[key].minTimeSpentTest = item.timeSpentTest;
+        });
+  
+        const newData = {};
+  
+        Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+          const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
+            (result, item) => {
+              const key = item.username;
+              if (!result[key]) {
+                result[key] = {
+                  maxPercentage: -Infinity,
+                  minTimeSpentTest: Infinity,
+                  userId: item.userId,
+                  amountOfCards: item.amountOfCards,
+                  firstName: item.firstName,
+                  lastName: item.lastName,
+                  showUserData: item.showUserData,
+                };
               }
-            }
-
-            return result;
-          },
-          {}
-        );
-
-        newData[amountOfCards] = Object.keys(groupedData)
-          .map((username) => ({
-            username,
-            userId: groupedData[username].userId,
-            maxPercentage: groupedData[username].maxPercentage,
-            minTimeSpentTest: groupedData[username].minTimeSpentTest,
-            amountOfCards: groupedData[username].amountOfCards,
-            firstName: groupedData[username].firstName,
-            lastName: groupedData[username].lastName,
-            showUserData: groupedData[username].showUserData,
-          }))
-          .sort((a, b) => {
-            if (a.maxPercentage !== b.maxPercentage) {
-              return b.maxPercentage - a.maxPercentage;
-            }
-            return a.minTimeSpentTest - b.minTimeSpentTest;
-          });
-      });
-
-      setAggregatedData(newData);
-      setTimeout(() => {
+  
+              if (item.percentage > result[key].maxPercentage) {
+                result[key].maxPercentage = item.percentage;
+                result[key].minTimeSpentTest = item.timeSpentTest;
+              } else if (item.percentage === result[key].maxPercentage) {
+                if (item.timeSpentTest < result[key].minTimeSpentTest) {
+                  result[key].minTimeSpentTest = item.timeSpentTest;
+                }
+              }
+  
+              return result;
+            },
+            {}
+          );
+  
+          newData[amountOfCards] = Object.keys(groupedData)
+            .map((username) => ({
+              username,
+              userId: groupedData[username].userId,
+              maxPercentage: groupedData[username].maxPercentage,
+              minTimeSpentTest: groupedData[username].minTimeSpentTest,
+              amountOfCards: groupedData[username].amountOfCards,
+              firstName: groupedData[username].firstName,
+              lastName: groupedData[username].lastName,
+              showUserData: groupedData[username].showUserData,
+            }))
+            .sort((a, b) => {
+              if (a.maxPercentage !== b.maxPercentage) {
+                return b.maxPercentage - a.maxPercentage;
+              }
+              return a.minTimeSpentTest - b.minTimeSpentTest;
+            });
+        });
+  
+        setAggregatedData(newData);
         setIsLoading(false);
-      }, 500);
+      } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+        setIsLoading(false);
+      }
     };
-
+  
     getRatingData();
   }, [ratings]);
+  
 
   return (
     <Modal visible={isVisible} transparent animationType="fade">
@@ -188,8 +172,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
               <Loader />
             ) : (
               <>
-                {aggregatedData &&
-                aggregatedData[activeTab].length > 0 ? (
+                {aggregatedData && aggregatedData[activeTab].length > 0 ? (
                   <FlatList
                     data={aggregatedData[activeTab]}
                     keyExtractor={(item, index) => index.toString()}
@@ -206,10 +189,10 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                             index === 0
                               ? styles.gold
                               : index === 1
-                              ? styles.silver
-                              : index === 2
-                              ? styles.bronze
-                              : "",
+                                ? styles.silver
+                                : index === 2
+                                  ? styles.bronze
+                                  : "",
                           ]}
                         >
                           <Text

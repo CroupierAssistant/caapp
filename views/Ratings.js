@@ -32,8 +32,8 @@ const Ratings = () => {
     setSelectedGame(gameName);
     setModalVisible(true);
 
-    // fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
-    fetch(`https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/ratings/${gameName}`) // Замените example.com на ваш адрес сервера
+    fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) 
+    // fetch(`https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/ratings/${gameName}`) 
       .then((response) => response.json())
       .then((data) => {
         setRatings(data); // Предполагается, что данные приходят в формате JSON

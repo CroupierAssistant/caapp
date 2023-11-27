@@ -15,8 +15,8 @@ const AuthProvider = ({ children, navigation }) => {
         const authToken = await AsyncStorage.getItem('authToken');
   
         if (authToken) {
-          // const response = await axios.post('https://caapp-server.onrender.com/verifyToken', {
-          const response = await axios.post('https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/verifyToken', {
+          const response = await axios.post('https://caapp-server.onrender.com/verifyToken', {
+          // const response = await axios.post('https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/verifyToken', {
             authToken,
           });
   

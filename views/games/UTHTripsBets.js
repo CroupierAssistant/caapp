@@ -22,28 +22,28 @@ function UTHTripsBets() {
   const navigation = useNavigation();
   const [timeLimit, settimeLimit] = useState(90000);
   const [isDuel, setIsDuel] = useState(null);
-  const [myFriends, setMyFriends] = useState([]);
+  const [myFavorites, setMyFavorites] = useState([]);
   const [duelist, setDuelist] = useState(null);
 
   const { user } = useContext(AuthContext);
   const userId = user && user._id ? user._id : "";
 
-  const fetchMyFriends = async () => {
+  const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
       );
-      setMyFriends(response.data);
+      setMyFavorites(response.data);
     } catch (error) {
-      console.error("Error fetching friends:", error);
+      console.error("Error fetching favorites:", error);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchMyFriends();
+      fetchMyFavorites();
     } else {
-      setMyFriends([]);
+      setMyFavorites([]);
     }
   }, [user]);
 
@@ -530,7 +530,7 @@ function UTHTripsBets() {
                     style={{ flex: 1 }}
                     showsVerticalScrollIndicator={false}
                   >
-                    {myFriends.map((userFromList) => (
+                    {myFavorites.map((userFromList) => (
                       <TouchableOpacity
                         key={userFromList._id}
                         style={styles.userItem}
@@ -614,7 +614,7 @@ function UTHTripsBets() {
         </Modal>
 
         <View style={styles.buttonContainer}>
-          {/* {!isEnabled && (
+          {!isEnabled && (
             <TouchableOpacity
               style={{
                 ...styles.startButton,
@@ -625,7 +625,7 @@ function UTHTripsBets() {
             >
               <Text style={styles.startButtonText}>Duel Start</Text>
             </TouchableOpacity>
-          )} */}
+          )}
           <TouchableOpacity
             style={styles.startButton}
             onPress={handleNavigateToTest}

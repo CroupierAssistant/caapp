@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign } from '@expo/vector-icons';
 import Loader from "./Loader";
 import DuelModal from "./DuelModal";
 
@@ -25,13 +26,8 @@ function DuelAll() {
   const [isLoading, setIsLoading] = useState(true);
   const [isShowGameList, setIsShowGameList] = useState(false);
   const [users, setUsers] = useState([]);
-  const [myFriends, setMyFriends] = useState([]);
+  const [myFavorites, setMyFavorites] = useState([]);
   const userId = user && user._id ? user._id : "";
-
-  const handleToggleModalToDuel = (duel) => {
-    setSelectedDuel(duel);
-    setIsDuel((prev) => !prev);
-  };
 
   const handleCloseModal = () => {
     setIsShowGameList(false);
@@ -45,7 +41,7 @@ function DuelAll() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users"
+        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users"
       );
       setUsers(response.data);
       setIsLoading(false);
@@ -54,43 +50,27 @@ function DuelAll() {
     }
   };
 
-  const fetchMyFriends = async () => {
+  const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
       );
-      setMyFriends(response.data);
+      setMyFavorites(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching friends:", error);
+      console.error("Error fetching favorites:", error);
     }
   };
 
   useEffect(() => {
     if (user) {
       fetchUsers();
-      fetchMyFriends();
+      fetchMyFavorites();
     } else {
       setUsers([]);
-      setMyFriends([]);
+      setMyFavorites([]);
     }
   }, [user]);
-
-  const handleNavigationToDuel = async (duel) => {
-    const duelOptions = await {
-      amountOfCards: duel.amountOfCards,
-      gameName: duel.game,
-      mode: "timeLimit",
-      duelId: duel._id,
-      cardsDuel: duel.cards,
-      isDuel: true,
-      isRespond: true,
-      timeLimit: duel.timeLimit,
-    };
-
-    navigation.navigate("Tests", { screen: "CardTest", params: duelOptions });
-    setIsDuel((prev) => !prev);
-  };
 
   const filteredList = users.filter(
     (userFromList) => userFromList._id !== userId
@@ -124,17 +104,17 @@ function DuelAll() {
                     </Text>
                   )}
                 </View>
-                {myFriends.find(
-                  (friend) => friend._id === userFromList._id
+                {myFavorites.find(
+                  (fav) => fav._id === userFromList._id
                 ) && (
                   <Text
                     style={{
-                      marginRight: 10,
+                      marginRight: 15,
                       fontWeight: "bold",
                       color: "#ccc",
                     }}
                   >
-                    FRIEND
+                    <AntDesign name="star" size={20} color="#ccc" />
                   </Text>
                 )}
                 <TouchableOpacity

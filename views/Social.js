@@ -17,10 +17,8 @@ const SocialComponent = () => {
   const { updateUser, user, authenticated } = useContext(AuthContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
-  const [myFriends, setMyFriends] = useState([]);
-  const [myRequests, setMyRequests] = useState([]);
-  const [requestToMe, setRequestToMe] = useState([]);
-  const [currentTab, setCurrentTab] = useState("SearchFriends");
+  const [myFavorites, setMyFavorites] = useState([]);
+  const [currentTab, setCurrentTab] = useState("AllUsers");
   const [isLoading, setIsLoading] = useState(true);
 
   const userId = user && user._id ? user._id : "";
@@ -28,7 +26,7 @@ const SocialComponent = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users"
+        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users"
       );
       setUsers(response.data);
       setIsLoading(false);
@@ -37,59 +35,31 @@ const SocialComponent = () => {
     }
   };
 
-  const fetchMyRequests = async () => {
+  const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myRequests/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
       );
-      setMyRequests(response.data);
-    } catch (error) {
-      console.error("Error fetching friends:", error);
-    }
-  };
-
-  const fetchRequestsToMe = async () => {
-    try {
-      const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/requestsToMe/${userId}`
-      );
-      setRequestToMe(response.data);
-    } catch (error) {
-      console.error("Error fetching friends:", error);
-    }
-  };
-
-  const fetchMyFriends = async () => {
-    try {
-      const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
-      );
-      setMyFriends(response.data);
+      setMyFavorites(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching friends:", error);
+      console.error("Error fetching favorites:", error);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchMyRequests();
-      fetchRequestsToMe();
       fetchUsers();
-      fetchMyFriends();
+      fetchMyFavorites();
     } else {
       setUsers([]);
-      setMyRequests([]);
-      setRequestToMe([]);
-      setMyFriends([]);
+      setMyFavorites([]);
     }
   }, [user]);
 
   useEffect(() => {
     if (authenticated) {
-      fetchMyRequests();
-      fetchRequestsToMe();
-      fetchMyFriends();
+      fetchMyFavorites();
     }
   }, [authenticated]);
 
@@ -100,7 +70,7 @@ const SocialComponent = () => {
       // Выполняем запрос на поиск только если текст не пустой
       if (text.trim() !== "") {
         const response = await axios.get(
-          `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/searchUsers?query=${text}`
+          `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/searchUsers?query=${text}`
         );
         setUsers(response.data);
       } else {
@@ -112,88 +82,42 @@ const SocialComponent = () => {
     }
   };
 
-  const addFriendRequest = async (userId, userFriendId) => {
+  const addFavorites = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/addFriendRequest",
+        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/addFavorites",
         { userId, userFriendId }
       );
 
-      fetchMyRequests();
-      fetchRequestsToMe();
-      fetchMyFriends();
+      fetchMyFavorites();
 
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/user/${userId}`
       );
       updateUser(updatedUserData.data);
 
       // Можно добавить сообщение об успешной отправке запроса
     } catch (error) {
-      console.error("Error sending friend request:", error);
+      console.error("Error adding favorite:", error);
     }
   };
 
-  const cancelFriendRequest = async (userId, userFriendId) => {
+  const removeFavorites = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/cancelFriendRequest",
+        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/removeFavorites",
         { userId, userFriendId }
       );
+      setMyFavorites(myFavorites.filter((fav) => fav._id !== userFriendId));
 
-      fetchMyRequests();
-      fetchRequestsToMe();
-      fetchMyFriends();
-
-      const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
-      );
-      updateUser(updatedUserData.data);
-      // Можно добавить сообщение об успешной отправке запроса
-    } catch (error) {
-      console.error("Error sending friend request:", error);
-    }
-  };
-
-  const approveFriendRequest = async (userId, userFriendId) => {
-    try {
-      await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/approveFriendRequest",
-        { userId, userFriendId }
-      );
-
-      fetchMyRequests();
-      fetchRequestsToMe();
-      fetchMyFriends();
+      fetchMyFavorites();
 
       const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
-      );
-      updateUser(updatedUserData.data);
-      // Можно добавить сообщение об успешном одобрении запроса
-    } catch (error) {
-      console.error("Error approving friend request:", error);
-    }
-  };
-
-  const removeFriend = async (userId, userFriendId) => {
-    try {
-      await axios.post(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/removeFriend",
-        { userId, userFriendId }
-      );
-      setMyFriends(myFriends.filter((friend) => friend._id !== userFriendId));
-
-      fetchMyRequests();
-      fetchRequestsToMe();
-      fetchMyFriends();
-
-      const updatedUserData = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/user/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/user/${userId}`
       );
       updateUser(updatedUserData.data);
     } catch (error) {
-      console.error("Error removing friend:", error);
+      console.error("Error removing favorite:", error);
     }
   };
 
@@ -203,7 +127,7 @@ const SocialComponent = () => {
     );
     return (
       <View style={styles.insideContainer}>
-        {currentTab === "SearchFriends" && (
+        {currentTab === "AllUsers" && (
           <TextInput
             style={styles.input}
             placeholder="Search..."
@@ -218,51 +142,13 @@ const SocialComponent = () => {
               showsVerticalScrollIndicator={false}
               style={{
                 ...styles.userList,
-                paddingVertical: currentTab === "MyFriends" ? 0 : 10,
+                paddingVertical: currentTab === "MyFavorites" ? 0 : 10,
               }}
             >
-              {currentTab === "MyFriends" && myRequests.length > 0 && (
-                <>
-                  <Text style={styles.sectionTitle}>Friendship requests</Text>
-                  {myRequests.map((userFromList, index) => (
-                    <React.Fragment key={userFromList._id}>
-                      <TouchableOpacity
-                        style={[
-                          styles.userItem,
-                          { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
-                          {
-                            borderBottomWidth:
-                              index === myRequests.length - 1 ? 0 : 1,
-                          }, // Убрать нижнюю границу для последнего элемента
-                        ]}
-                      >
-                        <View>
-                          <Text style={styles.username}>
-                            {userFromList.username}{" "}
-                          </Text>
-                          {userFromList.showUserData && (
-                            <Text>
-                              {userFromList.firstName} {userFromList.lastName}
-                            </Text>
-                          )}
-                        </View>
-                        <TouchableOpacity
-                          onPress={() =>
-                            approveFriendRequest(userId, userFromList._id)
-                          }
-                        >
-                          <Feather name="user-plus" size={28} color="#479761" />
-                        </TouchableOpacity>
-                      </TouchableOpacity>
-                    </React.Fragment>
-                  ))}
-                </>
-              )}
-
               {filteredList.length > 0 && (
                 <>
-                  {currentTab === "MyFriends" && (
-                    <Text style={styles.sectionTitle}>Friends list</Text>
+                  {currentTab === "MyFavorites" && (
+                    <Text style={styles.sectionTitle}>Favorites list</Text>
                   )}
                   {filteredList.map((userFromList, index) => (
                     <TouchableOpacity
@@ -286,35 +172,21 @@ const SocialComponent = () => {
                           </Text>
                         )}
                       </View>
-                      {myFriends.find(
-                        (friend) => friend._id === userFromList._id
+                      {myFavorites.find(
+                        (fav) => fav._id === userFromList._id
                       ) ? (
                         <TouchableOpacity
-                          onPress={() => removeFriend(userId, userFromList._id)}
+                          onPress={() => removeFavorites(userId, userFromList._id)}
                         >
-                          <Feather
-                            name="user-minus"
-                            size={28}
-                            color="#a16e83"
-                          />
-                        </TouchableOpacity>
-                      ) : requestToMe.find(
-                          (friend) => friend._id === userFromList._id
-                        ) ? (
-                        <TouchableOpacity
-                          onPress={() =>
-                            cancelFriendRequest(userId, userFromList._id)
-                          }
-                        >
-                          <Feather name="user-x" size={28} color="#ffbf00" />
+                          <AntDesign name="star" size={28} color="#29648a" />
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
                           onPress={() =>
-                            addFriendRequest(userId, userFromList._id)
+                            addFavorites(userId, userFromList._id)
                           }
                         >
-                          <Feather name="user-plus" size={28} color="#479761" />
+                          <AntDesign name="staro" size={28} color="#29648a" />
                         </TouchableOpacity>
                       )}
                     </TouchableOpacity>
@@ -334,25 +206,25 @@ const SocialComponent = () => {
         <TouchableOpacity
           style={[
             styles.tab,
-            currentTab === "SearchFriends" ? styles.activeTab : null,
+            currentTab === "AllUsers" ? styles.activeTab : null,
           ]}
-          onPress={() => setCurrentTab("SearchFriends")}
+          onPress={() => setCurrentTab("AllUsers")}
         >
           <Text style={styles.tabText}>Search</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.tab,
-            currentTab === "MyFriends" ? styles.activeTab : null,
+            currentTab === "MyFavorites" ? styles.activeTab : null,
           ]}
-          onPress={() => setCurrentTab("MyFriends")}
+          onPress={() => setCurrentTab("MyFavorites")}
         >
-          <Text style={styles.tabText}>Friends</Text>
+          <Text style={styles.tabText}>Favorites</Text>
         </TouchableOpacity>
       </View>
 
-      {currentTab === "SearchFriends" && renderUsersList(users)}
-      {currentTab === "MyFriends" && renderUsersList(myFriends)}
+      {currentTab === "AllUsers" && renderUsersList(users)}
+      {currentTab === "MyFavorites" && renderUsersList(myFavorites)}
     </View>
   );
 };

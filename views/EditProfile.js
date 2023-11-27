@@ -59,8 +59,8 @@ const EditProfile = () => {
   const handleChangeProfile = async () => {
     try {
       const response = await axios.post(
-        // "https://caapp-server.onrender.com/update-profile",
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/update-profile",
+        "https://caapp-server.onrender.com/update-profile",
+        // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/update-profile",
         {
           username: user.username,
           firstName,

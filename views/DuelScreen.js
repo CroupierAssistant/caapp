@@ -9,21 +9,21 @@ import {
   Modal,
   Dimensions,
 } from "react-native";
-import DuelFriends from "../components/DuelFriends";
+import DuelFavorites from "../components/DuelFavorites";
 import DuelAll from "../components/DuelAll";
 import DuelHistory from "../components/DuelHistory";
 
 function DuelScreen() {
-  const [currentTab, setCurrentTab] = useState("DuelFriends");
+  const [currentTab, setCurrentTab] = useState("DuelFavorites");
 
   return (
     <View style={styles.container}>
       <View style={styles.tabs}>
         <TouchableOpacity
-          style={[styles.tab, currentTab === "DuelFriends" ? styles.activeTab : null]}
-          onPress={() => setCurrentTab("DuelFriends")}
+          style={[styles.tab, currentTab === "DuelFavorites" ? styles.activeTab : null]}
+          onPress={() => setCurrentTab("DuelFavorites")}
         >
-          <Text style={styles.tabText}>{`Challenge\nFriends`}</Text>
+          <Text style={styles.tabText}>{`Challenge\nFavorites`}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, currentTab === "DuelAll" ? styles.activeTab : null]}
@@ -40,7 +40,7 @@ function DuelScreen() {
       </View>
 
       <View style={[styles.insideContainer]}>
-        {currentTab === "DuelFriends" && <DuelFriends />}
+        {currentTab === "DuelFavorites" && <DuelFavorites />}
         {currentTab === "DuelAll" && <DuelAll />}
         {currentTab === "DuelHistory" && <DuelHistory />}
       </View>

@@ -58,8 +58,8 @@ const AccountSettings = () => {
     if ((passwordLong && passMatch && passwordCurrent) || (!newPassword && !confirmPassword && !passwordCurrent)) {
       try {
         const response = await axios.post(
-          // "https://caapp-server.onrender.com/change-settings",
-          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/change-settings",
+          "https://caapp-server.onrender.com/change-settings",
+          // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/change-settings",
           {
             username: user.username,
             currentPassword,

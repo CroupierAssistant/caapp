@@ -30,19 +30,7 @@ const userSchema = new mongoose.Schema({
     instagram: String, 
     facebook: String, 
   },
-  friends: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-  ],
-  friendsRequests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-  ],
-  myFriendRequests: [
+  favorites: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

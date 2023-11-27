@@ -80,7 +80,7 @@ const CardResults = ({
     setRightAnswersAmount(correctAnswers);
     setPercentage(calculatedPercentage);
 
-    // if (!isDuel) {
+    if (!isDuel) {
       handleSaveTestResult({
         userId: user && user._id ? user._id : "",
         nickname: user && user.username ? user.username : "/guest/",
@@ -90,14 +90,14 @@ const CardResults = ({
         percent: calculatedPercentage,
         time: timeSpent,
       });
-    // }
+    }
 
     const sendResults = async (percentage) => {
       try {
         const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
   
         const response = await axios.post(
-          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/sendTestRequest",
+          "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/sendTestRequest",
           {
             username: user.username,
             duelistId: duelist.username,
@@ -124,7 +124,7 @@ const CardResults = ({
     const sendRespondResults = async (percentage) => {
       try {
         const response = await axios.post(
-          "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/sendRespondResults",
+          "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/sendRespondResults",
           {
             reciever: [{ username: user.username, timeSpent, percentage }, ...cardResults],
             duelId,

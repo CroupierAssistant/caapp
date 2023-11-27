@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Loader from "./Loader";
 import DuelModal from "./DuelModal";
 
-function DuelFriends() {
+function DuelFavorites() {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext);
   const [duels, setDuels] = useState([]);
@@ -24,7 +24,7 @@ function DuelFriends() {
   const [isLoading, setIsLoading] = useState(true);
   const [isShowGameList, setIsShowGameList] = useState(false);
   const [users, setUsers] = useState([]);
-  const [myFriends, setMyFriends] = useState([]);
+  const [myFavorites, setMyFavorites] = useState([]);
   const userId = user && user._id ? user._id : "";
 
   const handleToggleModalToDuel = (duel) => {
@@ -43,7 +43,7 @@ function DuelFriends() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/users"
+        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users"
       );
       setUsers(response.data);
       setIsLoading(false);
@@ -52,32 +52,32 @@ function DuelFriends() {
     }
   };
 
-  const fetchMyFriends = async () => {
+  const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://crispy-umbrella-vx56q44qvwp2p6gv-10000.app.github.dev/myFriends/${userId}`
+        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
       );
-      setMyFriends(response.data);
+      setMyFavorites(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching friends:", error);
+      console.error("Error fetching favorites:", error);
     }
   };
 
   useEffect(() => {
     if (user) {
       fetchUsers();
-      fetchMyFriends();
+      fetchMyFavorites();
     } else {
       setUsers([]);
-      setMyFriends([]);
+      setMyFavorites([]);
     }
   }, [user]);
 
   return (
     <>
       {isLoading && <Loader />}
-      {!isLoading && myFriends.length > 0 && (
+      {!isLoading && myFavorites.length > 0 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{
@@ -85,13 +85,13 @@ function DuelFriends() {
           }}
         >
           <>
-            {myFriends.map((userFromList, index) => (
+            {myFavorites.map((userFromList, index) => (
               <View
                 key={userFromList._id}
                 style={[
                   styles.userItem,
                   { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
-                  { borderBottomWidth: index === myFriends.length - 1 ? 0 : 1 }, // Убрать нижнюю границу для последнего элемента
+                  { borderBottomWidth: index === myFavorites.length - 1 ? 0 : 1 }, // Убрать нижнюю границу для последнего элемента
                 ]}
               >
                 <View style={{ flex: 1 }}>
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DuelFriends;
+export default DuelFavorites;

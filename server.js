@@ -175,19 +175,53 @@ app.post("/saveTestResult", async (req, res) => {
         ? UTHTripsResult
         : TexasHoldemResult;
 
-    const newTestResult = await ModelSchema.create({
-      userId,
-      username,
-      amountOfCards,
-      game,
-      mode,
-      percentage,
-      timeSpentTest,
-    });
+    // Поиск существующей записи для пользователя
+    const existingResult = await ModelSchema.findOne({ userId, amountOfCards});
 
+    if (!existingResult) {
+      // Если записи нет, создаем новую запись
+      const newTestResult = await ModelSchema.create({
+        userId,
+        username,
+        amountOfCards,
+        game,
+        mode,
+        percentage,
+        timeSpentTest,
+      });
+
+      return res.json({
+        success: "Test result saved successfully",
+        testResult: newTestResult,
+      });
+    }
+
+    // Если запись существует, проверяем значения percentage и timeSpentTest
+    if (existingResult.percentage < percentage) {
+      // Если новый процент лучше, обновляем запись
+      existingResult.percentage = percentage;
+      existingResult.timeSpentTest = timeSpentTest;
+      await existingResult.save();
+
+      return res.json({
+        success: "Updated test result",
+        testResult: existingResult,
+      });
+    } else if (existingResult.percentage === percentage && existingResult.timeSpentTest > timeSpentTest) {
+      // Если проценты равны, но время лучше, обновляем запись
+      existingResult.timeSpentTest = timeSpentTest;
+      await existingResult.save();
+
+      return res.json({
+        success: "Updated test result",
+        testResult: existingResult,
+      });
+    }
+
+    // Если текущая запись лучше или равна существующей, ничего не меняем
     return res.json({
-      success: "Test result saved successfully",
-      testResult: newTestResult,
+      message: "No changes made to test result",
+      testResult: existingResult,
     });
   } catch (error) {
     console.error(error);
@@ -451,198 +485,65 @@ app.get("/searchUsers", async (req, res) => {
   }
 });
 
-app.get("/myRequests/:userId", async (req, res) => {
+app.get("/myFavorites/:userId", async (req, res) => {
   const { userId } = req.params;
 
   try {
     const user = await User.findById(userId).populate(
-      "friendsRequests",
+      "favorites",
       "username firstName lastName"
     );
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    res.status(200).json(user.friendsRequests);
+    res.status(200).json(user.favorites);
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error fetching friends.", error: error.message });
-  }
-});
-
-app.get("/requestsToMe/:userId", async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const user = await User.findById(userId).populate(
-      "myFriendRequests",
-      "username firstName lastName"
-    );
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    res.status(200).json(user.myFriendRequests);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching friends.", error: error.message });
-  }
-});
-
-app.get("/myFriends/:userId", async (req, res) => {
-  const { userId } = req.params;
-
-  try {
-    const user = await User.findById(userId).populate(
-      "friends",
-      "username firstName lastName"
-    );
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    res.status(200).json(user.friends);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching friends.", error: error.message });
+      .json({ message: "Error fetching favorites.", error: error.message });
   }
 });
 
 // Эндпоинт для добавления друга
-app.post("/addFriendRequest", async (req, res) => {
+app.post("/addFavorites", async (req, res) => {
   const { userId, userFriendId } = req.body;
 
   try {
     const user = await User.findById(userId);
-    const userFriend = await User.findById(userFriendId);
+    const userFavorites = await User.findById(userFriendId);
 
-    if (!user || !userFriend) {
+    if (!user || !userFavorites) {
       return res.status(404).json({ message: "User not found." });
     }
 
-    // Добавление userFriendId в список запросов на дружбу пользователя userId
-    if (!user.myFriendRequests.includes(userFriendId))
-      user.myFriendRequests.push(userFriendId);
-    await user.save();
+    if (!user.favorites.includes(userFriendId)) {
+      user.favorites.push(userFriendId);
+      await user.save();
+    }
 
-    // Добавление userId в список запросов на дружбу пользователя userFriendId
-    if (!userFriend.friendsRequests.includes(userId))
-      userFriend.friendsRequests.push(userId);
-    await userFriend.save();
-
-    res.status(200).json({ message: "Friend request sent successfully." });
+    res.status(200).json({ message: "Added to favorites successfully." });
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error sending friend request.", error: error.message });
-  }
-});
-
-app.post("/cancelFriendRequest", async (req, res) => {
-  const { userId, userFriendId } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-    const userFriend = await User.findById(userFriendId);
-
-    if (!user || !userFriend) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    // Удаление userFriendId из списка запросов на дружбу пользователя userId
-    const index1 = user.myFriendRequests.indexOf(userFriendId);
-    if (index1 !== -1) {
-      user.myFriendRequests.splice(index1, 1);
-    }
-    await user.save();
-
-    // Удаление userId из списка запросов на дружбу пользователя userFriendId
-    const index2 = userFriend.friendsRequests.indexOf(userId);
-    if (index2 !== -1) {
-      userFriend.friendsRequests.splice(index2, 1);
-    }
-    await userFriend.save();
-
-    res.status(200).json({ message: "Friend request cancelled successfully." });
-  } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error cancelling friend request.",
-        error: error.message,
-      });
-  }
-});
-
-// Эндпоинт для одобрения запроса на добавление в друзья
-app.post("/approveFriendRequest", async (req, res) => {
-  const { userId, userFriendId } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-    const userFriend = await User.findById(userFriendId);
-
-    if (!user || !userFriend) {
-      return res.status(404).json({ message: "User not found." });
-    }
-
-    // Проверка наличия запроса в списке запросов у пользователя user
-    if (!user.friendsRequests.includes(userFriendId)) {
-      return res.status(404).json({ message: "Friend request not found." });
-    }
-
-    // Удаление userFriendId из списка запросов на дружбу пользователя userId
-    const index1 = user.friendsRequests.indexOf(userFriendId);
-    if (index1 !== -1) {
-      user.friendsRequests.splice(index1, 1);
-    }
-    await user.save();
-
-    // Удаление userId из списка запросов на дружбу пользователя userFriendId
-    const index2 = userFriend.myFriendRequests.indexOf(userId);
-    if (index2 !== -1) {
-      userFriend.myFriendRequests.splice(index2, 1);
-    }
-    
-    await userFriend.save();
-
-    // Добавление пользователей в список друзей у обоих пользователей
-    if (!user.friends.includes(userFriendId)) user.friends.push(userFriendId);
-    if (!userFriend.friends.includes(userId)) userFriend.friends.push(userId);
-
-    await Promise.all([user.save(), userFriend.save()]);
-
-    res.status(200).json({ message: "Friend request approved successfully." });
-  } catch (error) {
-    res.status(500).json({
-      message: "Error approving friend request.",
-      error: error.message,
-    });
+      .json({ message: "Error adding to favorites.", error: error.message });
   }
 });
 
 // Эндпоинт для удаления друга
-app.post("/removeFriend", async (req, res) => {
+app.post("/removeFavorites", async (req, res) => {
   const { userId, userFriendId } = req.body;
 
   try {
     const user = await User.findById(userId);
-    const friend = await User.findById(userFriendId);
 
-    if (!user || !friend) {
+    if (!user || !userFriendId) {
       return res.status(404).json({ message: "User or friend not found." });
     }
 
     // Удаление друга из списка друзей текущего пользователя
-    user.friends.pull(userFriendId);
+    user.favorites.pull(userFriendId);
     await user.save();
-
-    // Удаление текущего пользователя из списка друзей друга
-    friend.friends.pull(userId);
-    await friend.save();
 
     res.status(200).json({ message: "Friend removed successfully." });
   } catch (error) {
