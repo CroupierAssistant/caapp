@@ -33,7 +33,7 @@ const Ratings = () => {
     setModalVisible(true);
 
     fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) 
-    // fetch(`https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/ratings/${gameName}`) 
+    // fetch(`https://caapp-server.onrender.com/ratings/${gameName}`) 
       .then((response) => response.json())
       .then((data) => {
         setRatings(data); // Предполагается, что данные приходят в формате JSON

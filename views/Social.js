@@ -26,7 +26,7 @@ const SocialComponent = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users"
+        "https://caapp-server.onrender.com/users"
       );
       setUsers(response.data);
       setIsLoading(false);
@@ -38,7 +38,7 @@ const SocialComponent = () => {
   const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
+        `https://caapp-server.onrender.com/myFavorites/${userId}`
       );
       setMyFavorites(response.data);
       setIsLoading(false);
@@ -70,7 +70,7 @@ const SocialComponent = () => {
       // Выполняем запрос на поиск только если текст не пустой
       if (text.trim() !== "") {
         const response = await axios.get(
-          `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/searchUsers?query=${text}`
+          `https://caapp-server.onrender.com/searchUsers?query=${text}`
         );
         setUsers(response.data);
       } else {
@@ -85,14 +85,14 @@ const SocialComponent = () => {
   const addFavorites = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/addFavorites",
+        "https://caapp-server.onrender.com/addFavorites",
         { userId, userFriendId }
       );
 
       fetchMyFavorites();
 
       const updatedUserData = await axios.get(
-        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/user/${userId}`
+        `https://caapp-server.onrender.com/user/${userId}`
       );
       updateUser(updatedUserData.data);
 
@@ -105,7 +105,7 @@ const SocialComponent = () => {
   const removeFavorites = async (userId, userFriendId) => {
     try {
       await axios.post(
-        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/removeFavorites",
+        "https://caapp-server.onrender.com/removeFavorites",
         { userId, userFriendId }
       );
       setMyFavorites(myFavorites.filter((fav) => fav._id !== userFriendId));
@@ -113,7 +113,7 @@ const SocialComponent = () => {
       fetchMyFavorites();
 
       const updatedUserData = await axios.get(
-        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/user/${userId}`
+        `https://caapp-server.onrender.com/user/${userId}`
       );
       updateUser(updatedUserData.data);
     } catch (error) {

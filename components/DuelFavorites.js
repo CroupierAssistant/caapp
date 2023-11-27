@@ -43,7 +43,7 @@ function DuelFavorites() {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(
-        "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users"
+        "https://caapp-server.onrender.com/users"
       );
       setUsers(response.data);
       setIsLoading(false);
@@ -55,7 +55,7 @@ function DuelFavorites() {
   const fetchMyFavorites = async () => {
     try {
       const response = await axios.get(
-        `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/myFavorites/${userId}`
+        `https://caapp-server.onrender.com/myFavorites/${userId}`
       );
       setMyFavorites(response.data);
       setIsLoading(false);

@@ -4,7 +4,7 @@ const saveTestLog = async (level, user, game, amountOfCards, percentage, time) =
   try {
     const response = await axios.post(
       "https://caapp-server.onrender.com/saveTestLog",
-      // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/saveTestLog",
+      // "https://caapp-server.onrender.com/saveTestLog",
       {
         level,
         user,

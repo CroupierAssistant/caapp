@@ -49,10 +49,10 @@ function DuelAll() {
     const fetchDuels = async () => {
       try {
         const responseDefense = await axios.get(
-          `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/duelDefense/${user.username}`
+          `https://caapp-server.onrender.com/duelDefense/${user.username}`
         );
         const responseAttack = await axios.get(
-          `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/duelAttack/${user.username}`
+          `https://caapp-server.onrender.com/duelAttack/${user.username}`
         );
 
         const combinedDuels = [...responseDefense.data, ...responseAttack.data];

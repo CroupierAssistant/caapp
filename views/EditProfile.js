@@ -60,7 +60,7 @@ const EditProfile = () => {
     try {
       const response = await axios.post(
         "https://caapp-server.onrender.com/update-profile",
-        // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/update-profile",
+        // "https://caapp-server.onrender.com/update-profile",
         {
           username: user.username,
           firstName,

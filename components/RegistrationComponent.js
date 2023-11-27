@@ -30,7 +30,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.get(
         `https://caapp-server.onrender.com/userExists?username=${username}`
-        // `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/userExists?username=${username}`
+        // `https://caapp-server.onrender.com/userExists?username=${username}`
       );
       return response.data.exists;
     } catch (error) {
@@ -43,7 +43,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.get(
         `https://caapp-server.onrender.com/emailExists?email=${email}`
-        // `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/emailExists?email=${email}`
+        // `https://caapp-server.onrender.com/emailExists?email=${email}`
       );
       return response.data.exists;
     } catch (error) {
@@ -198,7 +198,7 @@ const RegistrationComponent = ({setIsRegistering, isRegistering}) => {
     try {
       const response = await Axios.post(
         "https://caapp-server.onrender.com/register",
-        // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/register",
+        // "https://caapp-server.onrender.com/register",
         formData
       );
       

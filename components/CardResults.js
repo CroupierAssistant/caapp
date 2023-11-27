@@ -97,7 +97,7 @@ const CardResults = ({
         const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
   
         const response = await axios.post(
-          "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/sendTestRequest",
+          "https://caapp-server.onrender.com/sendTestRequest",
           {
             username: user.username,
             duelistId: duelist.username,
@@ -124,7 +124,7 @@ const CardResults = ({
     const sendRespondResults = async (percentage) => {
       try {
         const response = await axios.post(
-          "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/sendRespondResults",
+          "https://caapp-server.onrender.com/sendRespondResults",
           {
             reciever: [{ username: user.username, timeSpent, percentage }, ...cardResults],
             duelId,

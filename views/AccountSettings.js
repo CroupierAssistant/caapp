@@ -59,7 +59,7 @@ const AccountSettings = () => {
       try {
         const response = await axios.post(
           "https://caapp-server.onrender.com/change-settings",
-          // "https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/change-settings",
+          // "https://caapp-server.onrender.com/change-settings",
           {
             username: user.username,
             currentPassword,

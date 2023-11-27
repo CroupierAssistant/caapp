@@ -44,7 +44,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
     try {
       const response = await axios.get(
         `https://caapp-server.onrender.com/users/${userId}`
-        // `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users/${userId}`
+        // `https://caapp-server.onrender.com/users/${userId}`
       );
       return response.data;
     } catch (error) {
