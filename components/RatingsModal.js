@@ -57,13 +57,30 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   useEffect(() => {
     const getRatingData = async () => {
       try {
+        const userPromises = ratings.map(async (item) => {
+          try {
+            const user = await findUserById(item.userId);
+            if (user) {
+              return {
+                ...item,
+                showUserData: user.showUserData, // Include showUserData property
+              };
+            }
+          } catch (error) {
+            console.error("Error fetching user data:", error);
+            return item;
+          }
+        });
+  
+        const users = await Promise.all(userPromises);
+
         const groupedByAmountOfCards = {
           10: [],
           20: [],
           30: [],
         };
   
-        ratings.forEach((item) => {
+        users.forEach((item) => {
           if (item.amountOfCards) {
             const key = item.amountOfCards.toString();
             groupedByAmountOfCards[key].push(item);
@@ -72,9 +89,8 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   
         const newData = {};
   
-        Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
-          const groupedData = groupedByAmountOfCards[amountOfCards].reduce(
-            (result, item) => {
+      Object.keys(groupedByAmountOfCards).forEach((amountOfCards) => {
+        const groupedData = groupedByAmountOfCards[amountOfCards].reduce((result, item) => {
               const key = item.username;
               if (!result[key]) {
                 result[key] = {
@@ -84,7 +100,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
                   amountOfCards: item.amountOfCards,
                   firstName: item.firstName,
                   lastName: item.lastName,
-                  showUserData: item.showUserData,
+                  showUserData: item.showUserData, // Use the fetched showUserData
                 };
               }
   
@@ -103,7 +119,7 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
           );
   
           newData[amountOfCards] = Object.keys(groupedData)
-            .map((username) => ({
+          .map((username) => ({
               username,
               userId: groupedData[username].userId,
               maxPercentage: groupedData[username].maxPercentage,
