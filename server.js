@@ -368,6 +368,8 @@ app.get("/users/:userId", async (req, res) => {
 
   try {
     const user = await findUserById(userId)
+    console.log('userId: ', userId)
+    console.log('user: ', user)
     res.json(user);
   } catch (error) {
     console.error("Ошибка при поиске пользователя:", error);
