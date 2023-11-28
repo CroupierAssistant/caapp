@@ -13,7 +13,6 @@ const RussianAnteSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  showUserData: Boolean,
 });
 
 const RussianAnteResult = connectionResults.model('RussianAnteResult', RussianAnteSchema);

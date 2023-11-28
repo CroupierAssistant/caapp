@@ -13,7 +13,6 @@ const NeighboursSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  showUserData: Boolean,
 });
 
 const NeighboursResult = connectionResults.model('NeighboursResult', NeighboursSchema);

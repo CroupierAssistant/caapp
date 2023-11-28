@@ -13,7 +13,6 @@ const BlackjackSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  showUserData: Boolean,
 });
 
 const BlackjackResult = connectionResults.model("BlackjackResult", BlackjackSchema);

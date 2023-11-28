@@ -8,7 +8,6 @@ const saveTestResult = async (
   mode,
   percentage,
   timeSpentTest,
-  showUserData
 ) => {
   try {
     const response = await axios.post(
@@ -22,9 +21,10 @@ const saveTestResult = async (
         mode,
         percentage,
         timeSpentTest,
-        showUserData
       }
     );
+
+    console.log('saveTestResult: ', response.data);
 
     return response.data;
   } catch (error) {

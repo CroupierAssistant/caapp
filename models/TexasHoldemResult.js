@@ -13,7 +13,6 @@ const TexasHoldemSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  showUserData: Boolean,
 });
 
 const TexasHoldemResult = connectionResults.model('TexasHoldemResult', TexasHoldemSchema);

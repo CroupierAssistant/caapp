@@ -13,7 +13,6 @@ const Russian6bonusSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  showUserData: Boolean,
 });
 
 const Russian6bonusResult = connectionResults.model('Russian6bonusResult', Russian6bonusSchema);
