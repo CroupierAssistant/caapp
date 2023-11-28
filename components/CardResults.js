@@ -33,6 +33,7 @@ const CardResults = ({
     type,
     percent,
     time,
+    showData
   }) => {
     try {
       const response = await saveTestResult(
@@ -42,7 +43,8 @@ const CardResults = ({
         game,
         type,
         percent,
-        time
+        time,
+        showData
       );
       await saveTestLog(type, nickname, game, cards, percent, time);
 
