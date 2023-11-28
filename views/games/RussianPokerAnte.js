@@ -522,7 +522,7 @@ function RussianPokerAnte() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.textHeader}>Blackjack Duel</Text>
+              <Text style={styles.textHeader}>Russian poker ante Duel</Text>
 
               <View
                 style={{
@@ -533,83 +533,135 @@ function RussianPokerAnte() {
                   borderRadius: 3,
                 }}
               >
-                {!duelist && (
-                  <ScrollView
-                    style={{ flex: 1 }}
-                    showsVerticalScrollIndicator={false}
-                  >
-                    {myFavorites.map((userFromList) => (
-                      <TouchableOpacity
-                        key={userFromList._id}
-                        style={styles.userItem}
-                      >
-                        <View>
-                          <Text style={styles.username}>
-                            {userFromList.username}
+              {!duelist && (
+                <ScrollView
+                  style={{ flex: 1 }}
+                  showsVerticalScrollIndicator={false}
+                >
+                  {myFavorites.length ? myFavorites.map((userFromList) => (
+                    <TouchableOpacity
+                      key={userFromList._id}
+                      style={styles.userItem}
+                    >
+                      <View>
+                        <Text style={styles.username}>
+                          {userFromList.username}
+                        </Text>
+                        {userFromList.showUserData && (
+                          <Text>
+                            {userFromList.firstName} {userFromList.lastName}
                           </Text>
-                          {userFromList.showUserData && (
-                            <Text>
-                              {userFromList.firstName} {userFromList.lastName}
-                            </Text>
-                          )}
-                        </View>
+                        )}
+                      </View>
 
-                        <TouchableOpacity
-                          onPress={() => setDuelist(userFromList)}
-                        >
-                          <MaterialCommunityIcons
-                            name="sword-cross"
-                            size={24}
-                            color="#a16e83"
-                          />
-                        </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => setDuelist(userFromList)}
+                      >
+                        <MaterialCommunityIcons
+                          name="sword-cross"
+                          size={24}
+                          color="#a16e83"
+                        />
                       </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                )}
-                {duelist && (
-                  <>
-                    <View style={styles.duelistContainer}>
-                      <Text style={styles.duelistName}>{user.username}</Text>
-                      <MaterialCommunityIcons
-                        name="sword-cross"
-                        size={70}
-                        color="#a16e83"
-                        style={{ marginVertical: 20 }}
-                      />
-                      <Text style={styles.duelistName}>{duelist.username}</Text>
-                    </View>
+                    </TouchableOpacity>
+                  )) : (
+                    <Text style={{ fontSize: 18, textAlign: 'center', color: '#29648a' }}>Your list of favorites is empty</Text>
+                  )}
+                </ScrollView>
+              )}
+              {duelist && (
+                <>
 
+                  <View style={styles.duelistContainer}>
                     <Text
                       style={{
-                        fontSize: 16,
                         textAlign: "center",
+                        fontSize: 16,
                         color: "#29648a",
+                        marginBottom: -5,
                       }}
                     >
-                      The user will receive a duel notification as soon as you
-                      complete the test
+                      You are challenging
                     </Text>
-
-                    <View style={styles.buttonContainer}>
-                      <TouchableOpacity
-                        style={{
-                          ...styles.startButton,
-                          backgroundColor: !user ? "#555" : "#a16e83",
-                        }}
-                        onPress={() => setDuelist(null)}
-                      >
-                        <Text style={styles.startButtonText}>cancel</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.startButton}
-                        onPress={handleNavigateToTest}
-                      >
-                        <Text style={styles.startButtonText}>start</Text>
-                      </TouchableOpacity>
+                    <Text style={styles.duelistName}>
+                      {duelist.username}
+                    </Text>
+                    <View style={styles.gameInfo}>
+                      <View style={styles.gameInfoRow}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "#29648a",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Challenge type: {" "}
+                        </Text>
+                        <Text style={{ fontSize: 16, color: "#29648a" }}>
+                          Russian poker ante
+                        </Text>
+                      </View>
+                      <View style={styles.gameInfoRow}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "#29648a",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Amount of cards: {" "}
+                        </Text>
+                        <Text style={{ fontSize: 16, color: "#29648a" }}>
+                          {selectedButton}
+                        </Text>
+                      </View>
+                      <View style={styles.gameInfoRow}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "#29648a",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Time limit: {" "}
+                        </Text>
+                        <Text style={{ fontSize: 16, color: "#29648a" }}>
+                          {timeLimit / 1000} seconds
+                        </Text>
+                      </View>
                     </View>
-                  </>
-                )}
+                  </View>
+
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      textAlign: "center",
+                      color: "#29648a",
+                    }}
+                  >
+                    The user will receive your challenge request as soon as you
+                    complete the test
+                  </Text>
+
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={{
+                        ...styles.startButton,
+                        backgroundColor: !user ? "#555" : "#a16e83",
+                      }}
+                      onPress={() => setDuelist(null)}
+                    >
+                      <Text style={styles.startButtonText}>cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.startButton}
+                      onPress={handleNavigateToTest}
+                    >
+                      <Text style={styles.startButtonText}>start</Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
               </View>
               <TouchableOpacity
                 style={styles.closeButton}
@@ -647,6 +699,12 @@ function RussianPokerAnte() {
 }
 
 const styles = StyleSheet.create({
+  gameInfo: {
+    marginTop: 20,
+  },
+  gameInfoRow: {
+    flexDirection: "row",
+  },
   container: {
     flex: 1,
     justifyContent: "start",

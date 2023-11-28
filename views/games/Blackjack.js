@@ -174,7 +174,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedButton === "20" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       20 cards
@@ -203,7 +203,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedButton === "30" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       30 cards
@@ -272,7 +272,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedMinBet === "25" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       25
@@ -301,7 +301,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedMinBet === "100" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       100
@@ -332,7 +332,7 @@ function Blackjack() {
                     style={[
                       styles.radioButtonText,
                       selectedMaxBet === "500" &&
-                        styles.selectedRadioButtonText,
+                      styles.selectedRadioButtonText,
                     ]}
                   >
                     500
@@ -352,7 +352,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedMaxBet === "1000" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       1000
@@ -381,7 +381,7 @@ function Blackjack() {
                       style={[
                         styles.radioButtonText,
                         selectedMaxBet === "5000" &&
-                          styles.selectedRadioButtonText,
+                        styles.selectedRadioButtonText,
                       ]}
                     >
                       5000
@@ -506,7 +506,7 @@ function Blackjack() {
                     style={{ flex: 1 }}
                     showsVerticalScrollIndicator={false}
                   >
-                    {myFavorites.map((userFromList) => (
+                    {myFavorites.length ? myFavorites.map((userFromList) => (
                       <TouchableOpacity
                         key={userFromList._id}
                         style={styles.userItem}
@@ -532,20 +532,72 @@ function Blackjack() {
                           />
                         </TouchableOpacity>
                       </TouchableOpacity>
-                    ))}
+                    )) : (
+                      <Text style={{ fontSize: 18, textAlign: 'center', color: '#29648a' }}>Your list of favorites is empty</Text>
+                    )}
                   </ScrollView>
                 )}
                 {duelist && (
                   <>
+
                     <View style={styles.duelistContainer}>
-                      <Text style={styles.duelistName}>{user.username}</Text>
-                      <MaterialCommunityIcons
-                        name="sword-cross"
-                        size={70}
-                        color="#a16e83"
-                        style={{ marginVertical: 20 }}
-                      />
-                      <Text style={styles.duelistName}>{duelist.username}</Text>
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          fontSize: 16,
+                          color: "#29648a",
+                          marginBottom: -5,
+                        }}
+                      >
+                        You are challenging
+                      </Text>
+                      <Text style={styles.duelistName}>
+                        {duelist.username}
+                      </Text>
+                      <View style={styles.gameInfo}>
+                        <View style={styles.gameInfoRow}>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "#29648a",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Challenge type: {" "}
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#29648a" }}>
+                            Blackjack
+                          </Text>
+                        </View>
+                        <View style={styles.gameInfoRow}>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "#29648a",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Amount of cards: {" "}
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#29648a" }}>
+                            {selectedButton}
+                          </Text>
+                        </View>
+                        <View style={styles.gameInfoRow}>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "#29648a",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Time limit: {" "}
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#29648a" }}>
+                            {timeLimit / 1000} seconds
+                          </Text>
+                        </View>
+                      </View>
                     </View>
 
                     <Text
@@ -555,7 +607,8 @@ function Blackjack() {
                         color: "#29648a",
                       }}
                     >
-                      The user will receive your challenge request as soon as you complete the test
+                      The user will receive your challenge request as soon as you
+                      complete the test
                     </Text>
 
                     <View style={styles.buttonContainer}>
@@ -614,6 +667,12 @@ function Blackjack() {
 }
 
 const styles = StyleSheet.create({
+  gameInfo: {
+    marginTop: 20,
+  },
+  gameInfoRow: {
+    flexDirection: "row",
+  },
   container: {
     flex: 1,
     justifyContent: "start",

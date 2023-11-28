@@ -77,7 +77,7 @@ function DuelFavorites() {
   return (
     <>
       {isLoading && <Loader />}
-      {!isLoading && myFavorites.length > 0 && (
+      {!isLoading && myFavorites.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{
@@ -123,7 +123,7 @@ function DuelFavorites() {
             />
           )}
         </ScrollView>
-      )}
+      ) : (<Text style={{ fontSize: 18, textAlign: 'center', color: '#29648a' }}>Your list of favorites is empty</Text>)}
     </>
   );
 }
