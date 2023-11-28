@@ -13,6 +13,7 @@ const RouletteSeriesSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  showUserData: Boolean,
 });
 
 const RouletteSeriesResult = connectionResults.model('RouletteSeriesResult', RouletteSeriesSchema);

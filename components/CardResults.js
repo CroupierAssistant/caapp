@@ -89,6 +89,7 @@ const CardResults = ({
         type: mode,
         percent: calculatedPercentage,
         time: timeSpent,
+        showUserData: user && user.showUserData ? user.showUserData : false
       });
     }
 

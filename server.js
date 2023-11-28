@@ -144,6 +144,7 @@ app.post("/saveTestResult", async (req, res) => {
       mode,
       percentage,
       timeSpentTest,
+      showUserData,
     } = req.body;
 
     if (!username || !game || !mode || !timeSpentTest) {
@@ -188,6 +189,7 @@ app.post("/saveTestResult", async (req, res) => {
         mode,
         percentage,
         timeSpentTest,
+        showUserData,
       });
 
       return res.json({
@@ -365,7 +367,7 @@ app.get("/users/:userId", async (req, res) => {
   const userId = req.params.userId;
 
   try {
-    const user = await findUserById(userId);
+    const user = await findUserById(userId)
     res.json(user);
   } catch (error) {
     console.error("Ошибка при поиске пользователя:", error);

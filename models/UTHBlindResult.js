@@ -13,6 +13,7 @@ const UTHBlindSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  showUserData: Boolean,
 });
 
 const UTHBlindResult = connectionResults.model("UTHBlindResult", UTHBlindSchema);

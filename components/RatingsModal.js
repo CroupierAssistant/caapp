@@ -8,25 +8,17 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-// import findUserById from "../functions/findUserById";
 import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
 import UserProfileModal from "./UserProfileModal";
 import Loader from "./Loader";
+// import { findUserById } from "../models/User";
 
 const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const [activeTab, setActiveTab] = useState(10);
   const [aggregatedData, setAggregatedData] = useState(null); // Добавляем состояние для хранения данных
   const [selectedUser, setSelectedUser] = useState(null); // Add selectedUser state
   const [isLoading, setIsLoading] = useState(true);
-
-  const openProfile = async (idPassed) => {
-    const user = await findUserById(idPassed);
-
-    if (user) {
-      setSelectedUser(user);
-    }
-  };
 
   const formatTime = (milliseconds) => {
     const totalSeconds = Math.floor(milliseconds / 1000);
@@ -43,15 +35,25 @@ const RatingsModal = ({ isVisible, onClose, ratings, game }) => {
   const findUserById = async (userId) => {
     try {
       const response = await axios.get(
+        // `https://10000-croupierassistan-caapp-08t6zzqrh2x.ws-us106.gitpod.io/users/${userId}`
         `https://caapp-server.onrender.com/users/${userId}`
-        // `https://caapp-server.onrender.com/users/${userId}`
       );
+      console.log(response.data)
       return response.data;
     } catch (error) {
       // console.error("Ошибка при поиске пользователя:", error);
       throw error;
     }
   };
+
+  const openProfile = async (idPassed) => {
+    const user = await findUserById(idPassed);
+
+    if (user) {
+      setSelectedUser(user);
+    }
+  };
+
   useEffect(() => {
     const getRatingData = async () => {
       try {

@@ -15,7 +15,6 @@ const Ratings = () => {
   const [ratings, setRatings] = useState([]);
   const games = [
     "Blackjack",
-    // "Multiplication",
     // "Roulette Pictures",
     "Roulette series",
     "Neighbours",
