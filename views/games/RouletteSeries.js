@@ -542,6 +542,20 @@ function RouletteSeries() {
                             fontWeight: "bold",
                           }}
                         >
+                          Maximum bet: {" "}
+                        </Text>
+                        <Text style={{ fontSize: 16, color: "#29648a" }}>
+                          50 (progressive)
+                        </Text>
+                      </View>
+                      <View style={styles.gameInfoRow}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: "#29648a",
+                            fontWeight: "bold",
+                          }}
+                        >
                           Amount of cards: {" "}
                         </Text>
                         <Text style={{ fontSize: 16, color: "#29648a" }}>
