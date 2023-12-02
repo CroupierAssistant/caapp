@@ -233,29 +233,29 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
         combinations = [
           {
             name: "Voisins de zero",
-            maxBet: 50 * 17,
-            critical: 50 * 13.5,
+            maxBet: 100 * 17,
+            critical: 100 * 13.5,
             coefficientBeforeCritical: 9,
             coefficientAfterCritical: 7,
           },
           {
             name: "Zero spiel",
-            maxBet: 50 * 7,
-            critical: 50 * 4,
+            maxBet: 100 * 7,
+            critical: 100 * 4,
             coefficientBeforeCritical: 4,
             coefficientAfterCritical: 3,
           },
           {
             name: "Orphelins",
-            maxBet: 50 * 9,
-            critical: 50 * 5,
+            maxBet: 100 * 9,
+            critical: 100 * 5,
             coefficientBeforeCritical: 5,
             coefficientAfterCritical: 4,
           },
           {
             name: "Tier",
-            maxBet: 50 * 12,
-            critical: 50 * 12,
+            maxBet: 100 * 12,
+            critical: 100 * 12,
             coefficientBeforeCritical: 6,
             coefficientAfterCritical: 6,
           },
@@ -273,7 +273,7 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
       mode: "timeLimit",
       amountOfCards: Number(activeTab),
       minBet: 5,
-      maxBet: selectedGame === "Roulette series" ? 50 : 500,
+      maxBet: selectedGame === "Roulette series" ? 100 : 500,
       step: 5,
       timeLimit: timeLimit,
       splitCoeff: selectedGame === "Russian Poker Ante" ? true : false,
@@ -434,7 +434,7 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
                             Maximum bet:{" "}
                           </Text>
                           <Text style={{ fontSize: 16, color: "#29648a" }}>
-                            50 (progressive)
+                            100 (progressive)
                           </Text>
                         </View>
                       )}

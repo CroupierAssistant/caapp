@@ -53,9 +53,8 @@ function RouletteSeriesTest({ route }) {
     setTimerRunning(true);
   };
 
-  const handleStopTest = () => {
-    setIsDone(true);
-    setShowResult(true)
+  const handleStopTest = async () => {
+    await setIsDone(true);
   };
 
   const openPaytableModal = () => {
