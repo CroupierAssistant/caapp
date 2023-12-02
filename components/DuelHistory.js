@@ -227,7 +227,9 @@ function DuelAll() {
                           width: "100%",
                         }}
                       >
-                        {duel.duelistId === user.username ? "Defense" : "Attack"}
+                        {duel.duelistId === user.username
+                          ? "Defense"
+                          : "Attack"}
                       </Text>
                     </View>
                     <View
@@ -321,14 +323,14 @@ function DuelAll() {
                                 style={{
                                   flex: 1,
                                   flexDirection: "row",
-                                  justifyContent: "space-between",
+                                  justifyContent: "space-between", paddingBottom: 10
                                 }}
                               >
                                 <View style={styles.resultColumn}>
                                   {selectedDuel &&
                                     selectedDuel.sender.slice(1).map((card) => {
                                       return (
-                                        <Text
+                                        <View
                                           key={card._id}
                                           style={{
                                             ...styles.resultItem,
@@ -339,8 +341,16 @@ function DuelAll() {
                                                 : "#a16e83",
                                           }}
                                         >
-                                          {card.userInput}
-                                        </Text>
+                                          <Text
+                                            style={{
+                                              fontSize: 18,
+                                              color: "#fff",
+                                              fontWeight: "bold",
+                                            }}
+                                          >
+                                            {card.userInput}
+                                          </Text>
+                                        </View>
                                       );
                                     })}
                                 </View>
@@ -353,7 +363,6 @@ function DuelAll() {
                                           style={{
                                             ...styles.resultItem,
                                             backgroundColor: "#fff",
-                                            paddingVertical: 0,
                                           }}
                                         >
                                           <Text
@@ -387,7 +396,7 @@ function DuelAll() {
                                       .slice(1)
                                       .map((card) => {
                                         return (
-                                          <Text
+                                          <View
                                             key={card._id}
                                             style={{
                                               ...styles.resultItem,
@@ -398,8 +407,16 @@ function DuelAll() {
                                                   : "#a16e83",
                                             }}
                                           >
-                                            {card.userInput}
-                                          </Text>
+                                            <Text
+                                              style={{
+                                                fontSize: 18,
+                                                color: "#fff",
+                                                fontWeight: "bold",
+                                              }}
+                                            >
+                                              {card.userInput}
+                                            </Text>
+                                          </View>
                                         );
                                       })}
                                 </View>
@@ -445,7 +462,7 @@ function DuelAll() {
                             fontSize: 16,
                             textAlign: "center",
                             color: "#29648a",
-                            marginTop: 15,
+                            marginTop: 5,
                           }}
                         >
                           The user will receive a duel notification as soon as
@@ -514,13 +531,11 @@ const styles = StyleSheet.create({
   },
   resultItem: {
     width: "100%",
-    paddingVertical: 10,
     textAlign: "center",
     borderRadius: 5,
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
     height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
   container: {
     flex: 1,
@@ -665,7 +680,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
-    marginBottom: 15,
+    marginBottom: 5,
   },
 });
 
