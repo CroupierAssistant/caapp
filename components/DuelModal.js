@@ -358,22 +358,22 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
                   borderBottomRightRadius: 3,
                 }}
               >
-                <ScrollView style={{flex: 1}}>
-                {games.map((game, index) => (
-                  <TouchableOpacity
-                    key={index.toString()}
-                    style={[
-                      styles.userItem,
-                      { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
-                      { borderBottomWidth: index === games.length - 1 ? 0 : 1 }, // Убрать нижнюю границу для последнего элемента
-                    ]}
-                    onPress={() => handleGameSelect(game)}
-                  >
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.username}>{game}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}</ScrollView>
+                <ScrollView style={{ flex: 1 }}>
+                  {games.map((game, index) => (
+                    <TouchableOpacity
+                      key={index.toString()}
+                      style={[
+                        styles.userItem,
+                        { borderTopWidth: index === 0 ? 0 : 1 }, // Убрать верхнюю границу для первого элемента
+                        { borderBottomWidth: index === games.length - 1 ? 0 : 1 }, // Убрать нижнюю границу для последнего элемента
+                      ]}
+                      onPress={() => handleGameSelect(game)}
+                    >
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.username}>{game}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}</ScrollView>
               </View>
 
               <TouchableOpacity style={styles.closeButton} onPress={onClose}>
@@ -422,6 +422,22 @@ const DuelModal = ({ isShowGameList, selectedDuelist, onClose, user }) => {
                           {selectedGame}
                         </Text>
                       </View>
+                      {selectedGame === "Roulette series" && (
+                        <View style={styles.gameInfoRow}>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              color: "#29648a",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Maximum bet:{" "}
+                          </Text>
+                          <Text style={{ fontSize: 16, color: "#29648a" }}>
+                            50 (progressive)
+                          </Text>
+                        </View>
+                      )}
                       <View style={styles.gameInfoRow}>
                         <Text
                           style={{

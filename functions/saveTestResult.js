@@ -24,8 +24,6 @@ const saveTestResult = async (
       }
     );
 
-    console.log('saveTestResult: ', response.data);
-
     return response.data;
   } catch (error) {
     throw error.response.data;
