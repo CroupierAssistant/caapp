@@ -111,7 +111,7 @@ function RouletteSeries() {
 
   const toggleSwitch = () => {
     setSelectedMinBet("5");
-    setSelectedMaxBet("50");
+    setSelectedMaxBet("100");
     setIsEnabled((previousState) => !previousState);
   };
 
@@ -127,7 +127,7 @@ function RouletteSeries() {
     setSelectedMinBet(value);
   };
 
-  const [selectedMaxBet, setSelectedMaxBet] = useState("50");
+  const [selectedMaxBet, setSelectedMaxBet] = useState("100");
   const handleMaxBetSelect = (value) => {
     setSelectedMaxBet(value);
   };
@@ -235,7 +235,7 @@ function RouletteSeries() {
                 The goal is to calculate the payout for {selectedButton} bets.
                 The time limit is {timeLimit / 1000} seconds. Specify the
                 highest denomination for the sector's payout (DO NOT WRITE THE
-                REST). The step is 5, with a maximum progressive of 50.
+                REST). The step is 5, with a maximum progressive of {selectedMaxBet}.
               </Text>
             </>
           </>
@@ -545,7 +545,7 @@ function RouletteSeries() {
                           Maximum bet: {" "}
                         </Text>
                         <Text style={{ fontSize: 16, color: "#29648a" }}>
-                          50 (progressive)
+                          {selectedMaxBet} (progressive)
                         </Text>
                       </View>
                       <View style={styles.gameInfoRow}>
