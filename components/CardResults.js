@@ -95,7 +95,7 @@ const CardResults = ({
     const sendResults = async (percentage) => {
       try {
         const cleanedCardResults = cardResults.map(({ userInput, ...rest }) => rest);
-  
+
         const response = await axios.post(
           "https://caapp-server.onrender.com/sendTestRequest",
           {
@@ -109,7 +109,7 @@ const CardResults = ({
             timeLimit,
           }
         );
-  
+
         if (response.status === 200) {
           // Результаты успешно отправлены
         } else {
@@ -119,6 +119,7 @@ const CardResults = ({
         console.error("Error sending test results:", error);
         // Обработка ошибок при отправке запроса
       }
+
     };
 
     const sendRespondResults = async (percentage) => {
@@ -130,9 +131,9 @@ const CardResults = ({
             duelId,
           }
         );
-  
+
         if (response.status === 200) {
-          
+
         } else {
           // Обработка ошибок при отправке
         }
@@ -141,7 +142,7 @@ const CardResults = ({
         // Обработка ошибок при отправке запроса
       }
     };
-  
+
     if (isDuel && duelist) {
       sendResults(calculatedPercentage);
     }

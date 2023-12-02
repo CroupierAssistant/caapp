@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 
 function CardTest({ route }) {
   const navigation = useNavigation();
+  
   const {
     timeLimit,
     mode,
@@ -53,8 +54,8 @@ function CardTest({ route }) {
   const openPaytableModal = () => {
     setShowPaytableModal(true);
   };
-  const handleStopTest = () => {
-    setIsDone(true);
+  const handleStopTest = async () => {
+    await setIsDone(true);
   };
 
   const closePaytableModal = () => {
@@ -62,7 +63,6 @@ function CardTest({ route }) {
   };
 
   const handleInputChange = (text) => {
-    // setInputValue(text);
     setInputValue(text);
 
     setCardResults((prev) => {
@@ -104,6 +104,8 @@ function CardTest({ route }) {
       }).filter((result) => result !== null); // Убираем все null из новых результатов
   
       setCardResults((prev) => [...prev, ...newResults]);
+      navigation.navigate('Tests')
+      setShowActiveCard(false);
       setShowResult(true)
     }
   }, [isDone]);

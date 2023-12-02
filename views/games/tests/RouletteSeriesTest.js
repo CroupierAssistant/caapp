@@ -17,6 +17,7 @@ import Stopwatch from "../../../components/Stopwatch";
 import { useNavigation } from "@react-navigation/native";
 
 function RouletteSeriesTest({ route }) {
+  const navigation = useNavigation();
   const {
     timeLimit,
     mode,
@@ -54,6 +55,7 @@ function RouletteSeriesTest({ route }) {
 
   const handleStopTest = () => {
     setIsDone(true);
+    setShowResult(true)
   };
 
   const openPaytableModal = () => {
@@ -141,6 +143,8 @@ function RouletteSeriesTest({ route }) {
         .filter((result) => result !== null); // Убираем все null из новых результатов
 
       setCardResults((prev) => [...prev, ...newResults]);
+      navigation.navigate('Tests')
+      setShowActiveCard(false);
       setShowResult(true);
     }
   }, [isDone]);
@@ -151,6 +155,7 @@ function RouletteSeriesTest({ route }) {
     } else {
       setShowActiveCard(false);
       setIsDone(true);
+      if (isDuel) navigation.navigate('Tests')
     }
     setInputValue("");
   };
